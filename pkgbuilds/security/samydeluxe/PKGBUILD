@@ -4,12 +4,12 @@ pkgver=20090215
 pkgrel=1
 pkgdesc="automatic samdump creation script"
 arch=("i686")
-url="http://github.com/BlackLotus/blacks-fork"
+url="http://github.com/BlackLotus/samydeluxe"
 license=('GPL')
 depends=('python')
 source=()
 md5sums=()
-_gitroot="git://github.com/BlackLotus/blacks-fork.git"
+_gitroot="git://github.com/BlackLotus/samydeluxe.git"
 _gitname="samydeluxe"
 build() {
   cd "$srcdir"
