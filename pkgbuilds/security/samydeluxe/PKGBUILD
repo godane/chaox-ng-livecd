@@ -1,14 +1,29 @@
-# Contributor: Jens Pranaitis
+# Contributor: Jens Pranaitis <jens@jenux.homelinux.org>
 pkgname=samydeluxe
-pkgver=$(date +%y%m%d%H%M)
+pkgver=20090215
 pkgrel=1
-pkgdesc="A little python script for breaking windows SAM files"
+pkgdesc="automatic samdump creation script"
 arch=("i686")
-url="http://github.com/jensp/chaox-ng-livecd/raw/master/code/samydeluxe"
+url="http://github.com/BlackLotus/blacks-fork"
 license=('GPL')
-depends=("python")
-source=("http://github.com/jensp/chaox-ng-livecd/raw/master/code/samydeluxe")
+depends=('python')
+source=()
+md5sums=()
+_gitroot="git://github.com/BlackLotus/blacks-fork.git"
+_gitname="samydeluxe"
 build() {
-  install -D -m755 "${srcdir}"/$pkgname "${pkgdir}"/usr/bin/$pkgname || return 1
-}
-# vim:set ts=2 sw=2 et:
+  cd "$srcdir"
+  msg "Connecting to GIT server...."
+  if [ -d $_gitname ] ; then
+    cd $_gitname && git pull origin
+    msg "The local files are updated."
+  else
+    git clone $_gitroot $_gitname
+  fi
+  msg "GIT checkout done or server timeout"
+  msg "Starting make..."
+  rm -rf "$srcdir/$_gitname-build"
+  cp -r "$srcdir/$_gitname" "$srcdir/$_gitname-build"
+  cd "$srcdir/$_gitname-build"
+  install -D -m755 samydeluxe "${pkgdir}"/usr/bin/samydeluxe
+} 
