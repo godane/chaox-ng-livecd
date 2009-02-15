@@ -1,0 +1,31 @@
+# Contributor: Jens Pranaitis <jens@jenux.homelinux.org>
+pkgname=installnvidia
+pkgver=20090215
+pkgrel=2
+pkgdesc="automatic samdump creation script"
+arch=("i686")
+url="http://github.com/BlackLotus/nvidia"
+license=('GPL')
+depends=('bash' 'dialog')
+source=()
+md5sums=()
+_gitroot="git://github.com/BlackLotus/nvidia.git"
+_gitname="nvidia"
+build() {
+  cd "$srcdir"
+  msg "Connecting to GIT server...."
+  if [ -d $_gitname ] ; then
+    cd $_gitname && git pull origin
+    msg "The local files are updated."
+  else
+    git clone $_gitroot $_gitname
+  fi
+  msg "GIT checkout done or server timeout"
+  rm -rf "$srcdir/$_gitname-build"
+  cp -r "$srcdir/$_gitname" "$srcdir/$_gitname-build"
+  cd "$srcdir/$_gitname-build"
+  install -D -m755 installnvidia "${pkgdir}"/usr/bin/installnvidia
+  install -D -m644 EULA "${pkgdir}"/usr/share/installnvidia/EULA
+  install -D -m644 installnvidia.desktop "${pkgdir}"/usr/share/applications/installnvidia.desktop
+  install -D -m644 installnvidia.png "${pkgdir}"/usr/share/pixmaps/installnvidia.png
+} 
