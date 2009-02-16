@@ -1,0 +1,29 @@
+# Contributor: Jens Pranaitis <jens@jenux.homelinux.org>
+# Contributor: Tobias Powalowski <tpowa@archlinux.org>
+pkgname=pinentry-gtk2
+pkgver=0.7.5
+pkgrel=1
+pkgdesc="a collection of simple PIN or passphrase entry dialogs which utilize the Assuan protocol"
+arch=(i686 x86_64)
+license=('GPL')
+url="http://www.gnupg.org/aegypten2"
+depends=('ncurses' 'libcap' 'gtk2')
+conflicts=("pinentry")
+replaces=("pinentry")
+provides=("pinentry")
+source=(ftp://ftp.gnupg.org/gcrypt/pinentry/pinentry-$pkgver.tar.gz
+        glib2.patch)
+md5sums=('ca492afbbb59cd19f1c875533f18b269'
+         'df553f478e7f9e943367967998bb0d43')
+
+build() {
+  cd "${srcdir}"/pinentry-$pkgver
+  patch -Np1 -i ${srcdir}/glib2.patch
+  ./configure --prefix=/usr \
+	--enable-pinentry-curses \
+	--enable-pinentry-gtk2 \
+	--enable-fallback-curses
+  make || return 1
+  make DESTDIR="${pkgdir}" install
+  rm "${pkgdir}"/usr/share/info/dir
+}
