@@ -1,12 +1,12 @@
 # Contributor: Jens Pranaitis <jens@jenux.homelinux.org>
 pkgname=samydeluxe
-pkgver=20090215
-pkgrel=1
+pkgver=20090216
+pkgrel=2
 pkgdesc="automatic samdump creation script"
 arch=("i686")
 url="http://github.com/jensp/samydeluxe"
-license=('GPL')
-depends=('python')
+license=('')
+depends=('bash' 'samdump2')
 source=()
 md5sums=()
 _gitroot="git://github.com/jensp/samydeluxe.git"
