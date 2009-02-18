@@ -1,12 +1,12 @@
 # Contributor: Jens Pranaitis <jens@jenux.homelinux.org>
 pkgname=airgraph-ng-svn
-pkgver=1406
+pkgver=1414
 pkgrel=1
 pkgdesc="Graphing tool for the aircrack suite"
 arch=('i686' 'x86_64')
 url="http://www.aircrack-ng.org"
 license=('GPL2')
-depends=('aircrack-ng' 'graphviz' 'python')
+depends=('graphviz' 'python')
 makedepends=("subversion")
 source=()
 md5sums=() 
