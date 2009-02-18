@@ -2,7 +2,7 @@
 # Contributor: Tobias Powalowski <tpowa@archlinux.org>
 pkgname=nvidia-96xx
 pkgver=96.43.10
-pkgrel=5
+pkgrel=6
 pkgdesc="NVIDIA legacy drivers for kernel26, 96xx branch"
 arch=(i686 x86_64)
 license=('custom:NVIDIA')
@@ -28,7 +28,7 @@ build()
   # Any extra patches are applied in here...
   cd usr/src/nv/
   ln -s Makefile.kbuild Makefile
-  make SYSSRC="${kerndir}" module 
+  make SYSSRC="${_kerndir}" module 
   
   # install kernel module
   mkdir -p "${pkgdir}"/lib/modules/${_kernver}/kernel/drivers/video/

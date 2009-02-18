@@ -8,7 +8,7 @@
 # Contributor: Ingmar Steen
 pkgname=virtualbox-modules
 pkgver=2.1.2
-pkgrel=5
+pkgrel=6
 pkgdesc="Kernel modules for VirtualBox (vboxdrv)"
 arch=('i686')
 url="http://www.virtualbox.org"
