@@ -8,6 +8,7 @@ makesqfs() {
 	chroot source /bin/bash --login <<CHROOTED
 	depmod -a $(ls "${SOURCE}"/lib/modules/)
 	pacman -Q > package.lst
+  freshclam
 	yes |hwd -u
 	localepurge
 CHROOTED
