@@ -1,0 +1,33 @@
+# Contributor: Jens Pranaitis <jens@jenux.homelinux.org>
+# Contributor: Abhishek Dasgupta <abhidg@gmail.com>
+# Contributor: Valmantas Palikša <walmis@balticum-tv.lt>
+# Contributor: blasse <koralik@gmail.com>
+# Contributor: Maciej Wilczyński <wiqert@gmail.com>
+# Contributor: Abhishek Dasgupta <abhidg@gmail.com>
+
+pkgname=blueman
+pkgver=1.01
+pkgrel=4
+pkgdesc="GTK+ bluetooth manager"
+arch=('i686' 'x86_64')
+license=("GPL")
+url="http://blueman-project.org"
+depends=('python-notify' 'bluez>=4.25' 'dbus-python' 'gtk2>=2.12' 'glib2>=2.12'\
+         'pygobject>=2.12' 'gconf>=2.0' 'startup-notification>=0.9' 'obex-data-server'\
+		 'policykit-gnome' 'notification-daemon' 'xdg-utils' 'gnome-python')
+makedepends=('pygobject' 'pyrex' 'pkgconfig' 'startup-notification' 'bluez' 'gtk2' 'intltool')
+optdepends=("dnsmasq: For creating PAN network")
+install=$pkgname.install
+source=(http://download.tuxfamily.org/blueman/${pkgname}-${pkgver}.tar.gz bnep.fdi)
+md5sums=('ef178e1ee4a70ff7cbfabce543c44728'
+         '5c179958e019e4b629ae34783f574efb')
+build() {
+	cd "${srcdir}/${pkgname}-${pkgver}"
+	./configure --prefix=/usr --sysconfdir=/etc --libexecdir=/usr/lib/blueman/ --with-no-runtime-deps-check
+
+	# clear tmp
+	make clean
+	make || return 1
+	make DESTDIR="${pkgdir}" install || return 1
+  install -D -m644 "${srcdir}"/bnep.fdi "${pkgdir}"/etc/hal/fdi/information/bnep.fdi
+}
