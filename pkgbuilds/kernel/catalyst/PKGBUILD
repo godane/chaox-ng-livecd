@@ -3,8 +3,8 @@
 # Contributor: amdviaman
 
 pkgname=catalyst
-pkgver=9.1
-pkgrel=3
+pkgver=9.2
+pkgrel=1
 pkgdesc="Proprietary AMD/ATI kernel drivers for Radeon brand cards. Stock kernel."
 arch=('i686' 'x86_64')
 url="http://www.ati.amd.com"
@@ -13,8 +13,8 @@ depends=("catalyst-utils>=${pkgver}")
 makedepends=()
 replaces=('ati-fglrx' 'fglrx') # Yay rebranding
 install=${pkgname}.install
-source=(http://www2.ati.com/drivers/linux/ati-driver-installer-${pkgver/./-}-x86.x86_64.run)
-md5sums=('cc4ff401586a6c099c9fd002c25cf7bb')
+source=(http://www2.ati.com/drivers/linux/ati-driver-installer-${pkgver}-x86.x86_64.run)
+md5sums=('3ef8f805be93eede480f56eaa4e3bee1')
 
 build() {
     source "${startdir}"/../kernel.env
@@ -27,7 +27,7 @@ build() {
     	BUILDARCH=i386
     	_archdir=x86
     fi
-    /bin/sh ./ati-driver-installer-${pkgver/./-}-x86.x86_64.run --extract archive_files
+    /bin/sh ./ati-driver-installer-${pkgver}-x86.x86_64.run --extract archive_files
     cd "${srcdir}/archive_files/common/lib/modules/fglrx/build_mod"
     cp "${srcdir}/archive_files/arch/${_archdir}/lib/modules/fglrx/build_mod/libfglrx_ip.a.GCC4" . || return 1
     # Build the kernel module
