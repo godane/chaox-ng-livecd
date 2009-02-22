@@ -1,0 +1,20 @@
+# Contributor: Jens Pranaitis <jens@jenux.homelinux.org>
+# Contributor: Charles Mauch <cmauch@gmail.com>
+pkgname=perl-thread-queue-any
+pkgver=0.09
+pkgrel=1
+pkgdesc="Perl/CPAN Module Object::MultiType"
+arch=("i686" "x86_64")
+url="http://search.cpan.org/~elizabeth/Thread-Queue-Any-0.09/"
+license=("GPL" "Artistic")
+source=("http://search.cpan.org/CPAN/authors/id/E/EL/ELIZABETH/Thread-Queue-Any-0.09.tar.gz")
+md5sums=('13fc0640ea1dd4cce02619cd7ab9c488')
+
+build() {
+  cd "${srcdir}"/Thread-Queue-Any-0.09
+  PERL_MM_USE_DEFAULT=1 perl Makefile.PL INSTALLDIRS=vendor || return 1 
+  make || return 1
+  make install DESTDIR="${pkgdir}" || return 1
+  find "${pkgdir}" -name '.packlist' -delete
+  find "${pkgdir}" -name '*.pod' -delete
+}
