@@ -1,12 +1,12 @@
 # Contributor: Jens Pranaitis <jens@jenux.homelinux.org>
 pkgname=seat
 pkgver=0.3
-pkgrel=3
+pkgrel=4
 pkgdesc="Advanced Datamining Tool"
 arch=("i686")
 url="http://midnightresearch.com/projects/search-engine-assessment-tool/"
 license=('GPL')
-depends=('perl' 'perl-xml-smart' 'perl-object-multitype' 'perl-thread-queue-any')
+depends=('perl' 'perl-xml-smart' 'perl-object-multitype' 'perl-thread-queue-any' 'gtk2-perl')
 source=(http://midnightresearch.com/common/$pkgname/$pkgname-$pkgver.tar.bz2)
 md5sums=('1fbcb97deb1205c51c87530e7553a2ec')
 build() {
