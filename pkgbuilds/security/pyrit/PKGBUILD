@@ -11,7 +11,7 @@ license=('GPL')
 depends=('python')
 makedepends=('gcc' 'subversion')
 source=(fix-includes.patch)
-md5sums=()
+md5sums=(e2b2adcb5d7293b9e2f836f376941142)
 
 _svntrunk=http://pyrit.googlecode.com/svn/trunk/
 _svnmod=pyrit
