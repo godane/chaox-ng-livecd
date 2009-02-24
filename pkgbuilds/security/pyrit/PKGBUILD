@@ -2,7 +2,7 @@
 # Contributor: Thomas Schneider <blacklotus@jenux.homelinux.org>
 
 pkgname=pyrit
-pkgver=60
+pkgver=69
 pkgrel=1
 pkgdesc="WPA-PSK and WPA2-PSK improved brute force and dictonary attack.Can use nvidia cards"
 url="http://code.google.com/p/pyrit/"
@@ -28,12 +28,9 @@ build() {
   msg "SVN checkout done or server timeout"
   msg "Starting make..."
 
-  cd $_svnmod/cpyrit
+  cd $_svnmod/pyrit
+  patch -p0 -i "${srcdir}/fix-includes.patch" || return 1
 
-  patch -p1 -i "${srcdir}/fix-includes.patch" || return 1
-
-  ./setup.py install --root="${pkgdir}"
-
-  install -m755 -D "../pyrit.py" "${pkgdir}/usr/bin/pyrit.py"
+  ./setup.py install --root="${pkgdir}" || return 1
 }
 # vim:syntax=sh
