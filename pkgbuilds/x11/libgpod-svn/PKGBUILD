@@ -1,13 +1,13 @@
 # Contributor: Jens Pranaitis <jens@jenux.homelinux.org>
 # Contributor: niQo
 pkgname=libgpod-svn
-pkgver=2195
+pkgver=2268
 pkgrel=1
 pkgdesc="libgpod is a shared library to access the contents of an iPod"
 arch=(i686 x86_64)
 license=('LGPL')
 depends=('gtk2>=2.10.14' 'libxml2' 'sg3_utils')
-makedepends=('perlxml' 'swig' 'subversion')
+makedepends=('perlxml' 'swig' 'subversion' 'gtk-doc')
 url="http://www.gtkpod.org/libgpod.html"
 options=(!libtool)
 source=()

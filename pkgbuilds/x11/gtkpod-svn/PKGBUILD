@@ -1,8 +1,8 @@
 # Contributor: Jens Pranaitis <jens@jenux.homelinux.org>
 # Contributor: niQo
 pkgname=gtkpod-svn
-pkgver=2185
-pkgrel=2
+pkgver=2266
+pkgrel=1
 pkgdesc="a platform independent GUI for Apple's iPod using GTK2"
 arch=(i686 x86_64)
 license=('GPL')
