@@ -1,5 +1,5 @@
---- setup	2009-01-17 00:36:06.000000000 +0100
-+++ chaox-setup	2009-01-27 21:04:54.104570273 +0100
+--- setup-orig	2009-03-02 20:10:05.000000000 +0100
++++ setup	2009-03-02 20:17:00.000000000 +0100
 @@ -1,9 +1,9 @@
  #!/bin/bash
  
@@ -12,17 +12,7 @@
  DESTDIR="/mnt"
  EDITOR=
  
-@@ -667,7 +667,8 @@
-         # our mirrorlist and pulling the full URL out. Substitute 'core' in
-         # for the repository name, and ensure that if it was listed twice we
-         # only return one line for the mirror.
--        SYNC_URL=$(egrep -o "${_server}.*" "${MIRRORLIST}" | sed 's/\$repo/core/g' | head -n1)
-+        # SYNC_URL=$(egrep -o "${_server}.*" "${MIRRORLIST}" | sed 's/\$repo/core/g' | head -n1)
-+        SYNC_URL=$(egrep -o "${_server}.*" "${MIRRORLIST}" | head -n1)
-     fi
-     echo "Using mirror: $SYNC_URL" >$LOG
- }
-@@ -690,6 +691,9 @@
+@@ -703,6 +703,9 @@
  CacheDir = ${DESTDIR}/var/cache/pacman/pkg
  CacheDir = /src/core/pkg
  
@@ -30,9 +20,9 @@
 +Server = http://dev-jenux.homelinux.org/chaox-repo
 +
  [core]
- Server = ${serverurl}
+ Server = ${serverurl//\$repo/core}
  EOF
-@@ -703,6 +707,37 @@
+@@ -716,6 +719,41 @@
      return 0
  }
  
@@ -54,6 +44,10 @@
 +    DIALOG --infobox "Copy in progress. This may take a while - you can watch the output in the progress window." 6 45
 +
 +    rsync -av / ${DESTDIR} --exclude-from=/tmp/rsync-exclude 2>&1 >$LOG
++    if [ $? -ne 0 ]; then
++        DIALOG --msgbox "Rsync failed (maybe you're out of disk space?). See the log output for more information"
++        return 1
++    fi
 +
 +    mknod -m666 ${DESTDIR}/dev/zero c 1 5
 +    mknod -m666 ${DESTDIR}/dev/null c 1 3
@@ -70,7 +64,7 @@
  # select_packages()
  # prompts the user to select packages to install
  #
-@@ -765,6 +800,90 @@
+@@ -778,6 +816,90 @@
      S_SELECT=1
  }
  
@@ -161,19 +155,7 @@
  
  # installpkg()
  # performs package installation to the target system
-@@ -926,9 +1045,9 @@
-     DIALOG --yesno "Do you want to use DHCP?" 0 0
-     if [ $? -eq 0 ]; then
-         DIALOG --infobox "Please wait.  Polling for DHCP server on $INTERFACE..." 10 65
--        dhcpcd $INTERFACE >$LOG 2>&1
-+        dhclient $INTERFACE >$LOG 2>&1
-         if [ $? -ne 0 ]; then
--            DIALOG --msgbox "Failed to run dhcpcd.  See $LOG for details." 0 0
-+            DIALOG --msgbox "Failed to run dhclient.  See $LOG for details." 0 0
-             return 1
-         fi
-         if [ ! $(ifconfig $INTERFACE | grep 'inet addr:') ]; then
-@@ -1011,19 +1130,20 @@
+@@ -1024,19 +1146,20 @@
              fi
              # remove default entries by truncating file at our little tag (#-*)
              sed -i -e '/#-\*/q' $grubmenu
@@ -200,7 +182,7 @@
  
  # (2) Windows
  #title Windows
-@@ -1103,18 +1223,7 @@
+@@ -1116,18 +1239,7 @@
  # returns: nothing
  select_source()
  {
@@ -220,16 +202,16 @@
  
      if [ "$MODE" = "cd" ]; then
          TITLE="Arch Linux CDROM or OTHER SOURCE Installation"
-@@ -1125,7 +1234,7 @@
+@@ -1138,7 +1250,7 @@
          fi
          echo "Using CDROM for package installation" >$LOG
      else
 -        TITLE="Arch Linux FTP/HTTP Installation"
 +        TITLE="Chaox Installation"
          DIALOG --msgbox "If you wish to load your ethernet modules manually, please do so now in another terminal." 12 65
-          while true; do
-             DIALOG --menu "FTP Installation" 10 35 3 \
-@@ -1239,7 +1348,7 @@
+         local CURRENT_SELECTION=""
+         while true; do
+@@ -1258,7 +1370,7 @@
          touch /tmp/setup-mkinitcpio-running
          echo "mkinitcpio progress ..." > /tmp/mkinitcpio.log; \
          echo >> /tmp/mkinitcpio.log; \
@@ -238,7 +220,7 @@
          echo $? > /tmp/.mkinitcpio-retcode
          echo >> /tmp/mkinitcpio.log
          rm -f /tmp/setup-mkinitcpio-running
-@@ -1358,11 +1467,11 @@
+@@ -1378,11 +1490,11 @@
      fi
      DIALOG $DEFAULT --title " MAIN MENU " \
          --menu "Use the UP and DOWN arrows to navigate menus.  Use TAB to switch between buttons and ENTER to select." 16 55 8 \
@@ -253,7 +235,7 @@
          "5" "Configure System" \
          "6" "Install Bootloader" \
          "7" "Exit Install" 2>$ANSWER
-@@ -1375,9 +1484,9 @@
+@@ -1395,9 +1507,9 @@
          "2")
              prepare_harddrive ;;
          "3")
@@ -265,7 +247,7 @@
          "5")
              configure_system ;;
          "6")
-@@ -1397,12 +1506,13 @@
+@@ -1417,12 +1529,13 @@
  #####################
  ## begin execution ##
  
