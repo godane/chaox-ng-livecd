@@ -1,8 +1,8 @@
 # Contributor: Jens Pranaitis <jens@jenux.homelinux.org>
 # Contributer: Jason Chu <jason@archlinux.org>
 pkgname=subversion-client
-pkgver=1.5.4
-pkgrel=3
+pkgver=1.5.6
+pkgrel=1
 pkgdesc="Replacement for CVS, another versioning system (svn)"
 arch=(i686 x86_64)
 license=('apache' 'bsd')
@@ -14,7 +14,7 @@ url="http://subversion.tigris.org/"
 provides=('svn' 'subversion')
 conflicts=("subversion")
 options=('!makeflags' 'libtool')
-md5sums=('8ec0a6e756c35dc3ce20abb580040924')
+md5sums=('ad81e54058e64b5d399d3eda5f8bfcd1')
 build() {
    cd "${srcdir}"/subversion-${pkgver}
    autoreconf
