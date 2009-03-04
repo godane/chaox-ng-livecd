@@ -3,13 +3,13 @@
 # Contributor: Aaron Griffin <aaron@archlinux.org>
 pkgname=libarchive
 pkgver=2.6.1
-pkgrel=1
+pkgrel=2
 pkgdesc="library that can create and read several streaming archive formats"
 arch=(i686 x86_64)
 url="http://people.freebsd.org/~kientzle/libarchive/"
 license=('BSD')
 groups=('base')
-depends=('zlib' 'bzip2' 'acl')
+depends=('zlib' 'bzip2' 'acl' 'lzma-utils')
 provides=("tar")
 conflicts=("tar")
 replaces=("tar")
