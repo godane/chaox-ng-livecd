@@ -1,14 +1,14 @@
 #Contributor Jens Pranaitis <jens@jenux.homelinux.org>
 pkgname=lynis
-pkgver=1.2.1
-pkgrel=2
+pkgver=1.2.3
+pkgrel=1
 pkgdesc='Lynis is an auditing tool for Unix (specialists)'
 url='http://www.rootkit.nl/projects/lynis.html'
 license=('GPL')
 arch=('i686' 'x86_64')
 depends=('bash')
 source=(http://www.rootkit.nl/files/$pkgname-$pkgver.tar.gz)
-md5sums=('4f8db3c524c1014db5842ca2dbd575aa')
+md5sums=('57d3058b60bb26fc333e4f1800498fdf')
 build() {
 	mkdir -p ${pkgdir}/{opt/$pkgname,usr/man/man8}
 	gzip -9 "${srcdir}"/$pkgname-$pkgver/$pkgname.8
