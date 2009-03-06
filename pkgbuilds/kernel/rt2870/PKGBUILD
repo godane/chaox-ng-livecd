@@ -1,0 +1,27 @@
+# Contributor: Jens Pranaitis <jens@jenux.homelinux.org>
+# Contributor Antti Oja <antti.bofh(AT)gmail.com>
+pkgname=rt2870
+pkgver=1.4.0.0
+pkgrel=1
+pkgdesc="Drivers for rt2870 chipset wireless cards"
+arch=('i686' 'x86_64')
+url="http://www.ralinktech.com/"
+license=("GPL")
+depends=()
+install=rt2870.install
+source=(http://www.ralinktech.com.tw/data/drivers/2008_0925_RT2870_Linux_STA_v1.4.0.0.tar.bz2)
+md5sums=('3ad8bc242907031c49436429f28bdd60')
+
+build() {
+  source "${startdir}"/../kernel.env
+  cd "${srcdir}"/2008_0925_RT2870_Linux_STA_v1.4.0.0
+  sed "s|LINUX_SRC = /lib/modules/\$(shell uname -r)/build|LINUX_SRC = ${_kerndir}|g" -i Makefile
+  sed "s#\(/tftpboot\)#$startdir\1#" -i Makefile
+  sed "s#HAS_WPA_SUPPLICANT=n#HAS_WPA_SUPPLICANT=y#" -i os/linux/config.mk
+  sed "s#HAS_NATIVE_WPA_SUPPLICANT_SUPPORT=n#HAS_NATIVE_WPA_SUPPLICANT_SUPPORT=y#" -i os/linux/config.mk
+  sed "s#dev->nd_net#dev_net(dev)#" -i os/linux/rt_main_dev.c
+  make || return 1
+  cd "${srcdir}"/2008_0925_RT2870_Linux_STA_v1.4.0.0/os/linux/
+  sed -i -e "s/KERNEL_VERSION='.*'/KERNEL_VERSION='${_kernver}'/" $startdir/*.install
+  install -D -m 755 rt2870sta.ko "${pkgdir}"/lib/modules/_$kernver/kernel/drivers/net/wireless/rt2870.ko || return 1
+}
