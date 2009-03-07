@@ -1,0 +1,32 @@
+# Contributor: Jens Pranaitis <jens@jenux.homelinux.org>
+pkgname=aufs2-utils-git
+pkgver=20090307
+pkgrel=1
+pkgdesc="aufs2 utils"
+arch=("i686")
+url="http://aufs.sourceforge.net"
+license=('GPL')
+depends=("bash")
+conflicts=("aufs-utils")
+_gitroot="http://git.c3sl.ufpr.br/pub/scm/aufs/aufs2-util.git"
+_gitname="aufs2-util"
+build() {
+  source "${startdir}"/../kernel.env
+  cd "$srcdir"
+  msg "Connecting to GIT server...."
+  if [ -d $_gitname ] ; then
+    cd $_gitname && git pull origin
+    msg "The local files are updated."
+  else
+    git clone $_gitroot
+  fi
+  msg "GIT checkout done or server timeout"
+  msg "Starting make..."
+  rm -rf "$srcdir/$_gitname-build"
+  cp -r "$srcdir/$_gitname" "$srcdir/$_gitname-build"
+  cd "$srcdir/$_gitname-build"
+  rm priv.mk
+  KDIR=$_kerndir/ make || return 1
+  mkdir -p "${pkgdir}"{/usr/bin,/sbin,/etc/default}
+  make KDIR=$_kerndir DESTDIR="$pkgdir/" install
+} 
