@@ -20,7 +20,6 @@ install=$pkgname.install
 source=(ftp://ftp.kernel.org/pub/linux/kernel/v2.6/linux-$_basekernel.tar.bz2
 	http://kernel.org/pub/linux/kernel/v2.6/patch-$pkgver.bz2
         config
-	aufs-patches.patch
 	http://patches.aircrack-ng.org/mac80211_2.6.28-rc4-wl_frag+ack_v3.patch
 	http://patches.aircrack-ng.org/ath5k-injection-2.6.27-rc2.patch
 	http://patches.aircrack-ng.org/ieee80211_inject-2.6.22.patch
@@ -35,8 +34,7 @@ source=(ftp://ftp.kernel.org/pub/linux/kernel/v2.6/linux-$_basekernel.tar.bz2
 )
 md5sums=('d351e44709c9810b85e29b877f50968a'
          '346c912ebaffcf84361859014009be50'
-         '679dc719eef6821cbf19e06e7bc9462a'
-         'e1cc3c48b5f52bb19b2b011bd488e065'
+         'b6ec6e58aeb1da89c24fdddad1f91c11'
          'ca85d39144f07b0500c663779dda9259'
          '69c34c83c6f64570efa3bc65c39304c5'
          '2c3adc6510c5bd47f0a04ace4aa2ea1d'
