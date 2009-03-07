@@ -2,7 +2,7 @@
 # Contributor Antti Oja <antti.bofh(AT)gmail.com>
 pkgname=rt2870
 pkgver=1.4.0.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Drivers for rt2870 chipset wireless cards"
 arch=('i686' 'x86_64')
 url="http://www.ralinktech.com/"
@@ -23,5 +23,5 @@ build() {
   make || return 1
   cd "${srcdir}"/2008_0925_RT2870_Linux_STA_v1.4.0.0/os/linux/
   sed -i -e "s/KERNEL_VERSION='.*'/KERNEL_VERSION='${_kernver}'/" $startdir/*.install
-  install -D -m 755 rt2870sta.ko "${pkgdir}"/lib/modules/_$kernver/kernel/drivers/net/wireless/rt2870.ko || return 1
+  install -D -m 755 rt2870sta.ko "${pkgdir}"/lib/modules/$_kernver/kernel/drivers/net/wireless/rt2870.ko || return 1
 }
