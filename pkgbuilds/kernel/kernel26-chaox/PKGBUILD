@@ -3,12 +3,13 @@
 pkgname=kernel26-chaox
 _basekernel=2.6.28
 pkgver=2.6.28.7
-pkgrel=1
+pkgrel=2
 pkgdesc="Linux kernel based on slax config. Used in chaox-ng"
 arch=("i686")
 license=('GPL2')
 groups=('base')
 url="http://www.kernel.org"
+makedepends=("git")
 depends=('coreutils' 'module-init-tools' 'mkinitcpio>=0.5.18')
 replaces=('kernel24' 'kernel24-scsi' 'kernel26-scsi'
           'alsa-driver' 'ieee80211' 'hostap-driver26'
@@ -49,14 +50,17 @@ md5sums=('d351e44709c9810b85e29b877f50968a'
          'a162a23b5db02738309e54b6ca9fcbc9')
 build() {
   KARCH=x86
-
-  cd "${srcdir}"/linux-$_basekernel
+  cd "${srcdir}"
+  git clone http://git.c3sl.ufpr.br/pub/scm/aufs/aufs2-standalone.git
+  cd aufs2-standalone
+  git checkout origin/aufs2-28
+  cd ../linux-$_basekernel
   if [ "$_basekernel" != "$pkgver" ]; then
   # add latest kernel stable patch
          patch -Np1 < "${srcdir}"/patch-$pkgver ||return 1
   fi
   # add squashfs and aufs
-  patch -Np1 -i "${srcdir}"/aufs-patches.patch || return 1
+  patch -Np1 -i "${srcdir}"/aufs2-standalone/aufs2-standalone.patch || return 1
   patch -Np1 -i "${srcdir}"/squashfs3.4/kernel-patches/linux-2.6.27-rc4/squashfs3.4-patch || return 1
   patch -Np0 -i "${srcdir}"/squashfs-kernel26-2.6.28.patch || return 1
   patch -Np1 -i "${srcdir}"/sqlzma2k-3.4.patch || return 1
@@ -74,6 +78,7 @@ build() {
   cp ../config ./.config
   # build the full kernel version to use in pathnames
   . ./.config
+  cp -R "${srcdir}"/aufs2-standalone/{Documentation,include,fs,config.mk} .
   ### next line is only needed for rc kernels
   _kernver="$pkgver"${CONFIG_LOCALVERSION}""
   # load configuration
