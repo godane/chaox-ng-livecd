@@ -57,7 +57,7 @@ build() {
          patch -Np1 < "${srcdir}"/patch-$pkgver ||return 1
   fi
   # add squashfs and aufs
-  patch -Np1 -i "${srcdir}"/aufs2-standalone.patch || return 1
+  patch -Np1 -i "${srcdir}"/aufs2-standalone/aufs2-standalone.patch || return 1
   patch -Np1 -i "${srcdir}"/squashfs3.4/kernel-patches/linux-2.6.27-rc4/squashfs3.4-patch || return 1
   patch -Np0 -i "${srcdir}"/squashfs-kernel26-2.6.28.patch || return 1
   patch -Np1 -i "${srcdir}"/sqlzma2k-3.4.patch || return 1
@@ -75,6 +75,7 @@ build() {
   cp ../config ./.config
   # build the full kernel version to use in pathnames
   . ./.config
+  cp -R "${srcdir}"/aufs2-standalone/{Documentation,include,fs,config.mk} .
   make prepare
   make modules_prepare
   _kernver="$pkgver"${CONFIG_LOCALVERSION}""
