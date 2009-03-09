@@ -6,7 +6,7 @@ pkgdesc="chaox menu for xfce4"
 arch=("i686")
 url="http://chaox.wordpress.com"
 license=('GPL')
-depends=("xfce")
+depends=("xfdesktop")
 source=(http://jenux.homelinux.org/~jens/chaox/chaox-menus.tar.bz2)
 md5sums=('f88df44242b2131db4dce955927e0672')
 build() {
