@@ -1,0 +1,23 @@
+# Contributor: Jens Pranaitis <jens@jenux.homelinux.org>
+pkgname=chaox-menus
+pkgver=1
+pkgrel=1
+pkgdesc="chaox menu for xfce4"
+arch=("i686")
+url="http://chaox.wordpress.com"
+license=('GPL')
+depends=("xfce")
+source=(http://jenux.homelinux.org/~jens/chaox/chaox-menus.tar.bz2)
+md5sums=('f88df44242b2131db4dce955927e0672')
+build() {
+  cd "${srcdir}"/chaox-menus
+  for x in *.directory
+  do
+    install -m 644 -D $x "${pkgdir}"/usr/share/desktop-directories/$x
+  done
+  for x in *.desktop
+  do
+    install -m 644 -D $x "${pkgdir}"/usr/share/applications/$x
+  done
+}
+# vim:set ts=2 sw=2 et:
