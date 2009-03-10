@@ -2,8 +2,8 @@
 # Contributor: Thomas Baechler <thomas@archlinux.org>
 # Contributor: Aaron Griffin <aaron@archlinux.org>
 pkgname=initscripts-chaox
-pkgver=2008.09
-pkgrel=3
+pkgver=2009.03
+pkgrel=1
 pkgdesc="System initialization/bootup scripts"
 arch=('i686' 'x86_64')
 url="http://www.archlinux.org"
@@ -13,11 +13,11 @@ backup=(etc/inittab etc/rc.conf etc/rc.local etc/rc.local.shutdown)
 depends=('glibc' 'bash' 'awk' 'grep' 'coreutils' 'sed' 'udev>=118' 'net-tools' 'ncurses' 'kbd' 'findutils')
 conflicts=("initscripts")
 provides=("initscripts")
-source=(ftp://ftp.archlinux.org/other/initscripts/initscripts-${pkgver}-2.tar.gz chaox.patch)
-md5sums=('c28214d35643570cde56dd1142348aa7'
-         '3b1ab4e870787b687972cc0f9b9d47a5')
+source=(ftp://ftp.archlinux.org/other/initscripts/initscripts-${pkgver}-1.tar.gz chaox.patch)
+md5sums=('d602c7647fa2afc7e8530c2e6342350c'
+         'f2a9cca38c9403c172be457dd3798d5c')
 build() {
-  cd "${srcdir}"/initscripts-${pkgver}-2/
-  patch -Np0 -i "${srcdir}"/chaox.patch
-  DESTDIR="${pkgdir}" ./install.sh
+  cd "${srcdir}"/initscripts-${pkgver}-1/
+  patch -Np0 -i "${srcdir}"/chaox.patch || return 1
+  DESTDIR="${pkgdir}" ./install.sh || return 1
 }
