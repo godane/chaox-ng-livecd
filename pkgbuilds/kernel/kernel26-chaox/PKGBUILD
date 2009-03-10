@@ -3,7 +3,7 @@
 pkgname=kernel26-chaox
 _basekernel=2.6.28
 pkgver=2.6.28.7
-pkgrel=2
+pkgrel=3
 pkgdesc="Linux kernel based on slax config. Used in chaox-ng"
 arch=("i686")
 license=('GPL2')
@@ -13,7 +13,7 @@ makedepends=("git")
 depends=('coreutils' 'module-init-tools' 'mkinitcpio>=0.5.18')
 replaces=('kernel24' 'kernel24-scsi' 'kernel26-scsi'
           'alsa-driver' 'ieee80211' 'hostap-driver26'
-          'pwc' 'nforce' 'squashfs' 'ivtv'
+          'pwc' 'nforce' 'squashfs' 'ivtv' 'aufs'
 	  'zd1211' 'kvm-modules' 'iwlwifi' 'rt2x00-cvs' 'kernel26' 'kernel26slax')
 provides=('kernel26')
 install=$pkgname.install
@@ -34,7 +34,7 @@ source=(ftp://ftp.kernel.org/pub/linux/kernel/v2.6/linux-$_basekernel.tar.bz2
 )
 md5sums=('d351e44709c9810b85e29b877f50968a'
          '346c912ebaffcf84361859014009be50'
-         'b6ec6e58aeb1da89c24fdddad1f91c11'
+         '961057b0e8ade0ef052b9415dedfbe43'
          'ca85d39144f07b0500c663779dda9259'
          '69c34c83c6f64570efa3bc65c39304c5'
          '2c3adc6510c5bd47f0a04ace4aa2ea1d'
