@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Type=Application
+Name=chaox installer
+Comment=install chaox
+Categories=Application;Chaox;
+Exec=bash -c "sudo /arch/chaox-setup;bash -i"
+Icon=Terminal
+Terminal=true
+StartupNotify=false
