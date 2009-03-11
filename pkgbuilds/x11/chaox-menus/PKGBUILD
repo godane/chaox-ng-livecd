@@ -1,14 +1,14 @@
 # Contributor: Jens Pranaitis <jens@jenux.homelinux.org>
 pkgname=chaox-menus
-pkgver=1
+pkgver=0.1
 pkgrel=1
 pkgdesc="chaox menu for xfce4"
 arch=("i686")
 url="http://chaox.wordpress.com"
 license=('GPL')
 depends=("xfdesktop")
-source=(http://jenux.homelinux.org/~jens/chaox/chaox-menus.tar.bz2)
-md5sums=('f88df44242b2131db4dce955927e0672')
+source=(http://jenux.homelinux.org/~jens/chaox/$pkgname-$pkgver.tar.bz2)
+md5sums=('5be77b4cffbf1c9c84bc973c976b0863')
 build() {
   cd "${srcdir}"/chaox-menus
   for x in *.directory
