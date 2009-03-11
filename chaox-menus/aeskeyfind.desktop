@@ -2,10 +2,10 @@
 Version=1.0
 Encoding=UTF-8
 Type=Application
-Name=lynis
-Comment=unix system auditing
+Name=aeskeyfind
+Comment=find aes keys from memory dump
 Categories=Application;Chaox;
-Exec=bash -c "sudo lynis;bash -i"
+Exec=bash -c "aeskeyfind;bash -i"
 Icon=Terminal
 Terminal=true
 StartupNotify=false

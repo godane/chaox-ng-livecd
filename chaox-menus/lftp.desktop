@@ -2,10 +2,10 @@
 Version=1.0
 Encoding=UTF-8
 Type=Application
-Name=lynis
-Comment=auditing tool
-Categories=Application;Chaox;
-Exec=bash -c "sudo lynis;bash -i"
+Name=lftp
+Comment=THE unix ftp client
+Categories=Application;Network;
+Exec=bash -c "lftp;bash -i"
 Icon=Terminal
 Terminal=true
 StartupNotify=false
