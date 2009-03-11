@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Type=Application
+Name=statifier
+Comment=create static executables
+Categories=Application;Chaox;
+Exec=bash -c "statifier --help;bash -i"
+Icon=Terminal
+Terminal=true
+StartupNotify=false

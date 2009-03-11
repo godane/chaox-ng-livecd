@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Type=Application
+Name=bob-the-butcher
+Comment=distributed password crackign
+Categories=Application;Passwords-Chaox;
+Exec=bash -c "bob_server -h;echo attach -sse2 to the command if you have a sse2 capable processor;bash -i"
+Icon=Terminal
+Terminal=true
+StartupNotify=false

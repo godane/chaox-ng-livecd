@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Type=Application
+Name=mdk3
+Comment=wireless swiss army knife
+Categories=Application;Wireless-Chaox;
+Exec=bash -c "sudo mdk3 --help;bash -i"
+Icon=Terminal
+Terminal=true
+StartupNotify=false

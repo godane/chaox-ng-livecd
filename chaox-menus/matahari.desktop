@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Type=Application
+Name=matahari
+Comment=reverese http shell
+Categories=Application;Chaox;
+Exec=bash -c "matahari --help;bash -i"
+Icon=Terminal
+Terminal=true
+StartupNotify=false

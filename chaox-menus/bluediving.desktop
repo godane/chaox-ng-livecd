@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Type=Application
+Name=bluediving
+Comment=bluetooth pentesting
+Categories=Application;Wireless-Chaox;
+Exec=bash -c "/usr/bin/bluedivingNG.pl --help;bash -i"
+Icon=Terminal
+Terminal=true
+StartupNotify=false

@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Type=Application
+Name=sshfs
+Comment=ssh file system
+Categories=Application;Chaox;
+Exec=bash -c "sshfs -h;bash -i"
+Icon=Terminal
+Terminal=true
+StartupNotify=false

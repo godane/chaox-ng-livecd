@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Type=Application
+Name=dsniff
+Comment=Collection of tools for network auditing and penetration testing
+Categories=Application;Sniffer-Chaox;
+Exec=bash -c "dsniff -h;bash -i"
+Icon=Terminal
+Terminal=true
+StartupNotify=false

@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Type=Application
+Name=mc
+Comment=file manager
+Categories=Application;Chaox;
+Exec=bash -c "mc;bash -i"
+Icon=Terminal
+Terminal=true
+StartupNotify=false

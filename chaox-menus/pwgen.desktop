@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Type=Application
+Name=pwgen
+Comment=password generator
+Categories=Application;Passwords-Chaox;
+Exec=bash -c "pwgen --help;bash -i"
+Icon=Terminal
+Terminal=true
+StartupNotify=false
