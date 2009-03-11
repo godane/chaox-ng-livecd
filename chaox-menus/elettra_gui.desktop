@@ -2,10 +2,10 @@
 Version=1.0
 Encoding=UTF-8
 Type=Application
-Name=aeskeyfind
-Comment=find aes keys from memory dump
+Name=elettra-gui
+Comment=wx gui crypto with plausible deniability
 Categories=Application;Crypto-Chaox;
-Exec=bash -c "aeskeyfind;bash -i"
+Exec=elettra_gui
 Icon=Terminal
-Terminal=true
+Terminal=false
 StartupNotify=false

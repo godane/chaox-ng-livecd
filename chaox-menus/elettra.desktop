@@ -2,10 +2,10 @@
 Version=1.0
 Encoding=UTF-8
 Type=Application
-Name=aeskeyfind
-Comment=find aes keys from memory dump
+Name=elettra
+Comment=crypto with plausible deniability
 Categories=Application;Crypto-Chaox;
-Exec=bash -c "aeskeyfind;bash -i"
+Exec=bash -c "elettra --help;bash -i"
 Icon=Terminal
 Terminal=true
 StartupNotify=false
