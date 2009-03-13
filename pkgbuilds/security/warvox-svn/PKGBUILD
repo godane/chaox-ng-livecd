@@ -1,7 +1,7 @@
 # Contributor: Jens Pranaitis <jens@jenux.homelinux.org>
 pkgname=warvox-svn
 pkgver=6328
-pkgrel=1
+pkgrel=2
 pkgdesc="telephone system auditing tool"
 arch=("i686")
 url="http://warvox.org/"
@@ -33,7 +33,10 @@ build() {
   #
   make || return 1
   make install || return 1
+  # I know the permissions are ugly, but that's what hdm himself recommends Oo
+  chmod 644 web/config/session.key
+  chmod 666 web/log/production.log
   mkdir -p "$pkgdir"/opt/warvox
   cp -r {bin,data,docs,etc,lib,web} "$pkgdir"/opt/warvox/
-  install -D -m 644 docs/LICENSE "$pkgdir"/usr/share/licenses/warvox/COPYING
+  install -D -m 644 docs/LICENSE "$pkgdir"/usr/share/licenses/warvox-svn/COPYING
 }
