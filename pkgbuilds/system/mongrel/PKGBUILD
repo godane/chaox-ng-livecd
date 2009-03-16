@@ -1,0 +1,17 @@
+# Contributor: Jens Pranaitis <jens@jenux.homelinux.org>
+pkgname=mongrel
+pkgver=1.1.5
+pkgrel=2
+pkgdesc="fast HTTP library and server"
+arch=('i686')
+url="http://mongrel.rubyforge.org/"
+license=('RUBY')
+depends=('ruby')
+makedepends=('rubygems')
+source=(http://gems.rubyforge.org/gems/mongrel-$pkgver.gem)
+md5sums=('a37617eb48f0932cc32143b2d76c0d12')
+build() {
+  cd "$srcdir/"
+  gem install -i "$pkgdir"/usr/lib/ruby/gems/1.8 mongrel-$pkgver.gem
+}
+
