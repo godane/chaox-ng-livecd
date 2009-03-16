@@ -1,14 +1,14 @@
 # Contributor: Jens Pranaitis <jens@jenux.homelinux.org>
 pkgname=warvox-svn
 pkgver=6328
-pkgrel=2
+pkgrel=3
 pkgdesc="telephone system auditing tool"
 arch=("i686")
 url="http://warvox.org/"
 license=('custom')
 depends=("iaxclient" "rake" "ruby-sqlite3" "gnuplot" "rubygems")
-makedepends=()
-install=
+source=("warvox-launcher")
+md5sums=("b765c14171c0614901b83510d2b5aced")
 _svntrunk=http://metasploit.com/svn/warvox/trunk/
 _svnmod=warvox
 
@@ -24,9 +24,9 @@ build() {
   msg "SVN checkout done or server timeout"
   msg "Starting make..."
 
-  rm -rf "$srcdir/$_svnmod-build"
-  cp -r "$srcdir/$_svnmod" "$srcdir/$_svnmod-build"
-  cd "$srcdir/$_svnmod-build"
+  rm -rf "$srcdir"/$_svnmod-build
+  cp -r "$srcdir"/$_svnmod "$srcdir"/$_svnmod-build
+  cd "$srcdir"/$_svnmod-build
 
   #
   # BUILD
@@ -39,4 +39,5 @@ build() {
   mkdir -p "$pkgdir"/opt/warvox
   cp -r {bin,data,docs,etc,lib,web} "$pkgdir"/opt/warvox/
   install -D -m 644 docs/LICENSE "$pkgdir"/usr/share/licenses/warvox-svn/COPYING
+  install -D -m 755 "$srcdir"/warvox-launcher "$pkgdir"/usr/bin/warvox-launcher
 }
