@@ -3,7 +3,7 @@
 pkgname=kernel26-chaox
 _basekernel=2.6.28
 pkgver=2.6.28.7
-pkgrel=3
+pkgrel=4
 pkgdesc="Linux kernel based on slax config. Used in chaox-ng"
 arch=("i686")
 license=('GPL2')
@@ -11,6 +11,7 @@ groups=('base')
 url="http://www.kernel.org"
 makedepends=("git")
 depends=('coreutils' 'module-init-tools' 'mkinitcpio>=0.5.18')
+conflicts=('aufs')
 replaces=('kernel24' 'kernel24-scsi' 'kernel26-scsi'
           'alsa-driver' 'ieee80211' 'hostap-driver26'
           'pwc' 'nforce' 'squashfs' 'ivtv' 'aufs'

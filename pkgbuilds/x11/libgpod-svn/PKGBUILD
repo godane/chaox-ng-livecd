@@ -1,7 +1,7 @@
 # Contributor: Jens Pranaitis <jens@jenux.homelinux.org>
 # Contributor: niQo
 pkgname=libgpod-svn
-pkgver=2268
+pkgver=2273
 pkgrel=1
 pkgdesc="libgpod is a shared library to access the contents of an iPod"
 arch=(i686 x86_64)
