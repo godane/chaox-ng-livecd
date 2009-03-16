@@ -1,0 +1,18 @@
+# Contributor: Jens Pranaitis <jens@jenux.homelinux.org>
+pkgname=ruby-gem_plugin
+pkgver=0.2.3
+pkgrel=1
+pkgdesc="easy plugin loading for mongrel"
+arch=('i686')
+url="http://mongrel.rubyforge.org/"
+license=('RUBY')
+depends=('ruby')
+conflicts=("<=mongrel-1.1.5-2")
+makedepends=('rubygems')
+source=(http://gems.rubyforge.org/gems/gem_plugin-$pkgver.gem)
+md5sums=('1736ce8ce007058c4703abe2fd209aa5')
+build() {
+  cd "$srcdir/"
+  gem install -i "$pkgdir"/usr/lib/ruby/gems/1.8 gem_plugin-$pkgver.gem
+}
+

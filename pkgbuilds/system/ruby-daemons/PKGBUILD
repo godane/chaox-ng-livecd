@@ -1,0 +1,18 @@
+# Contributor: Jens Pranaitis <jens@jenux.homelinux.org>
+pkgname=ruby-daemons
+pkgver=1.0.10
+pkgrel=1
+pkgdesc="easy way to wrap existing ruby scripts (for example a self-written server) to be run as a daemon"
+arch=('i686')
+url="http://daemons.rubyforge.org/"
+license=('RUBY')
+depends=('ruby')
+conflicts=("<=mongrel-1.1.5-2")
+makedepends=('rubygems')
+source=(http://gems.rubyforge.org/gems/daemons-$pkgver.gem)
+md5sums=('8e2fc7de08405b2d27ac96c82602c9ce')
+build() {
+  cd "$srcdir/"
+  gem install -i "$pkgdir"/usr/lib/ruby/gems/1.8 daemons-$pkgver.gem
+}
+
