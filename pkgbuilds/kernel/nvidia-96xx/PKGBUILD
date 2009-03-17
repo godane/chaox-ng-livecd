@@ -1,8 +1,8 @@
 # Contributor: Jens Pranaitis <jens@jenux.homelinux.org>
 # Contributor: Tobias Powalowski <tpowa@archlinux.org>
 pkgname=nvidia-96xx
-pkgver=96.43.10
-pkgrel=7
+pkgver=96.43.11
+pkgrel=1
 pkgdesc="NVIDIA legacy drivers for kernel26, 96xx branch"
 arch=(i686 x86_64)
 license=('custom:NVIDIA')
@@ -14,7 +14,7 @@ conflicts=('nvidia' 'nvidia-71xx' 'nvidia-legacy')
 install=nvidia-96xx.install
 license=('custom')
 source=(ftp://download.nvidia.com/XFree86/Linux-$ARCH/${pkgver}/NVIDIA-Linux-$ARCH-${pkgver}-pkg0.run)
-md5sums=('aefa11b825532e44a67d50c27ba4fa1a')
+md5sums=('bf2661f00759f78cbad9f72eeecdc676')
 [ "$CARCH" = "x86_64" ] && md5sums=('c03bd2469292d91dde8767af1418c4e1')
 
 build()

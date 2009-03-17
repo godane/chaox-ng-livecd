@@ -3,7 +3,7 @@
 # Contributor: James Rayner <iphitus@gmail.com>
 
 pkgname=nvidia-96xx-utils
-pkgver=96.43.10
+pkgver=96.43.11
 pkgrel=1
 pkgdesc="NVIDIA legacy drivers utilities and libraries, 96xx branch."
 arch=(i686 x86_64)
@@ -18,7 +18,7 @@ provides=('libgl')
 install=nvidia-96xx.install
 source=(http://download.nvidia.com/XFree86/Linux-${ARCH}/${pkgver}/NVIDIA-Linux-${ARCH}-${pkgver}-pkg0.run \
         supported-cards.txt)
-md5sums=('aefa11b825532e44a67d50c27ba4fa1a'
+md5sums=('bf2661f00759f78cbad9f72eeecdc676'
          '6363d7e494d33729609540088e33e73f')
 [ "$CARCH" = "x86_64" ] && md5sums=('c03bd2469292d91dde8767af1418c4e1'
          '6363d7e494d33729609540088e33e73f')

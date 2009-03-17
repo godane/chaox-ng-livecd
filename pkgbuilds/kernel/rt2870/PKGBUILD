@@ -2,7 +2,7 @@
 # Contributor Antti Oja <antti.bofh(AT)gmail.com>
 pkgname=rt2870
 pkgver=1.4.0.0
-pkgrel=2
+pkgrel=3
 pkgdesc="Drivers for rt2870 chipset wireless cards"
 arch=('i686' 'x86_64')
 url="http://www.ralinktech.com/"
