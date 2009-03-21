@@ -2,7 +2,7 @@
 # Contributor: Thomas Baechler <thomas@archlinux.org>
 # Contributor: James Rayner <iphitus@gmail.com>
 pkgname=nvidia-utils
-pkgver=180.37
+pkgver=180.41
 pkgrel=1
 pkgdesc="NVIDIA drivers utilities and libraries."
 arch=('i686' 'x86_64')
@@ -17,7 +17,7 @@ license=('custom')
 install=nvidia.install
 source=(http://download.nvidia.com/XFree86/Linux-${ARCH}/${pkgver}/NVIDIA-Linux-${ARCH}-${pkgver}-pkg0.run \
         supported-cards.txt)
-md5sums=('ace799a4c119d02ddc6aeed28d598ab3'
+md5sums=('ec91f014a00357303c12f4cfd03c8a3f'
          'bf8d68d66757096c3ab17653230bf2a8')
 [ "$CARCH" = "x86_64" ] && md5sums=('bab63757e04eb3ee11129a281cb11afd'
                         	    'bf8d68d66757096c3ab17653230bf2a8')
