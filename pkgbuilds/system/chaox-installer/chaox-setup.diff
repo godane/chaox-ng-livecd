@@ -1,5 +1,5 @@
---- setup-orig	2009-03-02 20:10:05.000000000 +0100
-+++ setup	2009-03-02 20:17:00.000000000 +0100
+--- setup.orig	2009-03-22 16:56:38.000000000 +0100
++++ setup	2009-03-22 17:01:12.000000000 +0100
 @@ -1,9 +1,9 @@
  #!/bin/bash
  
@@ -22,7 +22,7 @@
  [core]
  Server = ${serverurl//\$repo/core}
  EOF
-@@ -716,6 +719,41 @@
+@@ -716,6 +719,42 @@
      return 0
  }
  
@@ -33,6 +33,7 @@
 +# returns: 1 on error
 +do_rsync() {
 +    cat > /tmp/rsync-exclude << EOF
++/home/livecd/.gvfs
 +/tmp/*
 +/media/*
 +/mnt/*
@@ -64,7 +65,7 @@
  # select_packages()
  # prompts the user to select packages to install
  #
-@@ -778,6 +816,90 @@
+@@ -778,6 +817,90 @@
      S_SELECT=1
  }
  
@@ -155,7 +156,7 @@
  
  # installpkg()
  # performs package installation to the target system
-@@ -1024,19 +1146,20 @@
+@@ -1024,19 +1147,20 @@
              fi
              # remove default entries by truncating file at our little tag (#-*)
              sed -i -e '/#-\*/q' $grubmenu
@@ -182,7 +183,7 @@
  
  # (2) Windows
  #title Windows
-@@ -1116,18 +1239,7 @@
+@@ -1116,18 +1240,7 @@
  # returns: nothing
  select_source()
  {
@@ -202,7 +203,7 @@
  
      if [ "$MODE" = "cd" ]; then
          TITLE="Arch Linux CDROM or OTHER SOURCE Installation"
-@@ -1138,7 +1250,7 @@
+@@ -1138,7 +1251,7 @@
          fi
          echo "Using CDROM for package installation" >$LOG
      else
@@ -211,7 +212,7 @@
          DIALOG --msgbox "If you wish to load your ethernet modules manually, please do so now in another terminal." 12 65
          local CURRENT_SELECTION=""
          while true; do
-@@ -1258,7 +1370,7 @@
+@@ -1258,7 +1371,7 @@
          touch /tmp/setup-mkinitcpio-running
          echo "mkinitcpio progress ..." > /tmp/mkinitcpio.log; \
          echo >> /tmp/mkinitcpio.log; \
@@ -220,7 +221,7 @@
          echo $? > /tmp/.mkinitcpio-retcode
          echo >> /tmp/mkinitcpio.log
          rm -f /tmp/setup-mkinitcpio-running
-@@ -1378,11 +1490,11 @@
+@@ -1378,11 +1491,11 @@
      fi
      DIALOG $DEFAULT --title " MAIN MENU " \
          --menu "Use the UP and DOWN arrows to navigate menus.  Use TAB to switch between buttons and ENTER to select." 16 55 8 \
@@ -235,7 +236,7 @@
          "5" "Configure System" \
          "6" "Install Bootloader" \
          "7" "Exit Install" 2>$ANSWER
-@@ -1395,9 +1507,9 @@
+@@ -1395,9 +1508,9 @@
          "2")
              prepare_harddrive ;;
          "3")
@@ -247,7 +248,7 @@
          "5")
              configure_system ;;
          "6")
-@@ -1417,12 +1529,13 @@
+@@ -1417,12 +1530,13 @@
  #####################
  ## begin execution ##
  
