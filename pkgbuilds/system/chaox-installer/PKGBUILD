@@ -12,7 +12,7 @@ license=('GPL')
 depends=('bash')
 source=("ftp://ftp.archlinux.org/other/archlinux-installer/archlinux-installer-$pkgver-2.tar.gz" "chaox-setup.diff")
 md5sums=('93bc355046775819baa9402ff0744bd3'
-         '5576a69f5f1f33305ae8b42cc85c8203')
+         '7cfebee4ad484c90245cf393950032d6')
 
 build() {
   cd "$srcdir/archlinux-installer-$pkgver-$pkgrel"
