@@ -1,0 +1,40 @@
+# Contributor: Jens Pranaitis <jens@jenux.homelinux.org>
+# Contributor: Hugo Doria <hugo@archlinux.org>
+pkgname=wireshark-svn
+pkgver=27821
+pkgrel=1
+pkgdesc="A free network protocol analyzer for Unix/Linux and Windows"
+arch=('i686' 'x86_64')
+license=('GPL2')
+depends=('portaudio' 'gtk2>=2.14.5' 'heimdal>=1.2.1' 'libpcap>=1.0.0' 'bash' 'gnutls>=2.4.1' 'libcap')
+makedepends=('svn' 'bison' 'flex')
+url="http://www.wireshark.org/"
+replaces=('ethereal' 'wireshark')
+options=(!libtool)
+source=(wireshark.desktop wireshark.png)
+md5sums=('504ede44c02b2a52f6cbd3bffdf93b8d'
+         'e771800a8c977fe223583a453bc27397')
+_svntrunk=http://anonsvn.wireshark.org/wireshark/trunk/
+_svnmod=wireshark
+build() {
+  cd ${srcdir}
+  if [ -d $_svnmod/.svn ]; then
+    (cd $_svnmod && svn up -r $pkgver)
+  else
+    svn co $_svntrunk --config-dir ./ -r $pkgver $_svnmod
+  fi
+  msg "SVN checkout done or server timeout"
+  msg "Starting make..."
+  rm -rf "$srcdir/$_svnmod-build"
+  cp -r "$srcdir/$_svnmod" "$srcdir/$_svnmod-build"
+  cd "$srcdir/$_svnmod-build"
+
+  export CFLAGS="-fno-unit-at-a-time ${CFLAGS}"
+  ./autogen.sh --prefix=/usr --with-ssl || return 1
+  ./configure --prefix=/usr --with-ssl || return 1
+  make all || return 1
+  make DESTDIR=${pkgdir} install || return 1
+
+  install -Dm644 ${srcdir}/wireshark.png ${pkgdir}/usr/share/icons/wireshark.png
+  install -Dm644 ${srcdir}/wireshark.desktop ${pkgdir}/usr/share/applications/wireshark.desktop
+}
