@@ -1,0 +1,98 @@
+# Maintainer: abelstr <abel@pinklf.eu>
+# Maintainer: Marco Lima <cipparello gmail com>
+pkgname=nfs4-utils
+_realname=nfs-utils
+pkgver=1.1.5
+pkgrel=1
+pkgdesc="Support programs for Network File Systems"
+arch=('i686' 'x86_64')
+url="http://nfs.sourceforge.net"
+license=('GPL')
+depends=('e2fsprogs' 'glibc' 'libevent>=1.3e' 'librpcsecgss' 'nfsidmap' 'portmap' 'tcp_wrappers')
+conflicts=('nfs-utils')
+provides=('nfs-utils')
+backup=(etc/{exports,gssapi_mech.conf,idmapd.conf} etc/conf.d/{nfs-common.conf,nfs-server.conf})
+install="$pkgname.install"
+options=('docs')
+source=("http://downloads.sourceforge.net/sourceforge/nfs/$_realname-$pkgver.tar.bz2"
+	nfs-common
+	nfs-common.conf
+	nfs-server
+	nfs-server.conf
+	exports
+	start-statd.patch
+	idmapd.conf
+	gssapi_mech.conf
+	nfs-utils-1.1.2-kerberos-ac.patch
+	nfs-utils-1.1.2-pkgconfig_ac.patch
+	nfs-utils-1.1.5-no_libgssapi.patch
+	nfs-utils-1.1.5-heimdal_functions.patch
+	nfs-utils-1.1.4-mtab-sym.patch
+	nfs-utils-1.1.4-no-exec.patch)
+md5sums=('2848072a5e53840b9bc520fbb6782b57'
+         '3fa8ad66f434e8277e7a82c7c699ce46'
+         'a05e6e91307af37e7bd612b356bd0b6a'
+         'bedeb584f0ffa209ab30451a42737c3e'
+         '1c6c755fcfef4e5e19ee7414d3020269'
+         'ff585faf410a62c4333a027c50b56bae'
+         '11f6c229108c223dc5fe849d11aecaf3'
+         '64eaa20ea49e324e5a72858f104a61eb'
+         '234b9cca75a33af98eda3f1683756879'
+         'f3be115d392d9f9bb0f056e8d4341a14'
+         'd07c449358eeb254850975add54bcff2'
+         '0506aeaf6f48cb248763200ba889e248'
+         '63873cbfc6365a62fa98a0aca9080e1b'
+         '7674106eaaa4c149bccd4f05fe3604e9'
+         '4f4827dfc93008dfadd0a530ad0872b2')
+
+build() {
+  cd "$srcdir/$_realname-$pkgver"
+  
+  # Patches from gentoo for heimdal compatibility Bug 231396
+  # http://bugs.gentoo.org/show_bug.cgi?id=231396
+  patch -Np1 -i ../nfs-utils-1.1.2-kerberos-ac.patch || return 1
+  patch -Np0 -i ../nfs-utils-1.1.2-pkgconfig_ac.patch || return 1
+  patch -Np1 -i ../nfs-utils-1.1.5-no_libgssapi.patch || return 1
+  patch -Np0 -i ../nfs-utils-1.1.5-heimdal_functions.patch || return 1
+  patch -Np1 -i ../nfs-utils-1.1.4-mtab-sym.patch || return 1
+  patch -Np1 -i ../nfs-utils-1.1.4-no-exec.patch || return 1
+
+  rm -f config.guess config.sub ltmain.sh
+  autoreconf -i
+
+  export GSSAPI_CFLAGS='-I/usr/include/gssapi'
+  export GSSAPI_LIBS='-lgssapi -ldl'
+
+  patch -Np0 -i ../start-statd.patch || return 1
+  
+  ./configure \
+    --prefix=/usr \
+    --sysconfdir=/etc \
+    --with-statedir=/var/lib/nfs \
+    --mandir=/usr/share/man \
+    --infodir=/usr/share/info \
+    --enable-nfsv3 \
+    --enable-nfsv4 \
+    --enable-gss \
+    --with-tcp-wrappers || return 1
+  make || return 1
+  make DESTDIR="$pkgdir/" install || return 1
+  
+  # NFS & NFSv4 init scripts
+  install -D -m 755 ../nfs-common "$pkgdir/"etc/rc.d/nfs-common
+  install -D -m 755 ../nfs-server "$pkgdir/"etc/rc.d/nfs-server
+  # Configuration
+  install -D -m 644 ../exports "$pkgdir/"etc/exports
+  install -D -m 644 ../idmapd.conf "$pkgdir/"etc/idmapd.conf
+  install -D -m 644 ../gssapi_mech.conf "$pkgdir/"etc/gssapi_mech.conf
+  install -D -m 644 ../nfs-common.conf "$pkgdir/"etc/conf.d/nfs-common.conf
+  install -D -m 644 ../nfs-server.conf "$pkgdir/"etc/conf.d/nfs-server.conf
+  # directories
+  mkdir "$pkgdir/"var/lib/nfs/rpc_pipefs
+  mkdir "$pkgdir/"var/lib/nfs/v4recovery
+
+  # copy docs
+  install -m 755 -d "$pkgdir/"usr/share/doc/$pkgname || return 1
+  install -m 644 -t "$pkgdir/"usr/share/doc/$pkgname ChangeLog INSTALL \
+    NEWS README || return 1
+}

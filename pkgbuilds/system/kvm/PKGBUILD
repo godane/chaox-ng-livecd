@@ -1,0 +1,46 @@
+# Contributor: Jens Pranaitis <jens@jenux.homelinux.org>
+# Contributor: Bernhard Walle <bernhard.walle@gmx.de>
+# AUR Category: emulators
+
+pkgname=kvm
+pkgver=84
+pkgrel=2
+pkgdesc="KVM Userspace Package"
+arch=(i686 x86_64)
+url="http://kvm.qumranet.com"
+license=('GPL')
+depends=("sdl" "vde2" "alsa-lib" "bluez" "gnutls")
+install=('kvm.install')
+source=("http://switch.dl.sourceforge.net/sourceforge/$pkgname/$pkgname-$pkgver.tar.gz"
+        'kvm.install'
+        '65-kvm.rules'
+        'kvm-fix-with-evdev.patch')
+noextract=()
+md5sums=('39b7206ef400845800f081a5b901f757'
+         'c8f4508fa80da88416c99685b198f9dc'
+         'f7fb47f5bd3069948e6e9f2cda4a1b0d'
+         '1ae014e9f0cee4b289430a33b22da9b5')
+
+build() {
+
+  #
+  # EXTRACT
+  #
+  cd $srcdir/$pkgname-$pkgver
+  patch -p1 -i $startdir/kvm-fix-with-evdev.patch
+
+  #
+  # BUILD HERE
+  #
+
+  ./configure --prefix=/usr --audio-drv-list=sdl,alsa --with-patched-kernel
+  make || return 1
+  make DESTDIR="$pkgdir/" install
+  rm -fr $pkgdir/usr/include/linux/
+
+  #
+  # COPY FILES
+  #
+  mkdir -p $pkgdir/etc/udev/rules.d
+  cp $srcdir/65-kvm.rules $pkgdir/etc/udev/rules.d
+}
