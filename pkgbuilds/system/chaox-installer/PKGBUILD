@@ -15,7 +15,7 @@ md5sums=('93bc355046775819baa9402ff0744bd3'
          '7cfebee4ad484c90245cf393950032d6')
 
 build() {
-  cd "$srcdir/archlinux-installer-$pkgver-$pkgrel"
+  cd "$srcdir/archlinux-installer-$pkgver-2"
   patch -p0 < "$srcdir/chaox-setup.diff" || return 1
   install -D -m755 setup "$pkgdir/arch/chaox-setup"
 }
