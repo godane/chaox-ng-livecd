@@ -1,5 +1,5 @@
---- setup.orig	2009-03-22 16:56:38.000000000 +0100
-+++ setup	2009-03-22 17:01:12.000000000 +0100
+--- setup.orig	2009-02-10 23:13:45.000000000 +0100
++++ setup	2009-03-23 21:41:17.000000000 +0100
 @@ -1,9 +1,9 @@
  #!/bin/bash
  
@@ -22,7 +22,7 @@
  [core]
  Server = ${serverurl//\$repo/core}
  EOF
-@@ -716,6 +719,42 @@
+@@ -716,6 +719,38 @@
      return 0
  }
  
@@ -55,17 +55,13 @@
 +    mknod -m600 ${DESTDIR}/dev/console c 5 1
 +    mkdir -m755 ${DESTDIR}/media/{cd,dvd,fl}
 +
-+    # XXX: Revert mkinitcpio
-+    # sed -i 's/^\([A-Z]\+\).*/\1=""/' ${DESTDIR}/etc/mkinitcpio.conf
-+    # sed -i 's/^HOOKS=""/HOOKS="base udev autodetect pata scsi sata filesystems"/' ${DESTDIR}/etc/mkinitcpio.conf
-+
 +    S_SELECT=1
 +}
 +
  # select_packages()
  # prompts the user to select packages to install
  #
-@@ -778,6 +817,90 @@
+@@ -778,6 +813,90 @@
      S_SELECT=1
  }
  
@@ -107,7 +103,7 @@
 +        else
 +            echo -e "\nPackage Installation Complete." >>/tmp/pacman.log
 +        fi
-+        for packet in aufs ndiswrapper sqlzma com-on-air_cs rt2860 rt73-k2wrlz tiacx madwifi-newhal-svn; do
++        for packet in ndiswrapper sqlzma com-on-air_cs rt2860 rt73-k2wrlz tiacx madwifi-newhal-svn; do
 +            $PACMAN -S $packet
 +        done
 +        rm /tmp/setup-pacman-running
@@ -156,7 +152,7 @@
  
  # installpkg()
  # performs package installation to the target system
-@@ -1024,19 +1147,20 @@
+@@ -1024,19 +1143,20 @@
              fi
              # remove default entries by truncating file at our little tag (#-*)
              sed -i -e '/#-\*/q' $grubmenu
@@ -183,7 +179,7 @@
  
  # (2) Windows
  #title Windows
-@@ -1116,18 +1240,7 @@
+@@ -1116,18 +1236,7 @@
  # returns: nothing
  select_source()
  {
@@ -203,7 +199,7 @@
  
      if [ "$MODE" = "cd" ]; then
          TITLE="Arch Linux CDROM or OTHER SOURCE Installation"
-@@ -1138,7 +1251,7 @@
+@@ -1138,7 +1247,7 @@
          fi
          echo "Using CDROM for package installation" >$LOG
      else
@@ -212,7 +208,7 @@
          DIALOG --msgbox "If you wish to load your ethernet modules manually, please do so now in another terminal." 12 65
          local CURRENT_SELECTION=""
          while true; do
-@@ -1258,7 +1371,7 @@
+@@ -1258,7 +1367,7 @@
          touch /tmp/setup-mkinitcpio-running
          echo "mkinitcpio progress ..." > /tmp/mkinitcpio.log; \
          echo >> /tmp/mkinitcpio.log; \
@@ -221,7 +217,7 @@
          echo $? > /tmp/.mkinitcpio-retcode
          echo >> /tmp/mkinitcpio.log
          rm -f /tmp/setup-mkinitcpio-running
-@@ -1378,11 +1491,11 @@
+@@ -1378,11 +1487,11 @@
      fi
      DIALOG $DEFAULT --title " MAIN MENU " \
          --menu "Use the UP and DOWN arrows to navigate menus.  Use TAB to switch between buttons and ENTER to select." 16 55 8 \
@@ -236,7 +232,7 @@
          "5" "Configure System" \
          "6" "Install Bootloader" \
          "7" "Exit Install" 2>$ANSWER
-@@ -1395,9 +1508,9 @@
+@@ -1395,9 +1504,9 @@
          "2")
              prepare_harddrive ;;
          "3")
@@ -248,7 +244,7 @@
          "5")
              configure_system ;;
          "6")
-@@ -1417,12 +1530,13 @@
+@@ -1417,12 +1526,22 @@
  #####################
  ## begin execution ##
  
@@ -258,13 +254,22 @@
 -filesystems, you may want to consult some documentation before continuing. \
 -You can view all output from commands by viewing your VC7 console (ALT-F7). \
 -ALT-F1 will bring you back here." 14 65
++THUNAR_IS_STARTED=$(su livecd -c 'dbus-send --session --type=method_call --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.NameHasOwner string:"org.xfce.Thunar"' | grep -q 'boolean true'; echo $?)
++
++if [ $THUNAR_IS_STARTED -eq 0 ]; then
++    trap 'su livecd -c "dbus-send --session --type=method_call --dest=org.freedesktop.DBus / org.freedesktop.DBus.StartServiceByName string:org.xfce.Thunar uint32:0"' EXIT
++    su livecd -c "dbus-send --session --dest=org.xfce.Thunar --type=method_call /org/xfce/FileManager org.xfce.Thunar.Terminate"
++    THUNAR_NOTICE="\n\nNotice: The Thunar service will be disabled during the installation. It'll be restarted once you quit the installer."
++fi
++
 +DIALOG --msgbox "Welcome to the Chaox-ng Installation program
 +(based on the fabulous Arch Linux Installer)
 +
 +The install process is fairly straightforward, and you should run through \
 +the options in the order they are presented. If you are unfamiliar with \
 +non-graphical partition managers, you may want to use gparted instead. \
-+You can view all output from commands by viewing your VC8 console (ALT-F8)." 14 65
++You can view all output from commands by viewing your VC8 console (ALT-F8). \
++$THUNAR_NOTICE" 14 65
  
  while true; do
      mainmenu
