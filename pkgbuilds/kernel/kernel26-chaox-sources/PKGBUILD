@@ -2,7 +2,7 @@
 # Based on the work of godane <slaxemulator@gmail.com>
 pkgname=kernel26-chaox-sources
 _basekernel=2.6.28
-pkgver=2.6.28.8
+pkgver=2.6.28.9
 pkgrel=1
 pkgdesc="Linux kernel based on slax config. Used in chaox-ng"
 arch=("i686")
@@ -32,7 +32,7 @@ source=(ftp://ftp.kernel.org/pub/linux/kernel/v2.6/linux-$_basekernel.tar.bz2
 	http://patches.aircrack-ng.org/zd1211rw_inject_2.6.26.patch
 )
 md5sums=('d351e44709c9810b85e29b877f50968a'
-         '8d3d51f51eaadde0a04a79244e92e435'
+         '27a43f76cf4b90db18df6d1c5e72789b'
          '961057b0e8ade0ef052b9415dedfbe43'
          'ca85d39144f07b0500c663779dda9259'
          '69c34c83c6f64570efa3bc65c39304c5'
