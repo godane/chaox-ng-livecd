@@ -1,0 +1,13 @@
+--- src/nm-openvpn-service.c	2009-03-26 18:58:51.000000000 +0100
++++ src/nm-openvpn-service.c	2009-03-26 18:59:11.000000000 +0100
+@@ -677,8 +677,8 @@
+ 	 * and defaults to disallowing any scripts, a behavior change from previous
+ 	 * versions.
+ 	 */
+-	add_openvpn_arg (args, "--script-security");
+-	add_openvpn_arg (args, "2");
++	//add_openvpn_arg (args, "--script-security");
++	//add_openvpn_arg (args, "2");
+ 
+ 	/* Up script, called when connection has been established or has been restarted */
+ 	add_openvpn_arg (args, "--up");

@@ -7,13 +7,19 @@ pkgdesc='openvpn plugin for networkmanager'
 arch=('i686' 'x86_64')
 url="http://www.gnome.org/projects/NetworkManager/"
 license=('GPL')
-depends=('networkmanager>=0.7' 'openvpn' 'libgnomeui')
-md5sums=('52964484f984ce74502f9776f9dde872')
+depends=('libnetworkmanager>=0.7' 'openvpn' 'libgnomeui' 'gnome-network-manager')
+makedepends=('gnome-common' 'intltool')
+md5sums=('52964484f984ce74502f9776f9dde872'
+	'53d62b76657ecf05e6409c87daaa3267')
 
-source=(ftp://ftp.gnome.org/pub/gnome/sources/NetworkManager-openvpn/0.7/NetworkManager-openvpn-${pkgver}.tar.bz2)
+source=(ftp://ftp.gnome.org/pub/gnome/sources/NetworkManager-openvpn/0.7/NetworkManager-openvpn-${pkgver}.tar.bz2
+	openvpn-pre-2.1.patch)
+
 
 build() {
 	cd "${srcdir}/NetworkManager-openvpn-${pkgver}"
+
+	patch -p0 < "${srcdir}/openvpn-pre-2.1.patch" || return 1
 
 	./configure --prefix=/usr --sysconfdir=/etc || return 1
 	make || return 1
