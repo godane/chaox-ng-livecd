@@ -41,7 +41,7 @@ run_hook ()
     if [ $persistable ]; then
         mount_ext2fs
     else
-    	mount_tmpfs
+      mount_tmpfs
     fi
     if [ "x${BOOT_MOUNT}" = "x" ]; then
         echo "ERROR: BOOT_MOUNT is not set. The boot-cd or boot-usb hook MUST"

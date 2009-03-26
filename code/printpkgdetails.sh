@@ -1,5 +1,5 @@
 #!/bin/bash
-PKGBUILDSDIR="/home/jens/build/livecd/pkgbuilds"
+PKGBUILDSDIR="/home/build/chaox-ng-livecd/pkgbuilds"
 getarchver() {
 pkgver=0
 pkgrel=0
