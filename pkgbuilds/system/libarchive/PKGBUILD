@@ -2,8 +2,8 @@
 # Contributor: Dan McGee <dan@archlinux.org>
 # Contributor: Aaron Griffin <aaron@archlinux.org>
 pkgname=libarchive
-pkgver=2.6.1
-pkgrel=2
+pkgver=2.6.2
+pkgrel=1
 pkgdesc="library that can create and read several streaming archive formats"
 arch=(i686 x86_64)
 url="http://people.freebsd.org/~kientzle/libarchive/"
@@ -14,7 +14,7 @@ provides=("tar")
 conflicts=("tar")
 replaces=("tar")
 source=(http://libarchive.googlecode.com/files/libarchive-$pkgver.tar.gz)
-md5sums=('9d9f83947ee9d5732289ed48d00e3743')
+md5sums=('e31fcacd3f2b996988c0852a5edfc680')
 # pacman.static build fails unless we keep the libtool files (or unless we link
 # the missing symbols inside the libarchive .a static lib, but that is dirty)
 options=(libtool)
