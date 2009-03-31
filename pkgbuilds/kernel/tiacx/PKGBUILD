@@ -1,20 +1,20 @@
 # Contributor: Jens Pranaitis <jens@jenux.homelinux.org>
 # Contributor: James Rayner <iphitus@gmail.com>
+source "${startdir}"/../kernel.env
 pkgname=tiacx
 pkgver=20080210
-pkgrel=29
+pkgrel=30
 pkgdesc="OpenSource module for Texas Instruments ACX100/ACX111 wireless chips. For stock arch 2.6 kernel"
 arch=(i686 x86_64)
 url="http://acx100.sourceforge.net/"
 license=('MPL')
-depends=('wireless_tools' 'tiacx-firmware')
+depends=('wireless_tools' 'tiacx-firmware' "kernel26-chaox=$kernpkgver")
 install=acx.install
 source=(http://downloads.sourceforge.net/sourceforge/acx100/acx-$pkgver.tar.bz2 http://patches.aircrack-ng.org/acx-20070101.patch kernel-2.6.27.patch)
 md5sums=('7d5ce3215708e4e9f95cf567a9ee3a12'
          '786344c994b8e36c91b2d81490c770b1'
          '9895f72f8d0c84956b0f6c3b16df0fe8')
 build() {
-    source "${startdir}"/../kernel.env
     cd "${srcdir}"/acx-$pkgver
     patch -Np1 -i "${srcdir}"/acx-20070101.patch
     patch -Np1 -i "${srcdir}"/kernel-2.6.27.patch

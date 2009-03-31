@@ -1,14 +1,15 @@
 # Contributor: Jens Pranaitis <jens@jenux.homelinux.org>
 # Contributor: Thomas Schneider <blacklotus@jenux.homelinux.org>
 # Contributor: Shino <shino@jenux.homelinux.org>
+source "${startdir}"/../kernel.env
 pkgname=com-on-air_cs
-pkgver=86
-pkgrel=3
+pkgver=87
+pkgrel=1
 pkgdesc="Com on air linux driver, for dect pcmcia cards."
 url="https://dedected.org/cgi-bin/trac.cgi/wiki/COM-ON-AIR-Linux"
 arch=('i686' 'x86_64')
 license=('GPL2')
-depends=()
+depends=("kernel26-chaox=$kernpkgver")
 makedepends=('subversion' 'gcc')
 conflicts=()
 provides=()
@@ -21,7 +22,6 @@ _svntrunk=https://dedected.org/svn/trunk/com-on-air_cs-linux
 _svnmod=com-on-air_cs-linux
 
 build() {
-  source "${startdir}"/../kernel.env
   cd ${srcdir}
   if [ -d $_svnmod/.svn ]; then
     (cd $_svnmod && svn up -r $pkgver)

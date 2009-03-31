@@ -1,15 +1,16 @@
 # Contributor: Jens Pranaitis <jens@jenux.homelinux.org>
 # Contributor: Tobias Powalowski <tpowa@archlinux.org>
+source "${startdir}"/../kernel.env
 pkgname=nvidia-96xx
 pkgver=96.43.11
-pkgrel=2
-pkgdesc="NVIDIA legacy drivers for kernel26, 96xx branch"
+pkgrel=3
+pkgdesc="NVIDIA legacy drivers for kernel26-chaox, 96xx branch"
 arch=(i686 x86_64)
 license=('custom:NVIDIA')
 [ "$CARCH" = "i686"   ] && ARCH=x86
 [ "$CARCH" = "x86_64" ] && ARCH=x86_64
 url="http://www.nvidia.com/"
-depends=('nvidia-96xx-utils')
+depends=('nvidia-96xx-utils' "kernel26-chaox=$kernpkgver")
 conflicts=('nvidia' 'nvidia-71xx' 'nvidia-legacy')
 install=nvidia-96xx.install
 license=('custom')
@@ -19,7 +20,6 @@ md5sums=('bf2661f00759f78cbad9f72eeecdc676')
 
 build()
 {
-  source "${startdir}"/../kernel.env
   # Extract
   cd "${srcdir}"/
   sh NVIDIA-Linux-$ARCH-${pkgver}-pkg0.run --extract-only

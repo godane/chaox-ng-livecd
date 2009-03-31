@@ -1,4 +1,4 @@
-_kernver='2.6.28.9-chaox'
+_kernver='2.6.29-chaox'
 
 post_install()
 {
