@@ -1,0 +1,32 @@
+# Contributor: Jens Pranaitis <jens@jenux.homelinux.org>
+# Contributor: Bernhard Bliem <bernhard.bliem@gmail.com>
+pkgname=ecryptfs-utils-bzr
+pkgver=1
+pkgrel=1
+pkgdesc="Enterprise-class stacked cryptographic filesystem for Linux"
+arch=('i686')
+url="https://launchpad.net/ecryptfs"
+license=('GPL')
+source=()
+md5sums=()
+# build without nss, so not listed in depends
+depends=('keyutils' 'libgcrypt' 'openssl')
+makedepends=('bzr')
+options=('!libtool')
+install=$pkgname.install
+_bzrbranch=lp:ecryptfs
+_bzrmod=ecryptfs
+build() {
+  cd "$srcdir"
+  msg "Connecting to the server...."
+  bzr branch ${_bzrbranch} -q
+  msg "BZR checkout done or server timeout"
+  [ -d ./${_bzrmod}-build ] && rm -rf ./${_bzrmod}-build
+  cp -r ./${_bzrmod} ./${_bzrmod}-build
+  cd ./${_bzrmod}-build
+  msg "Starting make"
+  scripts/bootstrap.sh
+  ./configure --prefix=/usr --disable-nss
+  make || return 1
+  make DESTDIR="$pkgdir/" install
+} 

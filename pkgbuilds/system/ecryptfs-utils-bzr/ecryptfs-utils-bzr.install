@@ -1,0 +1,8 @@
+post_install() {
+	# mount.ecryptfs_private must be installed suid root
+	chmod +s /sbin/mount.ecryptfs_private
+}
+
+post_upgrade() {
+	chmod +s /sbin/mount.ecryptfs_private
+}
