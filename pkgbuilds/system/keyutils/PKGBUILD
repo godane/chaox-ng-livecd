@@ -1,0 +1,20 @@
+# Contributor: Jens Pranaitis <jens@jenux.homelinux.org>
+# Contributor: Tom K <tomk@runbox.com>
+pkgname=keyutils
+pkgver=1.2
+pkgrel=1
+pkgdesc="Userspace tools for the kernel key management system"
+depends=('glibc' 'bash')
+source=(http://people.redhat.com/~dhowells/keyutils/keyutils-$pkgver.tar.bz2 keyutils-1.2-makefile-fixup.patch)
+url="http://people.redhat.com/~dhowells/keyutils/"
+license=('GPL' 'LGPL')
+arch=("i686")
+md5sums=('227086776abccc3ee34599591db563f0'
+         '33a317769c1337940848dd776574829e')
+build() {
+  cd "${srcdir}"/keyutils-$pkgver
+  patch -Np0 -i "${srcdir}"/keyutils-1.2-makefile-fixup.patch 
+  make || return 1
+  make BINDIR=/usr/bin SBINDIR=/usr/sbin LIBDIR=/usr/lib \
+  DESTDIR="${pkgdir}" install || return 1
+}

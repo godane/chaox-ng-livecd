@@ -1,0 +1,24 @@
+--- Makefile.orig	2009-04-03 11:26:23.000000000 +0200
++++ Makefile	2009-04-03 11:29:51.000000000 +0200
+@@ -72,10 +72,10 @@
+ 	$(CC) $(CFLAGS) -fPIC -o $@ -c $<
+ 
+ 
+-keyctl: keyctl.c keyutils.h Makefile
++keyctl: keyctl.c keyutils.h Makefile $(DEVELLIB)
+ 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $< -L. -lkeyutils -Wl,-rpath,$(LIB)
+ 
+-request-key: request-key.c keyutils.h Makefile
++request-key: request-key.c keyutils.h Makefile $(DEVELLIB)
+ 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $< -L. -lkeyutils -Wl,-rpath,$(LIB)
+ 
+ 
+@@ -91,7 +91,7 @@
+ 	$(INSTALL) -D $(LIBNAME) $(DESTDIR)$(LIBDIR)/$(LIBNAME)
+ 	$(LNS) $(LIBNAME) $(DESTDIR)$(LIBDIR)/$(SONAME)
+ 	mkdir -p $(DESTDIR)$(USRLIBDIR)
+-	$(LNS) $(LIBDIR)/$(SONAME) $(DESTDIR)$(USRLIBDIR)/$(DEVELLIB)
++	$(LNS) $(SONAME) $(DESTDIR)$(LIBDIR)/$(DEVELLIB)
+ 	$(INSTALL) -D keyctl $(DESTDIR)$(BINDIR)/keyctl
+ 	$(INSTALL) -D request-key $(DESTDIR)$(SBINDIR)/request-key
+ 	$(INSTALL) -D request-key-debug.sh $(DESTDIR)$(SHAREDIR)/request-key-debug.sh
