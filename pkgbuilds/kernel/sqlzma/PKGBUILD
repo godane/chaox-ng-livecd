@@ -6,7 +6,7 @@ pkgname=sqlzma
 _realname=squashfs
 pkgver=3.4
 lzmaver=457
-pkgrel=20
+pkgrel=21
 url="http://www.squashfs-lzma.org"
 pkgdesc="A highly compressed read-only filesystem for Linux."
 depends=("kernel26-chaox=$kernpkgver" 'zlib')
@@ -27,7 +27,7 @@ build()
 {
 	cd "${srcdir}"
 	echo "applying sqlzma2u-3.4.patch"
-	patch -p0 < ${srcdir}/sqlzma2u-3.4.patch || return 1
+	patch -Np0 < ${srcdir}/sqlzma2u-3.4.patch || return 1
 
 	if [ "$CARCH" == "x86_64" ]; then
 		sed -i 's/-Werror//' ${srcdir}/sqlzma1-${lzmaver}.patch || return 1
@@ -35,7 +35,7 @@ build()
 	fi
 	
 	echo "applying sqlzma1-${lzmaver}.patch"
-	patch -p1 < "${srcdir}"/sqlzma1-${lzmaver}.patch || return 1
+	patch -Np1 < "${srcdir}"/sqlzma1-${lzmaver}.patch || return 1
 	
 	cd "${srcdir}" || return 1
 	
@@ -48,6 +48,6 @@ build()
 	make || return 1	
 	echo "Installing files"
   mkdir -p "${pkgdir}"/lib/modules/${_kernver}/fs/${_realname}
-  install -D -m644 "${_kerndir}"/fs/squashfs/squashfs.ko "${pkgdir}"/lib/modules/${_kernver}/fs/${_realname}
-  install -D -m644 C/Compress/Lzma/kmod/{un,sq}lzma.ko "${pkgdir}"/lib/modules/${_kernver}/fs/${_realname}
+  install -D -m644 "${srcdir}"/squashfs/squashfs.ko "${pkgdir}"/lib/modules/${_kernver}/fs/${_realname} || return 1
+  install -D -m644 C/Compress/Lzma/kmod/{un,sq}lzma.ko "${pkgdir}"/lib/modules/${_kernver}/fs/${_realname} || return 1
 }
