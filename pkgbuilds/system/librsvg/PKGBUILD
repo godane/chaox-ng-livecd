@@ -1,8 +1,7 @@
-# $Id: PKGBUILD 13073 2008-09-25 20:24:43Z jgc $
-# Maintainer: Jan de Groot <jgc@archlinux.org>
-
+# Contributor: Jens Pranaitis <jens@jenux.homelinux.org>
+# Contributor: Jan de Groot <jgc@archlinux.org>
 pkgname=librsvg
-pkgver=2.22.3
+pkgver=2.26.0
 pkgrel=1
 pkgdesc="SAX-based renderer for SVG files into a GdkPixbuf"
 arch=(i686 x86_64)
@@ -11,10 +10,9 @@ depends=('gtk2>=2.14.3' 'libgsf>=1.14.8' 'python')
 makedepends=('perlxml' 'pkgconfig')
 options=('!libtool')
 url="http://librsvg.sourceforge.net/"
-source=(http://ftp.gnome.org/pub/gnome/sources/${pkgname}/2.22/${pkgname}-${pkgver}.tar.bz2)
+source=(http://ftp.gnome.org/pub/gnome/sources/${pkgname}/2.26/${pkgname}-${pkgver}.tar.bz2)
 install=librsvg.install
-md5sums=('c4ec4fdb2b1842e221ca39127e85682d')
-
+md5sums=('65dbd726a514fe8b797d26254b8efc1e')
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
   ./configure --prefix=/usr --libexecdir=/usr/lib/${pkgname} \
