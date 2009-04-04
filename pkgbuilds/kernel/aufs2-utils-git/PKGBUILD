@@ -1,6 +1,6 @@
 # Contributor: Jens Pranaitis <jens@jenux.homelinux.org>
 pkgname=aufs2-utils-git
-pkgver=20090331
+pkgver=20090404
 pkgrel=1
 pkgdesc="aufs2 utils"
 arch=("i686")

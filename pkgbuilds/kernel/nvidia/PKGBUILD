@@ -3,7 +3,7 @@
 source "${startdir}"/../kernel.env
 pkgname=nvidia
 pkgver=180.44
-pkgrel=1
+pkgrel=2
 pkgdesc="NVIDIA drivers for kernel26-chaox."
 arch=('i686' 'x86_64')
 [ "$CARCH" = "i686"   ] && ARCH=x86

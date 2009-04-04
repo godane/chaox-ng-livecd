@@ -2,8 +2,8 @@
 # Based on the work of godane <slaxemulator@gmail.com>
 pkgname=kernel26-chaox
 _basekernel=2.6.29
-pkgver=2.6.29
-pkgrel=3
+pkgver=2.6.29.1
+pkgrel=1
 pkgdesc="Linux kernel based on slax config. Used in chaox-ng"
 arch=("i686")
 license=('GPL2')
@@ -26,15 +26,17 @@ source=(ftp://ftp.kernel.org/pub/linux/kernel/v2.6/linux-$_basekernel.tar.bz2
 	openlog.patch
 	http://patches.aircrack-ng.org/zd1211rw_inject_2.6.26.patch
   squashfs3.4-include.patch
+  ftp://kernel.org/pub/linux/kernel/people/edward/reiser4/reiser4-for-2.6/reiser4-for-2.6.29.patch.gz
 )
 md5sums=('64921b5ff5cdadbccfcd3820f03be7d8'
-         '1764da3e3f5fe588e1c72376c60b47c1'
-         '588870da9989a502923d92170d217a45'
+         '87c6fbf4096b644d66d4da8bb00641a5'
+         'fdae05174378fec60d994134eec3d86f'
          'ca85d39144f07b0500c663779dda9259'
          '69c34c83c6f64570efa3bc65c39304c5'
          'a49390dd08e4f7702b8f4b550f1ad84e'
          'a162a23b5db02738309e54b6ca9fcbc9'
-         '2ed00248c56672a6664864084011e85a')
+         '2ed00248c56672a6664864084011e85a'
+         'ace47269d99bb5e555e01417f3337cd8')
 build() {
   KARCH=x86
   cd "${srcdir}"
@@ -58,6 +60,8 @@ build() {
   patch -Np1 -i "${srcdir}"/mac80211_2.6.28-rc4-wl_frag+ack_v3.patch || return 1
   echo "applying ath5k injection patch"
   patch -Np1 -i "${srcdir}"/ath5k-injection-2.6.27-rc2.patch || return 1
+  echo "applying reiser4 patch"
+  patch -Np1 -i "${srcdir}"/reiser4-for-2.6.29.patch || return 1
   # add openlog patch
   patch -Np0 -i "${srcdir}"/openlog.patch || return 1
   cp ../config ./.config
