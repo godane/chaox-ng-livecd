@@ -1,7 +1,7 @@
 # Contributor: Jens Pranaitis <jens@jenux.homelinux.org>
 # Contributor: Thomas Bächler <thomas@archlinux.org>
 pkgname=mplayer
-pkgver=28936
+pkgver=29150
 pkgrel=1
 pkgdesc="A movie player for linux"
 arch=(i686 x86_64)
@@ -11,7 +11,7 @@ depends=('libxxf86dga' 'libxv' 'libmad' 'giflib' 'cdparanoia'
          'x264>=20080625' 'faac' 'ttf-dejavu' 'fribidi')
 license=('GPL')
 url="http://www.mplayerhq.hu/"
-makedepends=('unzip' 'live-media' 'libdca' 'mesa')
+makedepends=('unzip' 'libdca' 'mesa')
 backup=('etc/mplayer/codecs.conf' 'etc/mplayer/input.conf')
 source=()
 md5sums=()
@@ -28,8 +28,6 @@ build() {
   rm -rf ${srcdir}/${_svnmod}-build
   cp -r ${_svnmod} ${_svnmod}-build
   cd ${srcdir}/${_svnmod}-build
-  # Custom CFLAGS break the mplayer build
-  unset CFLAGS
   ./configure --prefix=/usr --disable-gui --disable-arts --enable-x11 \
       --enable-runtime-cpudetection --confdir=/etc/mplayer --disable-nas \
       --enable-gl --enable-tv-v4l1 --enable-tv-v4l2 --enable-largefiles \
@@ -37,7 +35,7 @@ build() {
       --enable-fribidi --disable-libdv --disable-musepack \
       --language=en --disable-dvdnav --disable-esd --disable-mga \
       --disable-libamr_nb --disable-jack --disable-pulse \
-      --with-extraincdir=/usr/lib/live-media --disable-aa \
+      --disable-live --disable-aa \
       --disable-lirc --disable-lircc --enable-caca --enable-alsa \
       --disable-ossaudio
   [ "$CARCH" = "i686" ] &&  sed 's|-march=i486|-march=i686|g' -i config.mak
