@@ -1,5 +1,5 @@
 --- setup.orig	2009-02-10 23:13:45.000000000 +0100
-+++ setup	2009-03-23 21:41:17.000000000 +0100
++++ setup	2009-04-08 17:16:32.000000000 +0200
 @@ -1,9 +1,9 @@
  #!/bin/bash
  
@@ -16,8 +16,8 @@
  CacheDir = ${DESTDIR}/var/cache/pacman/pkg
  CacheDir = /src/core/pkg
  
-+[livecd]
-+Server = http://dev-jenux.homelinux.org/chaox-repo
++[chaox-stable]
++Server = http://repo.chaox.net/stable
 +
  [core]
  Server = ${serverurl//\$repo/core}
@@ -103,7 +103,7 @@
 +        else
 +            echo -e "\nPackage Installation Complete." >>/tmp/pacman.log
 +        fi
-+        for packet in ndiswrapper sqlzma com-on-air_cs rt2860 rt73-k2wrlz tiacx madwifi-newhal-svn; do
++        for packet in ndiswrapper sqlzma com-on-air_cs tiacx madwifi-newhal-svn; do
 +            $PACMAN -S $packet
 +        done
 +        rm /tmp/setup-pacman-running
