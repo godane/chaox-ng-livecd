@@ -1,0 +1,30 @@
+# Contributor: Jens Pranaitis <jens@jenux.homelinux.org>
+pkgname=packet-o-matic-svn
+pkgver=323
+pkgrel=2
+pkgdesc="a real time packet generator"
+arch=("i686")
+url="http://www.packet-o-matic.org/"
+license=('GPL')
+depends=("sqlite3" "libxml2" "libpcap")
+makedepends=('subversion')
+_svntrunk=https://svn.tuxicoman.be/svn/packet-o-matic/trunk
+_svnmod=packet-o-matic
+
+build() {
+  cd "$srcdir"
+  if [ -d $_svnmod/.svn ]; then
+    (cd $_svnmod && svn up -r $pkgver)
+  else
+    svn co $_svntrunk --config-dir ./ -r $pkgver $_svnmod
+  fi
+  msg "SVN checkout done or server timeout"
+  msg "Starting make..."
+  rm -rf "$srcdir/$_svnmod-build"
+  cp -r "$srcdir/$_svnmod" "$srcdir/$_svnmod-build"
+  cd "$srcdir/$_svnmod-build"
+  autoreconf -f -i
+  ./configure --prefix=/usr
+  make || return 1
+  make DESTDIR="$pkgdir/" install
+}
