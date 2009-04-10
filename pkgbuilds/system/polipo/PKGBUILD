@@ -1,0 +1,40 @@
+# Contributor: Jens Pranaitis <jens@jenux.homelinux.org>
+# Contributor: Thomas Holmquist <holmquist(a)gatech.edu>
+# Contributor: Jan Böhringer <ja(a)bm-boehringer.de>
+
+pkgname=polipo
+pkgver=1.0.4
+pkgrel=4
+pkgdesc="A small and fast caching web proxy."
+arch=('i686' 'x86_64')
+url="http://www.pps.jussieu.fr/~jch/software/polipo/"
+license=('GPL')
+depends=(bash)
+makedepends=(texinfo)
+install=polipo.install
+source=(http://www.pps.jussieu.fr/~jch/software/files/polipo/polipo-$pkgver.tar.gz
+	polipo)
+md5sums=('defdce7f8002ca68705b6c2c36c4d096'
+         '997f87c4e74c24e3aef28bbabc3b76cb')
+
+build() {
+  cd "${srcdir}"/$pkgname-$pkgver
+  sed -i "s|-Os -g -Wall|${CFLAGS}|g" Makefile
+  make all || return 1
+
+  make  DESTDIR=""${pkgdir}"" \
+	PREFIX=""${pkgdir}"/usr" \
+	LOCAL_ROOT=""${pkgdir}"/usr/share/polipo/www" \
+	DISK_CACHE_ROOT=""${pkgdir}"/var/cache/polipo" \
+  MANDIR=""${pkgdir}"/usr/share/man" \
+  install || return 1
+
+  install -d "${pkgdir}"/etc/polipo/ "${pkgdir}"/etc/rc.d/ \
+  "${pkgdir}"/var/cache/polipo/
+
+  install -Dm 644 config.sample "${pkgdir}"/etc/polipo/
+
+  install -Dm 644 forbidden.sample "${pkgdir}"/etc/polipo/
+
+  install -D "$srcdir"/polipo "${pkgdir}"/etc/rc.d/
+}

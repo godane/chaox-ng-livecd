@@ -1,0 +1,10 @@
+post_install() {
+  echo "You should create a config-file now, an example is located in /etc/polipo/."
+  echo "If you don't create a config-file, polipo will use its defaults."
+}
+
+op=$1
+shift
+
+$op $*
+
