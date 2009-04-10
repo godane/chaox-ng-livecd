@@ -7,8 +7,8 @@ arch=("i686")
 url="http://chaox.wordpress.com"
 license=('GPL')
 depends=("xfdesktop")
-source=(http://jenux.homelinux.org/~jens/chaox/$pkgname-$pkgver.tar.bz2)
-md5sums=('4a9d2f80327636f32542c462a8b68453')
+source=(http://www.chaox.net/~jens/chaox/$pkgname-$pkgver.tar.bz2)
+md5sums=('cf104d286ddc673a4faf92c5ae016191')
 build() {
   cd "${srcdir}"/chaox-menus
   for x in *.directory
