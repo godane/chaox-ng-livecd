@@ -1,7 +1,7 @@
 # Contributor: Jan Misiak <fijam [at] archlinux.us>
 pkgname=gigolo
-pkgver=0.2.1
-pkgrel=2
+pkgver=0.3.1
+pkgrel=1
 pkgdesc="Frontend to manage connections to remote filesystems using GIO/GVFS."
 arch=('i686' 'x86_64')
 url="http://www.uvena.de/gigolo"
@@ -12,7 +12,7 @@ optdepends=('gnome-mount: to use HAL mounter for local drives')
 conflicts=('sion' 'gigolo-svn')
 options=(!libtool)
 source=(http://files.uvena.de/gigolo/$pkgname-$pkgver.tar.bz2)
-md5sums=('5174f9193735d300d3d76db819c45754')
+md5sums=('7f3c94bd9bcab6c2ff432d083f02ab3e')
 build() {
   cd "$srcdir/$pkgname-$pkgver"
   ./configure --prefix=/usr
