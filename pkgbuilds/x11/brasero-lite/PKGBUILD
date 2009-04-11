@@ -1,30 +1,34 @@
 # Contributor: Jens Pranaitis <jens@jenux.homelinux.org>
-# Contributor: Alois Nespor <alois.nespor@gmail.com>
+# Contributor: BluePeppers
 pkgname=brasero-lite
 origname=brasero
-pkgver=0.9.1
-pkgrel=2
-pkgdesc="A disc burning application, without  totem-plparser and nautilus dependency. Suitable for non-Gnome environment."
-arch=('i686' 'x86_64')
+pkgver=2.26.0
+pkgrel=4
+pkgdesc="A disc burning application, without the totem-plparser and nautilus dependency. Suitable for non-Gnome environments."
+arch=('i686')
 url="http://www.gnome.org/projects/brasero"
 license=('GPL')
-depends=('gconf' 'gstreamer0.10-base' 'dvd+rw-tools' 'cdrdao' 'cdrkit' 'hal')
+md5sums=('ef968fe98874da4e26b61591ee57be4a')
+depends=('gconf' 'gstreamer0.10-base' 'dvd+rw-tools' 'cdrdao' 'cdrkit')
 optdepends=('libburn: alternative back-end'
-            'libisofs: libburn back-end'
+            'libisofs: alternative back-end'
             'dvdauthor: video project'
             'gst-plugin-bad: video project'
             'vcdimager: video project')
 makedepends=('intltool' 'gnome-doc-utils')
 install=brasero-lite.install
-source=(http://ftp.gnome.org/pub/gnome/sources/brasero/0.9/brasero-${pkgver}.tar.bz2)
+source=(ftp://ftp.gnome.org/pub/GNOME/sources/brasero/2.26/brasero-${pkgver}.tar.bz2)
 options=('!libtool' '!emptydirs')
 conflicts=('brasero' 'brasero-svn')
+provides=("brasero=${pkgver}")
 
 build() {
   cd ${srcdir}/brasero-${pkgver}
-  ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --disable-caches --disable-schemas-install --disable-search --disable-playlist
+  ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --disable-caches \
+  --disable-schemas-install --disable-search
   make || return 1
   make GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL=1 DESTDIR=${pkgdir} install || return 1
+  
   mkdir -p ${pkgdir}/usr/share/gconf/schemas
   gconf-merge-schema ${pkgdir}/usr/share/gconf/schemas/${pkgname}.schemas \
     ${pkgdir}/etc/gconf/schemas/*.schemas
@@ -32,4 +36,5 @@ build() {
 
 }
 
-md5sums=('1b9432a5ac81a7b6d09b68887994f5c5')
+
+
