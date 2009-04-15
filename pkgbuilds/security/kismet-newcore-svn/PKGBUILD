@@ -1,7 +1,7 @@
 # Contributor: Shino <shino@jenux.homelinux.org>
 pkgname=kismet-newcore-svn
 pkgver=2616
-pkgrel=1
+pkgrel=2
 pkgdesc="Next generation of the wireless network sniffer"
 arch=('i686' 'x86_64')
 url="http://www.kismetwireless.net/"
@@ -13,7 +13,7 @@ conflicts=(kismet kismet-newcore)
 source=()
 md5sums=() 
 
-_svntrunk="http://svn.kismetwireless.net/code/branch/kismet-newcore"
+_svntrunk="https://www.kismetwireless.net/code/svn/branch/kismet-newcore"
 _svnmod="kismet-newcore"
 
 build() {
