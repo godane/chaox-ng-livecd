@@ -3,7 +3,7 @@
 
 pkgname=avahi
 pkgver=0.6.24
-pkgrel=1
+pkgrel=2
 pkgdesc="A multicast/unicast DNS-SD framework"
 arch=('i686' 'x86_64')
 url="http://www.avahi.org/"
