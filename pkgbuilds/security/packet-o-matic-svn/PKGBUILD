@@ -1,7 +1,7 @@
 # Contributor: Jens Pranaitis <jens@jenux.homelinux.org>
 pkgname=packet-o-matic-svn
-pkgver=323
-pkgrel=2
+pkgver=325
+pkgrel=1
 pkgdesc="a real time packet generator"
 arch=("i686")
 url="http://www.packet-o-matic.org/"
