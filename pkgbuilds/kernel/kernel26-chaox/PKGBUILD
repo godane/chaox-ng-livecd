@@ -2,7 +2,7 @@
 # Based on the work of godane <slaxemulator@gmail.com>
 pkgname=kernel26-chaox
 _basekernel=2.6.29
-pkgver=2.6.29.1
+pkgver=2.6.29.2
 pkgrel=1
 pkgdesc="Linux kernel based on slax config. Used in chaox-ng"
 arch=("i686")
@@ -20,21 +20,30 @@ provides=('kernel26')
 install=$pkgname.install
 source=(ftp://ftp.kernel.org/pub/linux/kernel/v2.6/linux-$_basekernel.tar.bz2
 	http://kernel.org/pub/linux/kernel/v2.6/patch-$pkgver.bz2
-        config
+  config
 	http://patches.aircrack-ng.org/mac80211_2.6.28-rc4-wl_frag+ack_v3.patch
-	http://patches.aircrack-ng.org/ath5k-injection-2.6.27-rc2.patch
+  #ath5k patches stolen from pentoo ;)
+  https://trac.pentoo.ch/pentoo/export/763/kernel/trunk/2.6/2.6.28/4001_ath5k-injection-2.6.28.patch
+  https://trac.pentoo.ch/pentoo/export/763/kernel/trunk/2.6/2.6.28/4007_ath5k-pass-failed-crc.patch
+  https://trac.pentoo.ch/pentoo/export/763/kernel/trunk/2.6/2.6.28/4008_ath5k-frequency-chaos-2.6.28.patch
 	openlog.patch
 	http://patches.aircrack-ng.org/zd1211rw_inject_2.6.26.patch
+  http://patches.aircrack-ng.org/mac80211-2.6.29-fix-tx-ctl-no-ack-retry-count.patch
+  http://patches.aircrack-ng.org/rtl8187-mac80211-injection-speed-2.6.28-wl.patch
   squashfs3.4-include.patch
   ftp://kernel.org/pub/linux/kernel/people/edward/reiser4/reiser4-for-2.6/reiser4-for-2.6.29.patch.gz
 )
 md5sums=('64921b5ff5cdadbccfcd3820f03be7d8'
-         '87c6fbf4096b644d66d4da8bb00641a5'
-         '67aedec79ba9a200a6046598a1c0fd29'
+         'a3e79545ef18ff2a172f82fffef92deb'
+         'f9561cf90f0d7567e966f66d15e55fde'
          'ca85d39144f07b0500c663779dda9259'
-         '69c34c83c6f64570efa3bc65c39304c5'
+         '80b536cef263991fa7fbaee217fa9191'
+         '3826efcfe08f1cbf978c02bd2f3c37b1'
+         '031cce31cd2dc8010ee27f5898853355'
          'a49390dd08e4f7702b8f4b550f1ad84e'
          'a162a23b5db02738309e54b6ca9fcbc9'
+         'a713e50e8f2cf82ae9cf7e10a9f82412'
+         '12e8d4bf7b430ce3cc6656c24e298a33'
          '2ed00248c56672a6664864084011e85a'
          'ace47269d99bb5e555e01417f3337cd8')
 build() {
@@ -58,8 +67,16 @@ build() {
   patch -Np0 -i "${srcdir}"/zd1211rw_inject_2.6.26.patch || return 1
   echo "applying mac80211 fragmentation attack patch"
   patch -Np1 -i "${srcdir}"/mac80211_2.6.28-rc4-wl_frag+ack_v3.patch || return 1
-  echo "applying ath5k injection patch"
-  patch -Np1 -i "${srcdir}"/ath5k-injection-2.6.27-rc2.patch || return 1
+  echo "applying mac80211 no ack retry patch"
+  patch -Np1 -i "${srcdir}"/mac80211-2.6.29-fix-tx-ctl-no-ack-retry-count.patch || return 1
+  echo "applying rtl8187 injection speed patch"
+  patch -Np1 -i "${srcdir}"/rtl8187-mac80211-injection-speed-2.6.28-wl.patch || return 1
+  echo "applying ath5k injection patches"
+  patch -Np1 -i "${srcdir}"/4001_ath5k-injection-2.6.28.patch || return 1
+  echo "applying ath5k crc patch"
+  patch -Np1 -i "${srcdir}"/4007_ath5k-pass-failed-crc.patch || return 1
+  echo "applying ath5k freq chaos patch"
+  patch -Np1 -i "${srcdir}"/4008_ath5k-frequency-chaos-2.6.28.patch || return 1
   echo "applying reiser4 patch"
   patch -Np1 -i "${srcdir}"/reiser4-for-2.6.29.patch || return 1
   # add openlog patch
