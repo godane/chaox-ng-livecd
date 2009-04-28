@@ -1,7 +1,7 @@
 # Contributor: Jens Pranaitis <jens@jenux.homelinux.org>
 pkgname=warvox-svn
-pkgver=6328
-pkgrel=3
+pkgver=6501
+pkgrel=1
 pkgdesc="telephone system auditing tool"
 arch=("i686")
 url="http://warvox.org/"
