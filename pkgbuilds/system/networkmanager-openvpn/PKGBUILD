@@ -1,3 +1,4 @@
+# Contributor: Jens Pranaitis <jens@chaox.net>
 # Contributor: Shino <shino@jenux.homelinux.org>
 
 pkgname=networkmanager-openvpn
@@ -7,10 +8,10 @@ pkgdesc='openvpn plugin for networkmanager'
 arch=('i686' 'x86_64')
 url="http://www.gnome.org/projects/NetworkManager/"
 license=('GPL')
-depends=('libnetworkmanager>=0.7' 'openvpn' 'libgnomeui' 'network-manager-applet')
+depends=('networkmanager' 'openvpn' 'libgnomeui' 'network-manager-applet')
 makedepends=('gnome-common' 'intltool')
-md5sums=('52964484f984ce74502f9776f9dde872'
-	'53d62b76657ecf05e6409c87daaa3267')
+md5sums=('3637145716d5a2d55af0d713e4f05c68'
+        '53d62b76657ecf05e6409c87daaa3267')
 
 source=(ftp://ftp.gnome.org/pub/gnome/sources/NetworkManager-openvpn/0.7/NetworkManager-openvpn-${pkgver}.tar.bz2
 	openvpn-pre-2.1.patch)
