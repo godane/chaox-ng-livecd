@@ -1,20 +1,18 @@
-# Copied/modified from frandom.install
+_kernver='2.6.29.2-chaox'
 
-# arg 1: the new package version
-# arg 2: the old package version
-
-post_install () {
-  echo ">> Place 'vhba' in MODULES= in /etc/rc.conf to enable vhba on system boot."
-  echo ">> This module needs to be recompiled for every kernel version upgrade."
-  depmod -a
+post_install()
+{
+  depmod -v $_kernver > /dev/null 2>&1
 }
 
-pre_remove () {
-  rmmod vhba 2> /dev/null
+post_upgrade()
+{
+  depmod -v $_kernver > /dev/null 2>&1
 }
 
-post_remove () {
-  depmod -a
+post_remove()
+{
+  depmod -v $_kernver > /dev/null 2>&1
 }
 
 op=$1
