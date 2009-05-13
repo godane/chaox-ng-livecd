@@ -30,7 +30,7 @@ then
 		getarchver $pkgname
 		if [[ $pkgver == 0 && $pkgrel == 0 ]]
 		then
-			echo "$pkgname doesn't exist in arch linux"
+      if [[ $2 != -q ]];then echo "$pkgname doesn't exist in arch linux";fi
 		else
 			case $(vercmp $_archpkgver-$_archpkgrel $_chaoxpkgver-$_chaoxpkgrel) in
 				-1) if [[ $checknew == 1 ]];then echo "$pkgname in chaox newer than in arch linux";fi;;
