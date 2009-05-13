@@ -1,8 +1,8 @@
 # Contributor: Shino <shino@jenux.homelinux.org>
 
 pkgname=networkmanager-openvpn
-pkgver=0.7.0
-pkgrel=2
+pkgver=0.7.1
+pkgrel=1
 pkgdesc='openvpn plugin for networkmanager'
 arch=('i686' 'x86_64')
 url="http://www.gnome.org/projects/NetworkManager/"
