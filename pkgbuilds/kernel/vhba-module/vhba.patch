@@ -1,0 +1,511 @@
+--- ../vhba-module-1.1.0/vhba.c	2008-06-28 12:08:33.000000000 +0200
++++ vhba.c	2008-11-22 16:43:01.000000000 +0100
+@@ -1,7 +1,7 @@
+ /*
+  * vhba.c
+  *
+- * Copyright (C) 2007 Chia-I Wu <b90201047 AT ntu DOT edu DOT tw>
++ * Copyright (C) 2007 Chia-I Wu
+  *
+  * This program is free software; you can redistribute it and/or
+  * modify it under the terms of the GNU General Public License
+@@ -31,6 +31,7 @@
+ #include <scsi/scsi_host.h>
+ #include <scsi/scsi_cmnd.h>
+ #include <scsi/scsi_device.h>
++#include <linux/scatterlist.h>
+ 
+ #include <kernel.api.h>
+ 
+@@ -60,6 +61,8 @@
+ #define DATA_TO_DEVICE(dir) ((dir) == DMA_TO_DEVICE || (dir) == DMA_BIDIRECTIONAL)
+ #define DATA_FROM_DEVICE(dir) ((dir) == DMA_FROM_DEVICE || (dir) == DMA_BIDIRECTIONAL)
+ 
++unsigned long flags;
++
+ enum vhba_req_state {
+ 	VHBA_REQ_FREE,
+ 	VHBA_REQ_PENDING,
+@@ -117,7 +120,7 @@
+ static struct vhba_device *vhba_device_alloc(void)
+ {
+ 	struct vhba_device *vdev;
+-
++	
+ 	vdev = kzalloc(sizeof(struct vhba_device), GFP_KERNEL);
+ 	if (!vdev)
+ 		return NULL;
+@@ -147,16 +150,16 @@
+ static int vhba_device_queue(struct vhba_device *vdev, struct scsi_cmnd *cmd)
+ {
+ 	struct vhba_command *vcmd;
+-
++	
+ 	vcmd = vhba_alloc_command();
+ 	if (!vcmd)
+ 		return SCSI_MLQUEUE_HOST_BUSY;
+ 
+ 	vcmd->cmd = cmd;
+ 
+-	spin_lock_bh(&vdev->cmd_lock);
++	spin_lock_irqsave(&vdev->cmd_lock, flags);
+ 	list_add_tail(&vcmd->entry, &vdev->cmd_list);
+-	spin_unlock_bh(&vdev->cmd_lock);
++	spin_unlock_irqrestore(&vdev->cmd_lock, flags);
+ 
+ 	wake_up_interruptible(&vdev->cmd_wq);
+ 
+@@ -167,8 +170,8 @@
+ {
+ 	struct vhba_command *vcmd;
+ 	int retval;
+-
+-	spin_lock_bh(&vdev->cmd_lock);
++	
++	spin_lock_irqsave(&vdev->cmd_lock, flags);
+ 	list_for_each_entry(vcmd, &vdev->cmd_list, entry)
+ 	{
+ 		if (vcmd->cmd == cmd)
+@@ -182,24 +185,24 @@
+ 	/* command not found */
+ 	if (&vcmd->entry == &vdev->cmd_list)
+ 	{
+-		spin_unlock_bh(&vdev->cmd_lock);
++		spin_unlock_irqrestore(&vdev->cmd_lock, flags);
+ 
+ 		return SUCCESS;
+ 	}
+ 
+ 	while (vcmd->status == VHBA_REQ_READING || vcmd->status == VHBA_REQ_WRITING)
+ 	{
+-		spin_unlock_bh(&vdev->cmd_lock);
++		spin_unlock_irqrestore(&vdev->cmd_lock, flags);
+ 		scmd_dbg(cmd, "wait for I/O before aborting\n");
+ 		schedule_timeout(1);
+-		spin_lock_bh(&vdev->cmd_lock);
++		spin_lock_irqsave(&vdev->cmd_lock, flags);
+ 	}
+ 
+ 	retval = (vcmd->status == VHBA_REQ_SENT) ? FAILED : SUCCESS;
+ 
+ 	vhba_free_command(vcmd);
+ 
+-	spin_unlock_bh(&vdev->cmd_lock);
++	spin_unlock_irqrestore(&vdev->cmd_lock, flags);
+ 
+ 	return retval;
+ }
+@@ -214,10 +217,10 @@
+ 	{
+ 		int remove;
+ 
+-		spin_lock_bh(&vhost->dev_lock);
++		spin_lock_irqsave(&vhost->dev_lock, flags);
+ 		clear_bit(id, vhost->chgmap);
+ 		remove = !(vhost->devices[id]);
+-		spin_unlock_bh(&vhost->dev_lock);
++		spin_unlock_irqrestore(&vhost->dev_lock, flags);
+ 
+ 		dev_dbg(&vhost->shost->shost_gendev, "try to %s target 0:%d:0\n",
+ 				(remove) ? "remove" : "add", id);
+@@ -247,10 +250,10 @@
+ 
+ 	vhba_device_get(vdev);
+ 
+-	spin_lock_bh(&vhost->dev_lock);
++	spin_lock_irqsave(&vhost->dev_lock, flags);
+ 	if (vhost->num_devices >= vhost->shost->max_id)
+ 	{
+-		spin_unlock_bh(&vhost->dev_lock);
++		spin_unlock_irqrestore(&vhost->dev_lock, flags);
+ 		vhba_device_put(vdev);
+ 
+ 		return -EBUSY;
+@@ -268,7 +271,7 @@
+ 			break;
+ 		}
+ 	}
+-	spin_unlock_bh(&vhost->dev_lock);
++	spin_unlock_irqrestore(&vhost->dev_lock, flags);
+ 
+ 	schedule_work(&vhost->scan_devices);
+ 
+@@ -281,12 +284,12 @@
+ 
+ 	vhost = platform_get_drvdata(&vhba_platform_device);
+ 
+-	spin_lock_bh(&vhost->dev_lock);
++	spin_lock_irqsave(&vhost->dev_lock, flags);
+ 	set_bit(vdev->id, vhost->chgmap);
+ 	vhost->devices[vdev->id] = NULL;
+ 	vhost->num_devices--;
+ 	vdev->id = VHBA_INVALID_ID;
+-	spin_unlock_bh(&vhost->dev_lock);
++	spin_unlock_irqrestore(&vhost->dev_lock, flags);
+ 
+ 	vhba_device_put(vdev);
+ 
+@@ -304,11 +307,11 @@
+ 
+ 	if (likely(id < vhost->shost->max_id))
+ 	{
+-		spin_lock_bh(&vhost->dev_lock);
++		spin_lock_irqsave(&vhost->dev_lock, flags);
+ 		vdev = vhost->devices[id];
+ 		if (vdev)
+ 			vdev = vhba_device_get(vdev);
+-		spin_unlock_bh(&vhost->dev_lock);
++		spin_unlock_irqrestore(&vhost->dev_lock, flags);
+ 	}
+ 
+ 	return vdev;
+@@ -319,10 +322,10 @@
+ 	struct vhba_host *vhost;
+ 	struct vhba_command *vcmd;
+ 	int i;
+-
++	
+ 	vhost = platform_get_drvdata(&vhba_platform_device);
+ 
+-	spin_lock_bh(&vhost->cmd_lock);
++	spin_lock_irqsave(&vhost->cmd_lock, flags);
+ 
+ 	vcmd = vhost->commands + vhost->cmd_next++;
+ 	if (vcmd->status != VHBA_REQ_FREE)
+@@ -347,7 +350,7 @@
+ 		vcmd->status = VHBA_REQ_PENDING;
+ 	vhost->cmd_next %= vhost->shost->can_queue;
+ 
+-	spin_unlock_bh(&vhost->cmd_lock);
++	spin_unlock_irqrestore(&vhost->cmd_lock, flags);
+ 
+ 	return vcmd;
+ }
+@@ -358,9 +361,9 @@
+ 
+ 	vhost = platform_get_drvdata(&vhba_platform_device);
+ 
+-	spin_lock_bh(&vhost->cmd_lock);
++	spin_lock_irqsave(&vhost->cmd_lock, flags);
+ 	vcmd->status = VHBA_REQ_FREE;
+-	spin_unlock_bh(&vhost->cmd_lock);
++	spin_unlock_irqrestore(&vhost->cmd_lock, flags);
+ }
+ 
+ static int vhba_queuecommand(struct scsi_cmnd *cmd, void (*done)(struct scsi_cmnd *))
+@@ -421,25 +424,17 @@
+ 	.sg_tablesize = 256,
+ };
+ 
+-static ssize_t do_request(struct scsi_cmnd *cmd, char __user *buf, size_t buf_len)
++static ssize_t do_request(const struct scsi_cmnd *cmd, char __user *buf, size_t buf_len)
+ {
+ 	struct vhba_request vreq;
+ 	ssize_t ret;
+-
++//	struct scatterlist *sg,
+ 	scmd_dbg(cmd, "request %lu, cdb 0x%x, bufflen %d, use_sg %d\n",
+-#ifdef KAT_HAVE_SCSI_MACROS
+-		cmd->serial_number, cmd->cmnd[0], scsi_bufflen(cmd), scsi_sg_count(cmd));
+-#else
+-        cmd->serial_number, cmd->cmnd[0], cmd->request_bufflen, cmd->use_sg);
+-#endif
+-    
++			cmd->serial_number, cmd->cmnd[0], cmd->sdb.length, cmd->sdb.table.nents);
++
+ 	ret = sizeof(vreq);
+ 	if (DATA_TO_DEVICE(cmd->sc_data_direction))
+-#ifdef KAT_HAVE_SCSI_MACROS
+-        ret += scsi_bufflen(cmd);
+-#else
+-        ret += cmd->request_bufflen;
+-#endif
++		ret += cmd->sdb.length;
+ 
+ 	if (ret > buf_len)
+ 	{
+@@ -452,11 +447,7 @@
+ 	vreq.lun = cmd->device->lun;
+ 	memcpy(vreq.cdb, cmd->cmnd, MAX_COMMAND_SIZE);
+ 	vreq.cdb_len = cmd->cmd_len;
+-#ifdef KAT_HAVE_SCSI_MACROS
+-	vreq.data_len = scsi_bufflen(cmd);
+-#else
+-	vreq.data_len = cmd->request_bufflen;
+-#endif
++	vreq.data_len = cmd->sdb.length;
+ 
+ 	if (copy_to_user(buf, &vreq, sizeof(vreq)))
+ 		return -EFAULT;
+@@ -466,11 +457,7 @@
+ 		buf += sizeof(vreq);
+ 
+ 		/* XXX use_sg? */
+-#ifdef KAT_HAVE_SCSI_MACROS
+-        if (copy_to_user(buf, scsi_sglist(cmd), vreq.data_len))
+-#else
+-        if (copy_to_user(buf, cmd->request_buffer, vreq.data_len))
+-#endif
++		if (copy_to_user(buf, cmd->sdb.table.sgl, vreq.data_len))
+ 			return -EFAULT;
+ 	}
+ 
+@@ -482,11 +469,7 @@
+ 	ssize_t ret = 0;
+        
+ 	scmd_dbg(cmd, "response %lu, status %x, data len %d, use_sg %d\n",
+-#ifdef KAT_HAVE_SCSI_MACROS
+-             cmd->serial_number, res->status, res->data_len, scsi_sg_count(cmd));
+-#else
+-             cmd->serial_number, res->status, res->data_len, cmd->use_sg);
+-#endif
++			cmd->serial_number, res->status, res->data_len, cmd->sdb.table.nents);
+ 
+ 	if (res->status)
+ 	{
+@@ -503,43 +486,23 @@
+ 
+ 		ret += res->data_len;
+ 	}
+-#ifdef KAT_HAVE_SCSI_MACROS
+-	else if (DATA_FROM_DEVICE(cmd->sc_data_direction) && scsi_bufflen(cmd))
+-#else
+-	else if (DATA_FROM_DEVICE(cmd->sc_data_direction) && cmd->request_bufflen)
+-#endif
++	else if (DATA_FROM_DEVICE(cmd->sc_data_direction) && cmd->sdb.length)
+ 	{
+ 		size_t to_read;
+ 	       
+-#ifdef KAT_HAVE_SCSI_MACROS
+-        if (res->data_len > scsi_bufflen(cmd))
+-        {
+-			scmd_warn(cmd, "truncate data (%d < %d)\n", scsi_bufflen(cmd), res->data_len);
+-			res->data_len = scsi_bufflen(cmd);
+-		}
+-#else
+-        if (res->data_len > cmd->request_bufflen)
++		if (res->data_len > cmd->sdb.length)
+ 		{
+-			scmd_warn(cmd, "truncate data (%d < %d)\n", cmd->request_bufflen, res->data_len);
+-			res->data_len = cmd->request_bufflen;
++			scmd_warn(cmd, "truncate data (%d < %d)\n", cmd->sdb.length, res->data_len);
++			res->data_len = cmd->sdb.length;
+ 		}
+-#endif
+-        
++
+ 		to_read = res->data_len;
+ 
+-#ifdef KAT_HAVE_SCSI_MACROS
+-        if (scsi_sg_count(cmd))
+-#else
+-        if (cmd->use_sg)
+-#endif
++		if (cmd->sdb.table.nents)
+ 		{
+ 			unsigned char buf_stack[64];
+ 			unsigned char *kaddr, *uaddr, *kbuf;
+-#ifdef KAT_HAVE_SCSI_MACROS
+-            struct scatterlist *sg = scsi_sglist(cmd);
+-#else
+-            struct scatterlist *sg = cmd->request_buffer;
+-#endif
++			struct scatterlist *sg = cmd->sdb.table.sgl;
+ 			int i;
+ 
+ 			uaddr = (unsigned char *) buf;
+@@ -549,11 +512,7 @@
+ 			else
+ 				kbuf = buf_stack;
+ 
+-#ifdef KAT_HAVE_SCSI_MACROS
+-			for (i = 0; i < scsi_sg_count(cmd); i++)
+-#else
+-			for (i = 0; i < cmd->use_sg; i++)
+-#endif
++			for (i = 0; i < cmd->sdb.table.nents; i++)
+ 			{
+ 				size_t len = (sg[i].length < to_read) ? sg[i].length : to_read;
+ 
+@@ -584,21 +543,13 @@
+ 		}
+ 		else
+ 		{
+-#ifdef KAT_HAVE_SCSI_MACROS
+-            if (copy_from_user(scsi_sglist(cmd), buf, res->data_len))
+-#else
+-            if (copy_from_user(cmd->request_buffer, buf, res->data_len))
+-#endif
++			if (copy_from_user(cmd->sdb.table.sgl, buf, res->data_len))
+ 				return -EFAULT;
+ 
+ 			to_read -= res->data_len;
+ 		}
+ 
+-#ifdef KAT_HAVE_SCSI_MACROS
+-        scsi_set_resid(cmd, to_read);
+-#else
+-        cmd->resid = to_read;
+-#endif
++		cmd->sdb.resid = to_read;
+ 
+ 		ret += res->data_len - to_read;
+ 	}
+@@ -650,11 +601,11 @@
+ 
+ 		prepare_to_wait(&vdev->cmd_wq, &wait, TASK_INTERRUPTIBLE);
+ 
+-		spin_unlock_bh(&vdev->cmd_lock);
++		spin_unlock_irqrestore(&vdev->cmd_lock, flags);
+ 
+ 		schedule();
+ 
+-		spin_lock_bh(&vdev->cmd_lock);
++		spin_lock_irqsave(&vdev->cmd_lock, flags);
+ 	}
+ 
+ 	finish_wait(&vdev->cmd_wq, &wait);
+@@ -672,16 +623,16 @@
+ 
+ 	vdev = file->private_data;
+ 
+-	spin_lock_bh(&vdev->cmd_lock);
++	spin_lock_irqsave(&vdev->cmd_lock, flags);
+ 	vcmd = wait_command(vdev);
+-	spin_unlock_bh(&vdev->cmd_lock);
++	spin_unlock_irqrestore(&vdev->cmd_lock, flags);
+ 
+ 	if (!vcmd)
+ 		return -ERESTARTSYS;
+ 
+ 	ret = do_request(vcmd->cmd, buf, buf_len);
+ 
+-	spin_lock_bh(&vdev->cmd_lock);
++	spin_lock_irqsave(&vdev->cmd_lock, flags);
+ 	if (ret >= 0)
+ 	{
+ 		vcmd->status = VHBA_REQ_SENT;
+@@ -689,7 +640,7 @@
+ 	}
+ 	else
+ 		vcmd->status = VHBA_REQ_PENDING;
+-	spin_unlock_bh(&vdev->cmd_lock);
++	spin_unlock_irqrestore(&vdev->cmd_lock, flags);
+ 
+ 	return ret;
+ }
+@@ -709,21 +660,21 @@
+ 
+ 	vdev = file->private_data;
+ 
+-	spin_lock_bh(&vdev->cmd_lock);
++	spin_lock_irqsave(&vdev->cmd_lock, flags);
+ 	vcmd = match_command(vdev, res.tag);
+ 	if (!vcmd || vcmd->status != VHBA_REQ_SENT)
+ 	{
+-		spin_unlock_bh(&vdev->cmd_lock);
++		spin_unlock_irqrestore(&vdev->cmd_lock, flags);
+ 		DPRINTK("not expecting response\n");
+ 
+ 		return -EIO;
+ 	}
+ 	vcmd->status = VHBA_REQ_WRITING;
+-	spin_unlock_bh(&vdev->cmd_lock);
++	spin_unlock_irqrestore(&vdev->cmd_lock, flags);
+ 
+ 	ret = do_response(vcmd->cmd, buf + sizeof(res), buf_len - sizeof(res), &res);
+ 
+-	spin_lock_bh(&vdev->cmd_lock);
++	spin_lock_irqsave(&vdev->cmd_lock, flags);
+ 	if (ret >= 0)
+ 	{
+ 		vcmd->cmd->scsi_done(vcmd->cmd);
+@@ -738,48 +689,11 @@
+ 	}
+ 	else
+ 		vcmd->status = VHBA_REQ_SENT;
+-	spin_unlock_bh(&vdev->cmd_lock);
++	spin_unlock_irqrestore(&vdev->cmd_lock, flags);
+ 
+ 	return ret;
+ }
+ 
+-static int vhba_ctl_ioctl (struct inode *inode, struct file *file, unsigned int cmd, unsigned long arg)
+-{
+-    struct vhba_device *vdev = file->private_data;
+-    
+-    switch (cmd) {
+-        case 0xBEEF001: {
+-            struct vhba_host *vhost;
+-            struct scsi_device *sdev;
+-            
+-            vhost = platform_get_drvdata(&vhba_platform_device);
+-            sdev = scsi_device_lookup(vhost->shost, 0, vdev->id, 0);
+-            
+-            if (sdev)
+-            {
+-                int id[4] = {
+-                    sdev->host->host_no,
+-                    sdev->channel,
+-                    sdev->id,
+-                    sdev->lun };
+-                
+-                scsi_device_put(sdev);
+-
+-                if (copy_to_user((void *)arg, id, sizeof(id)))
+-                    return -EFAULT;
+-                
+-                return 0;
+-            } 
+-            else 
+-            {
+-                return -ENODEV;
+-            }
+-        }
+-    }
+-    
+-    return -ENOTTY;
+-}
+-
+ static unsigned int vhba_ctl_poll(struct file *file, poll_table *wait)
+ {
+ 	struct vhba_device *vdev = file->private_data;
+@@ -787,10 +701,10 @@
+ 
+ 	poll_wait(file, &vdev->cmd_wq, wait);
+ 
+-	spin_lock_bh(&vdev->cmd_lock);
++	spin_lock_irqsave(&vdev->cmd_lock, flags);
+ 	if (next_command(vdev))
+ 		mask |= POLLIN | POLLRDNORM;
+-	spin_unlock_bh(&vdev->cmd_lock);
++	spin_unlock_irqrestore(&vdev->cmd_lock, flags);
+ 
+ 	return mask;
+ }
+@@ -830,7 +744,7 @@
+ 	vhba_device_get(vdev);
+ 	vhba_remove_device(vdev);
+ 
+-	spin_lock_bh(&vdev->cmd_lock);
++	spin_lock_irqsave(&vdev->cmd_lock, flags);
+ 	list_for_each_entry(vcmd, &vdev->cmd_list, entry)
+ 	{
+ 		WARN_ON(vcmd->status == VHBA_REQ_READING || vcmd->status == VHBA_REQ_WRITING);
+@@ -842,7 +756,7 @@
+ 		vhba_free_command(vcmd);
+ 	}
+ 	INIT_LIST_HEAD(&vdev->cmd_list);
+-	spin_unlock_bh(&vdev->cmd_lock);
++	spin_unlock_irqrestore(&vdev->cmd_lock, flags);
+ 
+ 	vhba_device_put(vdev);
+ 
+@@ -856,7 +770,6 @@
+ 	.read = vhba_ctl_read,
+ 	.write = vhba_ctl_write,
+ 	.poll = vhba_ctl_poll,
+-	.ioctl = vhba_ctl_ioctl,
+ };
+ 
+ static struct miscdevice vhba_miscdev = {
