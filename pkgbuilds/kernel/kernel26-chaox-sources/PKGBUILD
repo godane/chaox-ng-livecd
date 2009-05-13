@@ -2,7 +2,7 @@
 # Based on the work of godane <slaxemulator@gmail.com>
 pkgname=kernel26-chaox-sources
 _basekernel=2.6.29
-pkgver=2.6.29.2
+pkgver=2.6.29.3
 pkgrel=1
 pkgdesc="Linux kernel based on slax config. Used in chaox-ng"
 arch=("i686")
@@ -27,7 +27,7 @@ source=(ftp://ftp.kernel.org/pub/linux/kernel/v2.6/linux-$_basekernel.tar.bz2
         ftp://kernel.org/pub/linux/kernel/people/edward/reiser4/reiser4-for-2.6/reiser4-for-2.6.29.patch.gz
 )
 md5sums=('64921b5ff5cdadbccfcd3820f03be7d8'
-         'a3e79545ef18ff2a172f82fffef92deb'
+         '4e16a087ca4455f5e95c5890c4ac23f6'
          'f9561cf90f0d7567e966f66d15e55fde'
          'ca85d39144f07b0500c663779dda9259'
          '80b536cef263991fa7fbaee217fa9191'

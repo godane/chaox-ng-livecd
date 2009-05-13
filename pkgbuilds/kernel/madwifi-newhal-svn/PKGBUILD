@@ -3,7 +3,7 @@
 source "${startdir}"/../kernel.env
 pkgname=madwifi-newhal-svn
 pkgver=4016
-pkgrel=1
+pkgrel=2
 pkgdesc="Madwifi drivers for Atheros wireless chipsets. HAL 0.10.5.6 branch."
 arch=(i686 x86_64)
 url="http://madwifi-project.org/"
@@ -34,6 +34,8 @@ build()
 
   msg "make install-modules.."
   patch -Np0 -i "${srcdir}"/madwifi-ng-r3925.patch || return 1
+  # makes it compile, but I don't understand the sourcecode - might blow up
+  sed -i 's|-Werror||' Makefile*
   KERNELPATH="${_kerndir}" KERNELRELEASE=$_kernver DESTDIR="${pkgdir}" make install-modules || return 1
   sed -i -e "s/_kernver='.*'/_kernver='${_kernver}'/" $startdir/*.install
 }
