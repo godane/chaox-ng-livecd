@@ -1,14 +1,14 @@
 # Contributor: Jens Pranaitis <jens@jenux.homelinux.org>
 # Contributor: Thomas Bächler <thomas@archlinux.org>
 pkgname=mplayer
-pkgver=29150
+pkgver=29306
 pkgrel=1
 pkgdesc="A movie player for linux"
 arch=(i686 x86_64)
 depends=('libxxf86dga' 'libxv' 'libmad' 'giflib' 'cdparanoia'
          'sdl' 'lame' 'libtheora' 'xvidcore' 'zlib'
          'libgl' 'smbclient' 'libcaca' 'alsa-lib'
-         'x264>=20080625' 'faac' 'ttf-dejavu' 'fribidi')
+         'x264>=20080625' 'faac' 'ttf-dejavu')
 license=('GPL')
 url="http://www.mplayerhq.hu/"
 makedepends=('unzip' 'libdca' 'mesa')
@@ -32,7 +32,7 @@ build() {
       --enable-runtime-cpudetection --confdir=/etc/mplayer --disable-nas \
       --enable-gl --enable-tv-v4l1 --enable-tv-v4l2 --enable-largefiles \
       --disable-liblzo --disable-speex --disable-openal \
-      --enable-fribidi --disable-libdv --disable-musepack \
+      --disable-fribidi --disable-libdv --disable-musepack \
       --language=en --disable-dvdnav --disable-esd --disable-mga \
       --disable-libamr_nb --disable-jack --disable-pulse \
       --disable-live --disable-aa \
