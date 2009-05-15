@@ -1,7 +1,7 @@
 # Contributor: Jens Pranaitis <jens@jenux.homelinux.org>
 # Contributor: Simon Busch <morphis@gravedo.de>
 pkgname=ratproxy
-pkgver=1.57
+pkgver=1.58
 pkgrel=1
 pkgdesc="A passive web application security assessment tool"
 url="http://code.google.com/p/ratproxy/"
@@ -9,7 +9,7 @@ depends=("openssl" "bash")
 license=('APACHE')
 arch=('i686')
 source=(http://$pkgname.googlecode.com/files/$pkgname-$pkgver.tar.gz)
-md5sums=('5403d5b8fba9e72caad3345fb5e9878c')
+md5sums=('e4d5e64a0bd8f8f92032cbcee77fb3cf')
 build() {
 	cd "${srcdir}"/ratproxy
 	sed -i "s|-O3|${CFLAGS}|g" Makefile
