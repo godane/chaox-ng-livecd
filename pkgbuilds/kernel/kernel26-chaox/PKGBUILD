@@ -1,15 +1,15 @@
-# Contributor: Jens Pranaitis <jens@jenux.homelinux.org>
+# Contributor: Jens Pranaitis <jens@chaox.net>
 # Based on the work of godane <slaxemulator@gmail.com>
 pkgname=kernel26-chaox
 _basekernel=2.6.29
 pkgver=2.6.29.3
-pkgrel=2
+pkgrel=3
 pkgdesc="Linux kernel based on slax config. Used in chaox-ng"
 arch=("i686")
 license=('GPL2')
 groups=('base')
 url="http://www.kernel.org"
-makedepends=("git")
+makedepends=("git" "lzma")
 depends=('coreutils' 'module-init-tools' 'mkinitcpio>=0.5.18')
 conflicts=('aufs')
 replaces=('kernel24' 'kernel24-scsi' 'kernel26-scsi'
@@ -34,10 +34,11 @@ source=(ftp://ftp.kernel.org/pub/linux/kernel/v2.6/linux-$_basekernel.tar.bz2
   https://trac.pentoo.ch/pentoo/export/820/kernel/trunk/2.6/2.6.29/4300_squashfs-3-regress.patch
   https://trac.pentoo.ch/pentoo/export/820/kernel/trunk/2.6/2.6.29/4305_sqlzma-457.patch
   ftp://kernel.org/pub/linux/kernel/people/edward/reiser4/reiser4-for-2.6/reiser4-for-2.6.29.patch.gz
+  lzma-bzip2.patch
 )
 md5sums=('64921b5ff5cdadbccfcd3820f03be7d8'
          '4e16a087ca4455f5e95c5890c4ac23f6'
-         '034f01189d62e6ce9aaed84e841641cb'
+         '5d59d7f00f5e461179f71208d3ee6c3e'
          'ca85d39144f07b0500c663779dda9259'
          '80b536cef263991fa7fbaee217fa9191'
          '3826efcfe08f1cbf978c02bd2f3c37b1'
@@ -48,7 +49,8 @@ md5sums=('64921b5ff5cdadbccfcd3820f03be7d8'
          '12e8d4bf7b430ce3cc6656c24e298a33'
          '89a7f97d00f43a3e99fc40bfe3a33bc1'
          '31b8cb7701298939aca49171414eb07c'
-         'ace47269d99bb5e555e01417f3337cd8')
+         'ace47269d99bb5e555e01417f3337cd8'
+         'a2fde5cb8d67abfc7aa8722eca440533')
 build() {
   KARCH=x86
   cd "${srcdir}"
@@ -63,6 +65,8 @@ build() {
   # add squashfs and aufs
   patch -Np1 -i "${srcdir}"/aufs2-standalone/aufs2-standalone.patch || return 1
   cp -R "${srcdir}"/aufs2-standalone/{Documentation,include,fs,config.mk} .
+  echo "add lzma-bzip support"
+  patch -Np1 -i "${srcdir}"/lzma-bzip2.patch || return 1
   echo "add sqlzma"
   patch -Np1 -i "${srcdir}"/4300_squashfs-3-regress.patch || return 1
   patch -Np1 -i "${srcdir}"/4305_sqlzma-457.patch || return 1
