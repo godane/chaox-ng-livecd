@@ -1,9 +1,9 @@
-# Contributor: Jens Pranaitis <jens@jenux.homelinux.org>
+# Contributor: Jens Pranaitis <jens@chaox.net>
 # Based on the work of godane <slaxemulator@gmail.com>
 pkgname=kernel26-chaox-sources
 _basekernel=2.6.29
 pkgver=2.6.29.3
-pkgrel=1
+pkgrel=3
 pkgdesc="Linux kernel based on slax config. Used in chaox-ng"
 arch=("i686")
 license=('GPL2')
@@ -11,24 +11,27 @@ groups=('base')
 url="http://www.kernel.org"
 makedepends=("git")
 depends=('coreutils' 'module-init-tools' 'mkinitcpio>=0.5.18')
-source=(ftp://ftp.kernel.org/pub/linux/kernel/v2.6/linux-$_basekernel.tar.bz2
+  source=(ftp://ftp.kernel.org/pub/linux/kernel/v2.6/linux-$_basekernel.tar.bz2
         http://kernel.org/pub/linux/kernel/v2.6/patch-$pkgver.bz2
-        config
+  config
         http://patches.aircrack-ng.org/mac80211_2.6.28-rc4-wl_frag+ack_v3.patch
-        #ath5k patches stolen from pentoo ;)
-        https://trac.pentoo.ch/pentoo/export/763/kernel/trunk/2.6/2.6.28/4001_ath5k-injection-2.6.28.patch
-        https://trac.pentoo.ch/pentoo/export/763/kernel/trunk/2.6/2.6.28/4007_ath5k-pass-failed-crc.patch
-        https://trac.pentoo.ch/pentoo/export/763/kernel/trunk/2.6/2.6.28/4008_ath5k-frequency-chaos-2.6.28.patch
+  #ath5k patches stolen from pentoo ;)
+  https://trac.pentoo.ch/pentoo/export/763/kernel/trunk/2.6/2.6.28/4001_ath5k-injection-2.6.28.patch
+  https://trac.pentoo.ch/pentoo/export/763/kernel/trunk/2.6/2.6.28/4007_ath5k-pass-failed-crc.patch
+  https://trac.pentoo.ch/pentoo/export/763/kernel/trunk/2.6/2.6.28/4008_ath5k-frequency-chaos-2.6.28.patch
         openlog.patch
         http://patches.aircrack-ng.org/zd1211rw_inject_2.6.26.patch
-        http://patches.aircrack-ng.org/mac80211-2.6.29-fix-tx-ctl-no-ack-retry-count.patch
-        http://patches.aircrack-ng.org/rtl8187-mac80211-injection-speed-2.6.28-wl.patch
-        squashfs3.4-include.patch
-        ftp://kernel.org/pub/linux/kernel/people/edward/reiser4/reiser4-for-2.6/reiser4-for-2.6.29.patch.gz
+  http://patches.aircrack-ng.org/mac80211-2.6.29-fix-tx-ctl-no-ack-retry-count.patch
+  http://patches.aircrack-ng.org/rtl8187-mac80211-injection-speed-2.6.28-wl.patch
+  #squashfs patches courtesy of pentoo, thanks guys
+  https://trac.pentoo.ch/pentoo/export/820/kernel/trunk/2.6/2.6.29/4300_squashfs-3-regress.patch
+  https://trac.pentoo.ch/pentoo/export/820/kernel/trunk/2.6/2.6.29/4305_sqlzma-457.patch
+  ftp://kernel.org/pub/linux/kernel/people/edward/reiser4/reiser4-for-2.6/reiser4-for-2.6.29.patch.gz
+  lzma-bzip2.patch
 )
 md5sums=('64921b5ff5cdadbccfcd3820f03be7d8'
          '4e16a087ca4455f5e95c5890c4ac23f6'
-         'f9561cf90f0d7567e966f66d15e55fde'
+         'eca0626231a38768c2de1d9894831ef2'
          'ca85d39144f07b0500c663779dda9259'
          '80b536cef263991fa7fbaee217fa9191'
          '3826efcfe08f1cbf978c02bd2f3c37b1'
@@ -37,8 +40,10 @@ md5sums=('64921b5ff5cdadbccfcd3820f03be7d8'
          'a162a23b5db02738309e54b6ca9fcbc9'
          'a713e50e8f2cf82ae9cf7e10a9f82412'
          '12e8d4bf7b430ce3cc6656c24e298a33'
-         '2ed00248c56672a6664864084011e85a'
-         'ace47269d99bb5e555e01417f3337cd8')
+         '89a7f97d00f43a3e99fc40bfe3a33bc1'
+         '31b8cb7701298939aca49171414eb07c'
+         'ace47269d99bb5e555e01417f3337cd8'
+         'a2fde5cb8d67abfc7aa8722eca440533')
 build() {
   KARCH=x86
   cd "${srcdir}"
@@ -53,9 +58,12 @@ build() {
   # add squashfs and aufs
   patch -Np1 -i "${srcdir}"/aufs2-standalone/aufs2-standalone.patch || return 1
   cp -R "${srcdir}"/aufs2-standalone/{Documentation,include,fs,config.mk} .
-  echo "fix for sqlzma 3.4"
-  patch -Np1 -i "${srcdir}"/squashfs3.4-include.patch || return 1
-  # add injection support
+  echo "add lzma-bzip support"
+  patch -Np1 -i "${srcdir}"/lzma-bzip2.patch || return 1
+  echo "add sqlzma"
+  patch -Np1 -i "${srcdir}"/4300_squashfs-3-regress.patch || return 1
+  patch -Np1 -i "${srcdir}"/4305_sqlzma-457.patch || return 1
+ # add injection support
   echo "applying zd1211rw injection patch"
   patch -Np0 -i "${srcdir}"/zd1211rw_inject_2.6.26.patch || return 1
   echo "applying mac80211 fragmentation attack patch"
