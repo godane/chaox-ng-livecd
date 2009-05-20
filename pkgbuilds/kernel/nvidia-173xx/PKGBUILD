@@ -3,7 +3,7 @@
 source "${startdir}"/../kernel.env
 pkgname=nvidia-173xx
 pkgver=173.14.18
-pkgrel=1
+pkgrel=2
 pkgdesc="NVIDIA legacy drivers for kernel26-chaox, 173xx branch"
 arch=('i686' 'x86_64')
 [ "$CARCH" = "i686"   ] && ARCH=x86
