@@ -2,10 +2,23 @@ pre_install() {
 	/bin/true
 }
 
+pre_upgrade() {
+  if [ -e /etc/mkinitcpio.d/kernel26-chaox.preset ]
+  then
+    syspreset=$(md5sum /etc/mkinitcpio.d/kernel26-chaox.preset|awk '{print $1}')
+    if [[ $syspreset == 27b73ecc9083efcf62ff276ee19326a4 ]]
+    then
+      rm /etc/mkinitcpio.d/kernel26-chaox.preset
+    else
+      mv /etc/mkinitcpio.d/kernel26-chaox.preset /etc/mkinitcpio.d/kernel26-chaox.preset.old
+      echo "a new kernel26-chaox preset file was installed, your old file has been saved to /etc/mkinitcpio.d/kernel26-chaox.preset.old"
+    fi
+fi
+} 
 post_install() {
   # updating module dependencies
   echo ">>> Updating module dependencies. Please wait ..."
-  KERNEL_VERSION=
+  KERNEL_VERSION=2.6.29.4-chaox
   depmod -v $KERNEL_VERSION > /dev/null 2>&1
   /sbin/mkinitcpio -p kernel26-chaox
   /bin/true
@@ -14,7 +27,7 @@ post_install() {
 post_upgrade() {
   # updating module dependencies
   echo ">>> Updating module dependencies. Please wait ..."
-  KERNEL_VERSION=
+  KERNEL_VERSION=2.6.29.4-chaox
   depmod -v $KERNEL_VERSION > /dev/null 2>&1
   /sbin/mkinitcpio -p kernel26-chaox
   /bin/true
@@ -23,7 +36,7 @@ post_upgrade() {
 post_remove() {
   # updating module dependencies
   echo ">>> Updating module dependencies. Please wait ..."
-  KERNEL_VERSION=
+  KERNEL_VERSION=2.6.29.4-chaox
   depmod -v $KERNEL_VERSION > /dev/null 2>&1
   /bin/true
 }

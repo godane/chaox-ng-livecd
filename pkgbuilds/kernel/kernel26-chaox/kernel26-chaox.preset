@@ -1,0 +1,8 @@
+# preset names
+PRESETS=('default' 'fallback')
+source /etc/mkinitcpio.d/kernel26-chaox.kver
+ALL_config='/etc/mkinitcpio.conf'
+default_image="/boot/kernel26-chaox.img"
+default_options=""
+fallback_image="/boot/kernel26-chaox-fallback.img"
+fallback_options="-S autodetect"
