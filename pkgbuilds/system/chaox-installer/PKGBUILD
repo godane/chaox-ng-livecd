@@ -4,7 +4,7 @@
 
 pkgname=chaox-installer
 pkgver=2009.02
-pkgrel=9
+pkgrel=10
 pkgdesc="The chaox install script"
 arch=('i686' 'x86_64')
 url="http://projects.archlinux.org/?p=installer.git"
@@ -12,7 +12,7 @@ license=('GPL')
 depends=('bash')
 source=("ftp://ftp.archlinux.org/other/archlinux-installer/archlinux-installer-$pkgver-2.tar.gz" "chaox-setup.diff")
 md5sums=('93bc355046775819baa9402ff0744bd3'
-         '794b6ac1be7054de0ece8d76382c8dc0')
+         'd73a0507bd9c6e51b05682627b457b26')
 
 build() {
   cd "$srcdir/archlinux-installer-$pkgver-2"

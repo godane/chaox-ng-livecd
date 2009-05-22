@@ -1,5 +1,5 @@
---- setup.orig	2009-02-10 23:13:45.000000000 +0100
-+++ setup	2009-05-19 15:05:24.000000000 +0200
+--- setup.orig 2009-02-10 23:13:45.000000000 +0100
++++ setup	2009-05-22 14:42:31.000000000 +0200
 @@ -1,9 +1,9 @@
  #!/bin/bash
  
@@ -180,6 +180,15 @@
  
  # (2) Windows
  #title Windows
+@@ -1092,7 +1213,7 @@
+         DIALOG --msgbox "GRUB root and setup devices could not be auto-located.  You will need to manually run the GRUB shell to install a bootloader." 0 0
+         return 1
+     fi
+-    $DESTDIR/sbin/grub-install --recheck --grub-shell=$DESTDIR/sbin/grub --root-directory=$DESTDIR $ROOTDEV >/tmp/grub.log 2>&1
++    $DESTDIR/sbin/grub-install --no-floppy --recheck --grub-shell=$DESTDIR/sbin/grub --root-directory=$DESTDIR $ROOTDEV >/tmp/grub.log 2>&1
+     cat /tmp/grub.log >$LOG
+     # unfreeze xfs filesystems
+     if [ -x /usr/sbin/xfs_freeze ]; then
 @@ -1116,18 +1237,7 @@
  # returns: nothing
  select_source()
