@@ -1,10 +1,11 @@
 # Maintainer: jensp <jens@jenux.homelinux.org>
 # Shamelessly adapted from dorphell <dorphell@archlinux.org> 
 pkgname=ntpdate
-pkgver=4.2.4p6
-pkgrel=2
+pkgver=4.2.4p7
+pkgrel=1
 pkgdesc="client for the network time protocol"
 arch=(i686 x86_64)
+depends=("libcap")
 conflicts=("ntp")
 license=('custom')
 url="http://www.ntp.org/"
@@ -12,7 +13,7 @@ backup=('conf.d/ntp-client.conf')
 source=(ftp://ftp.archlinux.org/other/ntp//ntp-4.2.0a-manpages.tar.bz2 http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-${pkgver}.tar.gz ntp-client.conf ntpdate)
 options=('!emptydirs')
 md5sums=('d3a5a6185ef5ed71d2fa8e06598fc28f'
-         '1961c2c12b66b9046d5df37d0a41b181'
+         '8c19ff62ed4f7d64f8e2aa59cb11f364'
          'c7f50632b69bd4f32cf052d0b1848463'
          '140855352baeb89da0c6c1c475c18b57')
 build() {
