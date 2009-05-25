@@ -4,7 +4,7 @@ pkgbase=kernel
 pkgname=("kernel26-chaox" "kernel26-chaox-sources")
 _basekernel=2.6.29
 pkgver=2.6.29.4
-pkgrel=1
+pkgrel=2
 pkgdesc="Linux kernel based on slax config. Used in chaox-ng"
 arch=("i686")
 license=('GPL2')
@@ -104,12 +104,15 @@ package_kernel26-chaox() {
   provides=('kernel26')
   install=$pkgname.install
   cd "${srcdir}"/linux-$_basekernel
+  . ./.config
+  ### next line is only needed for rc kernels
+  _kernver="$pkgver"${CONFIG_LOCALVERSION}""
   mkdir -p "${pkgdir}"/{lib/modules,boot}
   make INSTALL_MOD_PATH="${pkgdir}" modules_install || return 1
-  cp System.map "${pkgdir}"/boot/System.map26
-  cp arch/x86/boot/bzImage "${pkgdir}"/boot/vmlinuz26
-  cd ${pkgdir}/lib/modules/${_kernver}
-  rm -f source build; ln -sf ../../../usr/src/linux-${_kernver} build
+  cp System.map "${pkgdir}"/boot/System.map26 || return 1
+  cp arch/x86/boot/bzImage "${pkgdir}"/boot/vmlinuz26 || return 1
+  cd ${pkgdir}/lib/modules/${_kernver} || return 1
+  rm -f source build; ln -sf ../../../usr/src/linux-${_kernver} build || return 1
   cd "${srcdir}"/linux-$_basekernel
   # set correct depmod command for install
   . ./.config
