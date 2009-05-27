@@ -1,7 +1,7 @@
 # Contributor: Jens Pranaitis <jens@jenux.homelinux.org>
 # Contributer: Jason Chu <jason@archlinux.org>
 pkgname=subversion-client
-pkgver=1.6.1
+pkgver=1.6.2
 pkgrel=1
 pkgdesc="Replacement for CVS, another versioning system (svn)"
 arch=(i686 x86_64)
@@ -14,11 +14,11 @@ url="http://subversion.tigris.org/"
 provides=('svn' 'subversion')
 conflicts=("subversion")
 options=('!makeflags' 'libtool')
-md5sums=('32014fe70397357fa1e0ef8f937a0232')
+md5sums=('93f128306b11e1a1c64ff51338777952')
 build() {
    cd "${srcdir}"/subversion-${pkgver}
    autoreconf
-   ./configure --prefix=/usr --without-apache --without-apxs --without-swig \
+   ./configure --prefix=/usr --without-apxs --without-swig \
                --with-zlib=/usr --with-neon=/usr --with-ssl
    (make external-all && make LT_LDFLAGS="-L$Fdestdir/usr/lib" local-all ) || return 1
    export LD_LIBRARY_PATH="${pkgdir}"/usr/lib:$LD_LIBRARY_PATH
