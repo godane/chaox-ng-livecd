@@ -1,0 +1,17 @@
+# Contributor: Jens Pranaitis <jens@chaox.net>
+pkgname=python-ipcalc
+pkgver=0.1a
+pkgrel=1
+pkgdesc="python module for calculating ipv4 and ipv6 subnets"
+arch=("i686")
+url="http://dev.tehmaze.com/projects/ipcalc/"
+license=('BSD')
+depends=("python")
+source=("http://dev.tehmaze.com/projects/ipcalc/changeset?format=zip&new=0:67245a396a11")
+md5sums=('c492d769197cb02e4de75bfc951e56ee')
+build() {
+  cd "$srcdir"/src
+  install -D ipcalc.py "$pkgdir"/usr/lib/python2.6/ipcalc.py
+}
+
+# vim:set ts=2 sw=2 et:
