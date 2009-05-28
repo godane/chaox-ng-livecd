@@ -2,7 +2,7 @@
 # Contributor: Hugo Doria <hugo@archlinux.org>
 pkgname=nmap-beta
 pkgver=4.85BETA9
-pkgrel=1
+pkgrel=2
 pkgdesc="A network exploration tool and security/port scanner"
 arch=('i686' 'x86_64')
 url="http://nmap.org"
@@ -13,6 +13,7 @@ makedepends=('python')
 optdepends=('pygtk: gui for nmap')
 options=('!makeflags')
 replaces=('nmap')
+provides=("nmap")
 source=(http://download.insecure.org/nmap/dist/nmap-${pkgver}.tar.bz2)
 md5sums=('51bcb77a524a0646d1f5fbe2bdf9e073')
 
