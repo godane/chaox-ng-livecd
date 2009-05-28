@@ -2,7 +2,7 @@
 # Contributor: Ermak <ermak@email.it>
 pkgname=openvas-server
 pkgver=2.0.1
-pkgrel=1
+pkgrel=2
 pkgdesc="The OpenVAS server"
 arch=('i686' 'x86_64')
 url="http://www.openvas.org/"
@@ -10,8 +10,9 @@ license=('GPL')
 depends=('openvas-libraries' 'openvas-libnasl')
 install=$pkgname.install
 source=(http://wald.intevation.org/frs/download.php/562/$pkgname-$pkgver.tar.gz $pkgname.rc $pkgname.install)
-md5sums=('f68e2014113185a1e596408679eb192d' 'afaa392eebb28fdadeaeb63518e2d8e0' 'f936d043db46a2c75d9f4be153fc65cd')
-
+md5sums=('f68e2014113185a1e596408679eb192d'
+         '586ba4bafcf222beeaae414a6300bbea'
+         'f936d043db46a2c75d9f4be153fc65cd')
 build() {
   cd "$srcdir/$pkgname-$pkgver"
 
