@@ -4,8 +4,8 @@
  . /etc/rc.d/functions
  
  echo " "
-+printhl "Chaox-NG\n"
-+printhl	"Copyleft 2008-2009 Jenux ${C_H2}https://jenux.homelinux.org"
++printhl "Chaox\n"
++printhl	"Copyleft 2008-2009 ${C_H2}http://jenux.homelinux.org"
 +printhl "based on:"
 +echo " "
  printhl "Arch Linux\n"
