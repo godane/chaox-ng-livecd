@@ -1,0 +1,21 @@
+--- rc.multi.orig	2009-03-10 22:04:12.000000000 +0100
++++ rc.multi	    2009-05-31 13:49:15.000000000 +0200
+@@ -12,10 +12,15 @@
+ # Start daemons
+ for daemon in "${DAEMONS[@]}"; do
+ 	if [ "$daemon" = "${daemon#!}" ]; then
+-		if [ "$daemon" = "${daemon#@}" ]; then
+-			start_daemon $daemon
++		if grep -q no"${daemon/@/}" /proc/cmdline
++		then
++			echo "not starting ${daemon/@/}"
+ 		else
+-			start_daemon_bkgd ${daemon:1}
++			if [ "$daemon" = "${daemon#@}" ]; then
++				start_daemon $daemon
++			else
++				start_daemon_bkgd ${daemon:1}
++			fi
+ 		fi
+ 	fi
+ done
