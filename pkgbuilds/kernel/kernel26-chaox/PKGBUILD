@@ -4,7 +4,7 @@ pkgbase=kernel
 pkgname=("kernel26-chaox" "kernel26-chaox-sources")
 _basekernel=2.6.29
 pkgver=2.6.29.4
-pkgrel=4
+pkgrel=6
 pkgdesc="Linux kernel based on slax config. Used in chaox-ng"
 arch=("i686")
 license=('GPL2')
@@ -24,7 +24,7 @@ source=(ftp://ftp.kernel.org/pub/linux/kernel/v2.6/linux-$_basekernel.tar.bz2
 )
 md5sums=('64921b5ff5cdadbccfcd3820f03be7d8'
          '03f1a0236cc37d8594d2f3c837d81c9d'
-         '847dc9f0367dd5e84da69ac14d176c2d'
+         '1f76c08bafc1d6a24220268d92508237'
          'a49390dd08e4f7702b8f4b550f1ad84e'
          '89a7f97d00f43a3e99fc40bfe3a33bc1'
          '31b8cb7701298939aca49171414eb07c'
@@ -44,6 +44,7 @@ build() {
   fi
   # add squashfs and aufs
   patch -Np1 -i "${srcdir}"/aufs2-standalone/aufs2-standalone.patch || return 1
+  patch -Np1 -i "${srcdir}"/aufs2-standalone/aufs2-kbuild.patch || return 1
   cp -R "${srcdir}"/aufs2-standalone/{Documentation,include,fs,config.mk} .
   echo "add lzma-bzip support"
   patch -Np1 -i "${srcdir}"/lzma-bzip2.patch || return 1
