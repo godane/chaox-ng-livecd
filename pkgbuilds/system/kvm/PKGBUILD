@@ -1,8 +1,8 @@
 # Contributor: Jens Pranaitis <jens@chaox.net>
 # Contributor: Tobias Powalowski <tpowa@archlinux.org>
 pkgname=kvm
-pkgver=85
-pkgrel=3
+pkgver=86
+pkgrel=1
 pkgdesc="Latest KVM QEMU is a generic and open source processor emulator which achieves a good emulation speed by using dynamic translation."
 arch=(i686 x86_64)
 license=('GPL2')
@@ -13,7 +13,6 @@ conflicts=('qemu')
 source=(http://downloads.sourceforge.net/${pkgname}/${pkgname}-${pkgver}.tar.gz
         65-kvm.rules
         70-kqemu.rules)
-
 build()
 {
     cd ${srcdir}/${pkgname}-${pkgver}
@@ -69,6 +68,6 @@ build()
     install -D -m644 ${srcdir}/65-kvm.rules \
                      ${pkgdir}/lib/udev/rules.d/65-kvm.rules
 }
-md5sums=('7eec5cec0368e098f11ced03395e7439'
+md5sums=('cd8cc78c56ddaaf0be421919f8a6835c'
          'cead7ba387159d360f892281499975df'
          'ec06591830b8fcf53913f05f3d66f7e5')
