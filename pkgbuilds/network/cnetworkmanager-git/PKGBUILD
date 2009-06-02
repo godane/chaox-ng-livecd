@@ -1,12 +1,12 @@
 # Contributor: Jens Pranaitis <jens@jenux.homelinux.org>
-#Contributor: Dario Andres Rodriguez <andresbajotierra@gmail.com>
+# Contributor: Dario Andres Rodriguez <andresbajotierra@gmail.com>
 pkgname=cnetworkmanager-git
 pkgver=20090602
 pkgrel=1
 pkgdesc="Command Line Interface for NetworkManager"
 url="http://vidner.net/martin/software/cnetworkmanager/"
 license="GPL"
-depends=('networkmanager' 'dbus-python')
+depends=('networkmanager' 'dbus-python' 'pygobject' 'python-pbkdf2')
 makedepends=('git')
 arch=(i686 x86_64)
 source=()
