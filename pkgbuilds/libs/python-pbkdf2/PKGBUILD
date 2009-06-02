@@ -1,0 +1,17 @@
+# Contributor: Jens Pranaitis <jens@chaox.net>
+pkgname=python-pbkdf2
+pkgver=1.2
+pkgrel=1
+pkgdesc="python module for pbkdf2"
+arch=("i686")
+url="http://www.dlitz.net/software/python-pbkdf2/"
+license=('BSD')
+depends=("python")
+source=("http://ftp.dlitz.net/pub/dlitz/python/pkcs5-pbkdf2/$pkgver/PBKDF2.py")
+md5sums=('7271236027d779704a53e01dd314f9e2')
+build() {
+  cd "$srcdir"
+  install -D PBKDF2.py "$pkgdir"/usr/lib/python2.6/pbkdf2.py
+}
+
+# vim:set ts=2 sw=2 et:
