@@ -1,0 +1,4 @@
+#!/bin/bash
+cd /usr/share/wyd
+perl wyd.pl "$@"
+cd $OLDPWD
