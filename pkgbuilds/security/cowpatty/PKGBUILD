@@ -2,7 +2,7 @@
 # Contributor: icarus <icarus.roaming@gmail.com>
 # Contributor: Thomas Schneider <blacklotus@jenux.homelinux.org>
 pkgname=cowpatty
-pkgver=4.3
+pkgver=4.5
 pkgrel=1
 pkgdesc="Wireless WPA/WPA2 PSK handshake cracking utility"
 arch=('i686' 'x86_64')
@@ -10,7 +10,7 @@ url="http://www.churchofwifi.org/Project_Display.asp?PID=95"
 license=('GPL')
 depends=('openssl' 'libpcap')
 source=("http://www.willhackforsushi.com/code/$pkgname/$pkgver/$pkgname-$pkgver.tgz" "cow.patch")
-md5sums=('deccac0763a05ef7014107d347bf9190' '118bf4c19a1e1920cfe066ba6a2bfa02')
+md5sums=('13e13c79ce6f5695dae355792b80d8aa' '118bf4c19a1e1920cfe066ba6a2bfa02')
 
 build() {
   cd "${srcdir}/$pkgname-$pkgver"
