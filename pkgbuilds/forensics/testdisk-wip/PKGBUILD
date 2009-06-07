@@ -1,7 +1,7 @@
 # Contributor: Jens Pranaitis <jens@jenux.homelinux.org>
 # Contributor: Thomas Schneider <maxmusterm@gmail.com>
 pkgname=testdisk-wip
-pkgver=6.11
+pkgver=6.12
 pkgrel=1
 pkgdesc="Tool to check and undelete partition. Includes PhotoRec - tool to recover pictures from digital camera memory."
 url="http://www.cgsecurity.org/wiki/TestDisk"
@@ -12,7 +12,7 @@ replaces=("testdisk")
 provides=("testdisk")
 arch=('i686' 'x86_64')
 source=("http://www.cgsecurity.org/${pkgname/-wip/}-$pkgver-WIP.tar.bz2")
-md5sums=('056041430e3a869cf8e3b34b595d4ee2')
+md5sums=('bcc86d376fcca77c91af43eedd1864bd')
 build() {
   cd "${srcdir}"/${pkgname/-wip/}-$pkgver-WIP
   ./configure --prefix=/usr
