@@ -7,7 +7,7 @@ pkgdesc="DECT Plugin for Kismet"
 arch=('i686' 'x86_64')
 url="https://dedected.org/"
 license=('GPL2')
-depends=('gcc-libs' 'kismet-newcore')
+depends=('gcc-libs' '>=kismet-2009_05_RC2')
 makedepends=('subversion')
 provides=(kismet-dect)
 conflicts=(kismet-dect)
