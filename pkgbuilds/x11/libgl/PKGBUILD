@@ -20,7 +20,7 @@ source=(http://downloads.sourceforge.net/mesa3d/MesaLib-${pkgver}.tar.bz2
 md5sums=('b10a76e32bde4645cfc34ea0416d7d8b'
          'f0baa948d9810f268413111ee439d24b'
          '293e975b548b8cb29b23b735a112bafa'
-         'f04bb92b6d6b8e66b2a1c2ef2c6516ef')
+         '1cd5cd1888928ef9594a9af62445f531')
 build() {
   cd "${startdir}/src/Mesa-${pkgver}"
   patch -Np1 -i "${srcdir}/mesa-7.1-link-shared.patch" || return 1
@@ -42,5 +42,5 @@ build() {
   install -m755 -d "${pkgdir}/usr/lib/xorg/modules/_extensions"
   mkdir "${pkgdir}"/usr/lib/xorg/modules/extensions
   ln -sf libglx.xorg ${pkgdir}/usr/lib/xorg/modules/_extensions/libglx.so || return 1
-  install -D -m644 "${srcdir}"/xorg-symlinks.sh "${pkgdir}"/usr/share/select-opengl/functions/xorg-symlinks.sh
+  install -D -m644 "${srcdir}"/xorg-symlinks.sh "${pkgdir}"/usr/share/select-opengl/functions/xorg-symlinks.sh || return 1
 }
