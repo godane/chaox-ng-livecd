@@ -4,7 +4,7 @@
 pkgbase=nvidia
 pkgname=("nvidia-utils" "nvidia-drivers")
 pkgver=180.60
-pkgrel=2
+pkgrel=4
 pkgdesc="NVIDIA drivers utilities and libraries."
 arch=('i686')
 [ "$CARCH" = "i686"   ] && ARCH=x86 	 
@@ -15,7 +15,7 @@ license=('custom')
 install=nvidia.install
 source=(http://download.nvidia.com/XFree86/Linux-${ARCH}/${pkgver}/NVIDIA-Linux-${ARCH}-${pkgver}-pkg0.run nvidia-symlinks.sh)
 md5sums=('84fb2ac671804f94544237b11a63ba31'
-         '71e7c8bbf1d37df43505f2e114e15541')
+         '3bb95abce03c863f0afa41d1c3144d21')
 options=(docs !strip)
 build()
 {
