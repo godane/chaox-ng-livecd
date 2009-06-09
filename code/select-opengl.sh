@@ -18,14 +18,19 @@ then
   done
 elif [ "$1" == "set" ]
 then
-  if [ -z $2 ]
+  if [ $(id -u) != 0 ]
   then
-    echo "you must specify an opengl implementation"
-  elif [ -e /usr/share/select-opengl/functions/$2-symlinks.sh ]
-  then
-    source /usr/share/select-opengl/functions/$2-symlinks.sh
-  else 
-    echo "implementation doesn't exist, check $0 list"
+    echo "you need root priviledges to run the set action" && exit 3
+  else
+    if [ -z $2 ]
+    then
+      echo "you must specify an opengl implementation"
+    elif [ -e /usr/share/select-opengl/functions/$2-symlinks.sh ]
+    then
+      source /usr/share/select-opengl/functions/$2-symlinks.sh
+    else 
+      echo "implementation doesn't exist, check $0 list"
+    fi
   fi
 else
   _usage
