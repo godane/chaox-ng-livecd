@@ -31,3 +31,12 @@ do
     echo "there is already a library of the same name available, bailing out" && return 2
   fi
 done
+if [ -h /lib/modules/$(uname -r)/kernel/drivers/video/nvidia.ko ]
+then
+  ln -sf /usr/lib/nvidia/modules/$(uname -r)/nvidia.ko /lib/modules/$(uname -r)/kernel/drivers/video/nvidia.ko
+elif [ ! -e /lib/modules/$(uname -r)/kernel/drivers/video/nvidia.ko ]
+then
+  ln -sf /usr/lib/nvidia/modules/$(uname -r)/nvidia.ko /lib/modules/$(uname -r)/kernel/drivers/video/nvidia.ko
+else
+  echo "there is already a module of the same name available, bailing out" && exit 2
+fi

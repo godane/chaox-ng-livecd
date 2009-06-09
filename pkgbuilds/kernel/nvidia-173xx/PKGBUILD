@@ -4,15 +4,17 @@ source "${startdir}"/../kernel.env
 pkgbase=nvidia-173xx
 pkgname=("nvidia-173xx-module" "nvidia-173xx-drivers" "nvidia-173xx-utils")
 pkgver=173.14.18
-pkgrel=4
+pkgrel=6
 arch=('i686')
 [ "$CARCH" = "i686"   ] && ARCH=x86
 url="http://www.nvidia.com/"
 license=('nvidia')
 source=("ftp://download.nvidia.com/XFree86/Linux-$ARCH/${pkgver}/NVIDIA-Linux-$ARCH-${pkgver}-pkg0.run"
-        "nvidia-173xx-symlinks.sh")
+        "nvidia-173xx-symlinks.sh"
+        "nvidia_supported_chakra")
 md5sums=('480c10f3d861fd2c3cc2a46bccc961a4'
-         '5ab459a41da54b8a64b078b97ec4bc7a')
+         'f640e43180aa025258c6598babd0e273'
+         'd0f28ba00ca1f3011f5fccacb80b8378')
 build()
 {
   # Extract
@@ -30,6 +32,10 @@ depends=("kernel26-chaox=$kernpkgver" "nvidia-173xx-drivers=$pkgver")
   # install kernel module
   mkdir -p "${pkgdir}"/usr/lib/nvidia-173xx/modules/${_kernver}/
   install -m644 nvidia.ko "${pkgdir}"/usr/lib/nvidia-173xx/modules/${_kernver}/
+  # create db of supported devices
+  mkdir -p "${pkgdir}"/usr/share/detect-opengl/
+  "${srcdir}"/nvidia_supported_chakra "${pkgdir}"/usr/lib/nvidia-173xx/modules/${_kernver}/nvidia.ko > "${pkgdir}"/usr/share/detect-opengl/nvidia-173xx.db || return 1
+
 }
 package_nvidia-173xx-drivers() {
 pkgdesc="NVIDIA driver libraries from the 173xx  branch"

@@ -4,15 +4,17 @@ source "${startdir}"/../kernel.env
 pkgbase=nvidia
 pkgname=("nvidia-module" "nvidia-drivers" "nvidia-utils")
 pkgver=180.60
-pkgrel=6
+pkgrel=7
 arch=('i686')
 [ "$CARCH" = "i686"   ] && ARCH=x86
 url="http://www.nvidia.com/"
 license=('nvidia')
 source=("ftp://download.nvidia.com/XFree86/Linux-$ARCH/${pkgver}/NVIDIA-Linux-$ARCH-${pkgver}-pkg0.run"
-        'nvidia-symlinks.sh')
+        'nvidia-symlinks.sh'
+        'nvidia_supported_chakra')
 md5sums=('84fb2ac671804f94544237b11a63ba31'
-         '3bb95abce03c863f0afa41d1c3144d21')
+         '1e4cb23fe9af8ac621e6443da1ec1d5b'
+         'd0f28ba00ca1f3011f5fccacb80b8378')
 build()
 {
   # Extract
@@ -30,6 +32,9 @@ depends=("kernel26-chaox=$kernpkgver" "nvidia-drivers=$pkgver")
   # install kernel module
   mkdir -p "${pkgdir}"/usr/lib/nvidia/modules/${_kernver}/
   install -m644 nvidia.ko "${pkgdir}"/usr/lib/nvidia/modules/${_kernver}/
+  # create db of supported devices
+  mkdir -p "${pkgdir}"/usr/share/detect-opengl/
+  "${srcdir}"/nvidia_supported_chakra "${pkgdir}"/usr/lib/nvidia/modules/${_kernver}/nvidia.ko > "${pkgdir}"/usr/share/detect-opengl/nvidia.db || return 1
 }
 package_nvidia-drivers() {
 pkgdesc="NVIDIA driver libraries"
