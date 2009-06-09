@@ -4,7 +4,7 @@ source "${startdir}"/../kernel.env
 pkgbase=nvidia
 pkgname=("nvidia-module" "nvidia-drivers" "nvidia-utils")
 pkgver=180.60
-pkgrel=5
+pkgrel=6
 arch=('i686')
 [ "$CARCH" = "i686"   ] && ARCH=x86
 url="http://www.nvidia.com/"
