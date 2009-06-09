@@ -6,7 +6,7 @@
 # thanks guys!
 
 nvidia_card=$(lspci -n | sed -n "s/.* 0300: 10de:\(....\).*/\1/p")
-if [ -n $nvidia_card ]
+if [ $nvidia_card ]
 then
   for dbentry in /usr/share/detect-opengl/nvidia*.db
   do
@@ -16,14 +16,17 @@ then
       nvidia)
         select-opengl.sh nvidia
         modprobe nvidia
+        break
         ;;
       nvidia-173xx)
         select-opengl.sh nvidia-173xx
         modprobe nvidia
+        break
         ;;
       nvidia-96xx)
         select-opengl.sh nvidia-96xx
         modprobe nvidia
+        break
         ;;
       *)
         echo "no drivers for your nvidia hardware found"
