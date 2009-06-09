@@ -26,7 +26,7 @@ build() {
 	unset FAKEROOTKEY
 
 	msg "Configuring..."
-	./waf configure || return 1
+	./waf --without-gui --without-lua configure || return 1
 
 	msg "Building..."
 	./waf build || return 1
