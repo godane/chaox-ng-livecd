@@ -9,8 +9,6 @@ pkgdesc="NVIDIA drivers utilities and libraries."
 arch=('i686')
 [ "$CARCH" = "i686"   ] && ARCH=x86 	 
 url="http://www.nvidia.com/"
-depends=('xorg-server')
-provides=('libgl')
 license=('custom')
 install=nvidia.install
 source=(http://download.nvidia.com/XFree86/Linux-${ARCH}/${pkgver}/NVIDIA-Linux-${ARCH}-${pkgver}-pkg0.run nvidia-symlinks.sh)
@@ -24,6 +22,8 @@ build()
   sh NVIDIA-Linux-${ARCH}-${pkgver}-pkg0.run --extract-only
 }
 package_nvidia-drivers() {
+depends=("xorg-server" "gcc-libs" "zlib" "libxext")
+provides=("libgl")
   cd "${srcdir}"/NVIDIA-Linux-${ARCH}-${pkgver}-pkg0/usr
   mkdir -p ${pkgdir}/usr/lib/nvidia/modules/{extensions,drivers}
   mkdir -p ${pkgdir}/usr/share/licenses/nvidia/
@@ -52,6 +52,8 @@ package_nvidia-drivers() {
   # phew :)
 }
 package_nvidia-utils() {
+conflicts=("nvidia-173xx-utils")
+depends=("gtk2")
   cd "${srcdir}"/NVIDIA-Linux-${ARCH}-${pkgver}-pkg0/usr
   mkdir -p "${pkgdir}"/usr/{bin,share/applications,share/man/man1,share/pixmaps/}
   install -m755 bin/nvidia-{settings,xconfig,bug-report.sh} $pkgdir/usr/bin/ || return 1
