@@ -12,10 +12,10 @@ do
 done
 if [ -h /usr/lib/xorg/modules/drivers/nvidia_drv.so ]
 then
-  ln -sf /usr/lib/nvidia-96xx/driver/nvidia_drv.so /usr/lib/xorg/modules/drivers/nvidia_drv.so
+  ln -sf /usr/lib/nvidia-96xx/modules/drivers/nvidia_drv.so /usr/lib/xorg/modules/drivers/nvidia_drv.so
 elif [ ! -e /usr/lib/xorg/modules/drivers/nvidia_drv.so ]
 then
-  ln -sf /usr/lib/nvidia-96xx/driver/nvidia_drv.so /usr/lib/xorg/modules/drivers/nvidia_drv.so
+  ln -sf /usr/lib/nvidia-96xx/modules/drivers/nvidia_drv.so /usr/lib/xorg/modules/drivers/nvidia_drv.so
 else
   echo "there is already a library of the same name available, bailing out" && return 2
 fi
