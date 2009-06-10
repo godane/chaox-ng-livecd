@@ -14,17 +14,20 @@ then
     dbentry_name=$(basename $dbentry .db)
     case "$dbentry_name" in 
       nvidia)
-        select-opengl.sh nvidia
+        select-opengl.sh set nvidia
+        depmod
         modprobe nvidia
         break
         ;;
       nvidia-173xx)
-        select-opengl.sh nvidia-173xx
+        select-opengl.sh set nvidia-173xx
+        depmod
         modprobe nvidia
         break
         ;;
       nvidia-96xx)
-        select-opengl.sh nvidia-96xx
+        select-opengl.sh set nvidia-96xx
+        depmod
         modprobe nvidia
         break
         ;;
@@ -34,5 +37,5 @@ then
     esac
   done
 else
- select-opengl.sh xorg
+ select-opengl.sh set xorg
 fi 
