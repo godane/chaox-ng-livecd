@@ -1,0 +1,34 @@
+# Contributor: Jens Pranaitis <jens@chaox.net>
+pkgname=lewifi-svn
+pkgver=12
+pkgrel=1
+pkgdesc="wifi level mapper"
+arch=("i686")
+url="http://code.google.com/p/lewifi/"
+license=('MIT')
+depends=("python-wifi" "wxpython" "python-numpy")
+_svntrunk=http://lewifi.googlecode.com/svn/trunk/
+_svnmod=lewifi
+build() {
+  cd "$srcdir"
+  if [ -d $_svnmod/.svn ]; then
+    (cd $_svnmod && svn up -r $pkgver)
+  else
+    svn co $_svntrunk --config-dir ./ -r $pkgver $_svnmod
+  fi
+
+  msg "SVN checkout done or server timeout"
+  msg "Starting make..."
+
+  rm -rf "$srcdir/$_svnmod-build"
+  cp -r "$srcdir/$_svnmod" "$srcdir/$_svnmod-build"
+  cd "$srcdir/$_svnmod-build"
+  mkdir -p "${pkgdir}"/usr/{bin,share/doc/$pkgname/examples} || return 1
+  install -m 755 LeWifi.py "${pkgdir}"/usr/bin/lewifi || return 1
+  install -m 644 carlfloorplan.png "${pkgdir}"/usr/share/doc/$pkgname/examples/ || return 1
+  install -m 644 carlland.dat "${pkgdir}"/usr/share/doc/$pkgname/examples/ || return 1
+  install -m 644 carlland.jpg "${pkgdir}"/usr/share/doc/$pkgname/examples/ || return 1
+  install -m 644 floorplan.png "${pkgdir}"/usr/share/doc/$pkgname/examples/ || return 1
+}
+
+# vim:set ts=2 sw=2 et:
