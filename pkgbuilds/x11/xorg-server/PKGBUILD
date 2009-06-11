@@ -1,10 +1,10 @@
-# $Id: PKGBUILD 40345 2009-05-29 09:04:05Z jgc $
-# Maintainer: Alexander Baldeck <kth5@archlinux.org>
+# Contributor: Jens Pranaitis <jens@chaox.net>
+# Contributor: Alexander Baldeck <kth5@archlinux.org>
 # Contributor: Jan de Groot <jgc@archlinux.org>
 
 pkgname=xorg-server
 pkgver=1.6.1.901
-pkgrel=2
+pkgrel=3
 pkgdesc="X.Org X servers"
 arch=('i686' 'x86_64')
 license=('custom')
@@ -40,7 +40,7 @@ build() {
   # Fix dbus config path
   sed -i -e 's/\$(sysconfdir)/\/etc/' config/Makefile.*  || return 1
   
-  PCI_TXT_IDS_PATH=/usr/share/xorg-pciids/ ./configure --prefix=/usr \
+./configure --prefix=/usr \
               --enable-ipv6 \
               --enable-dri \
               --disable-dmx \
@@ -65,7 +65,8 @@ build() {
               --with-default-font-path=/usr/share/fonts/misc,/usr/share/fonts/100dpi:unscaled,/usr/share/fonts/75dpi:unscaled,/usr/share/fonts/TTF,/usr/share/fonts/Type1 \
               --with-xkb-path=/usr/share/X11/xkb \
               --with-xkb-output=/var/lib/xkb \
-              --with-dri-driver-path=/usr/lib/xorg/modules/dri || return 1
+              --with-dri-driver-path=/usr/lib/xorg/modules/dri \
+             PCI_TXT_IDS_DIR="/usr/share/xorg-pciids" || return 1
 
   make || return 1
   make DESTDIR="${pkgdir}" install || return 1

@@ -4,7 +4,7 @@ source "${startdir}"/../kernel.env
 pkgbase=nvidia-173xx
 pkgname=("nvidia-173xx-module" "nvidia-173xx-drivers" "nvidia-173xx-utils")
 pkgver=173.14.18
-pkgrel=6
+pkgrel=7
 arch=('i686')
 [ "$CARCH" = "i686"   ] && ARCH=x86
 url="http://www.nvidia.com/"
