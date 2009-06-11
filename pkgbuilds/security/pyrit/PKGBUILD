@@ -1,17 +1,17 @@
 # Contributor: Shino <shino@jenux.homelinux.org>
 # Contributor: Thomas Schneider <blacklotus@jenux.homelinux.org>
-
-pkgname=pyrit
-pkgver=101
+pkgbase="pyrit"
+pkgname=("pyrit" "pyrit-cuda")
+pkgver=102
 pkgrel=1
-pkgdesc="WPA-PSK and WPA2-PSK improved brute force and dictonary attack.Can use nvidia cards"
+pkgdesc="WPA-PSK and WPA2-PSK improved brute force and dictonary attack"
 url="http://code.google.com/p/pyrit/"
 arch=('i686' 'x86_64')
 license=('GPL')
 depends=('python')
 makedepends=('gcc' 'subversion')
-source=()
-md5sums=()
+source=("cuda-setup.patch")
+md5sums=("ae7c0c984e2b39d7d9405b7c457ca358")
 
 _svntrunk=http://pyrit.googlecode.com/svn/trunk/
 _svnmod=pyrit
@@ -26,10 +26,16 @@ build() {
   fi
 
   msg "SVN checkout done or server timeout"
-  msg "Starting make..."
-
+}
+package_pyrit() {
   cd $_svnmod/pyrit
-
+  ./setup.py install --root="${pkgdir}" || return 1
+}
+package_pyrit-cuda() {
+pkgdesc="cuda module for pyrit"
+depends=("cuda" "pyrit")
+  cd $srcdir/pyrit/cpyrit_cuda
+  patch -Np0 -i "${srcdir}"/cuda-setup.patch || return 1
   ./setup.py install --root="${pkgdir}" || return 1
 }
 # vim:syntax=sh
