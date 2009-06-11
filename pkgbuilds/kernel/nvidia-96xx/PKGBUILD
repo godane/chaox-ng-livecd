@@ -4,7 +4,7 @@ source "${startdir}"/../kernel.env
 pkgbase=nvidia-96xx
 pkgname=("nvidia-96xx-module" "nvidia-96xx-drivers" "nvidia-96xx-utils")
 pkgver=96.43.11
-pkgrel=6
+pkgrel=7
 arch=(i686)
 license=('nvidia')
 [ "$CARCH" = "i686"   ] && ARCH=x86
@@ -24,6 +24,7 @@ build()
 package_nvidia-96xx-module() {
 pkgdesc="NVIDIA driver module from the 96xx branch"
 depends=("kernel26-chaox=$kernpkgver" "nvidia-96xx-drivers=$pkgver")
+replaces=("nvidia-96xx")
   cd "${srcdir}"/NVIDIA-Linux-$ARCH-${pkgver}-pkg0
   # Any extra patches are applied in here...
   cd usr/src/nv/
@@ -41,6 +42,7 @@ package_nvidia-96xx-drivers() {
 pkgdesc="NVIDIA driver libraries from the 96xx branch"
 depends=("xorg-server" "libxext")
 provides=("libgl")
+install=nvidia-96xx-drivers.install
   cd "${srcdir}"/NVIDIA-Linux-${ARCH}-${pkgver}-pkg0/usr
   mkdir -p ${pkgdir}/usr/lib/nvidia-96xx/modules/{extensions,drivers}
   install lib/{libGLcore.so.${pkgver},libGL.so.${pkgver},libnvidia-cfg.so.${pkgver},tls/libnvidia-tls.so.${pkgver}} \

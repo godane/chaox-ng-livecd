@@ -4,7 +4,7 @@ source "${startdir}"/../kernel.env
 pkgbase=nvidia-173xx
 pkgname=("nvidia-173xx-module" "nvidia-173xx-drivers" "nvidia-173xx-utils")
 pkgver=173.14.18
-pkgrel=7
+pkgrel=8
 arch=('i686')
 [ "$CARCH" = "i686"   ] && ARCH=x86
 url="http://www.nvidia.com/"
@@ -24,6 +24,7 @@ build()
 package_nvidia-173xx-module() {
 pkgdesc="NVIDIA driver kernel module from the 173xx branch for kernel26-chaox"
 depends=("kernel26-chaox=$kernpkgver" "nvidia-173xx-drivers=$pkgver")
+replaces=("nvidia-173xx")
   cd "${srcdir}"/NVIDIA-Linux-$ARCH-${pkgver}-pkg0
   # Any extra patches are applied in here...
   cd usr/src/nv/
@@ -39,8 +40,9 @@ depends=("kernel26-chaox=$kernpkgver" "nvidia-173xx-drivers=$pkgver")
 }
 package_nvidia-173xx-drivers() {
 pkgdesc="NVIDIA driver libraries from the 173xx  branch"
-depends=("gcc-libs" "zlib" "libxext" "xorg-server")
+depends=("gcc-libs" "zlib" "libxext" "xorg-server" "chaox-opengl-tools")
 provides=("libgl")
+install="nvidia-173xx-drivers.install"
   cd "${srcdir}"/NVIDIA-Linux-${ARCH}-${pkgver}-pkg0/usr
   mkdir -p ${pkgdir}/usr/lib/nvidia-173xx/modules/{extensions,drivers}
   install lib/{libGLcore,libGL,libnvidia-cfg,libcuda,tls/libnvidia-tls}.so.${pkgver} \
