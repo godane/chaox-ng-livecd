@@ -1,0 +1,38 @@
+# Contributor: Jens Pranaitis <jens@chaox.net>
+pkgname=chaox-opengl-tools-git
+pkgver=20090611
+pkgrel=2
+pkgdesc="some scripts to aid with opengl setup"
+arch=("i686")
+url="http://github.com/jensp/chaox-opengl-tools"
+license=('GPL')
+depends=('xorg-server')
+makedepends=('git')
+provides=chaox-opengl-tools
+_gitroot="git://github.com/jensp/chaox-opengl-tools.git"
+_gitname="chaox-opengl-tools"
+
+build() {
+  cd "$srcdir"
+  msg "Connecting to GIT server...."
+
+  if [ -d $_gitname ] ; then
+    cd $_gitname && git pull origin
+    msg "The local files are updated."
+  else
+    git clone $_gitroot
+  fi
+
+  msg "GIT checkout done or server timeout"
+  msg "Starting make..."
+
+  rm -rf "$srcdir/$_gitname-build"
+  git clone "$srcdir/$_gitname" "$srcdir/$_gitname-build"
+  cd "$srcdir/$_gitname-build"
+
+  #
+  # BUILD HERE
+  #
+  mkdir -p "$pkgdir"/usr/bin/
+  install -m755 {detect,select}-opengl.sh "$pkgdir"/usr/bin/ || return 1
+} 

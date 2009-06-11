@@ -1,0 +1,8 @@
+post_install() {
+  echo "This nvidia driver doesn't setup the libraries per default. You will have to call \"select-opengl.sh set nvidia-96xx\" to set the symlinks up."
+}
+
+post_upgrade() {
+  post_install
+}
+# vim:set ts=2 sw=2 et:

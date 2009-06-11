@@ -9,7 +9,7 @@ case "$1" in
     for x in $(cat /proc/cmdline)
         do
         case ${x} in
-                xfce) /etc/init.d/gdm start
+                xfce) /usr/bin/detect-opengl.sh && /etc/init.d/gdm start
                 ;;
                 xkeymap=*) export ${x}
                 ;;
