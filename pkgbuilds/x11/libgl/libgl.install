@@ -1,0 +1,11 @@
+post_install() {
+  echo "setting opengl implementation to xorg"
+  select-opengl.sh set xorg
+}
+
+post_upgrade() {
+  echo "setting opengl implementation to xorg"
+  select-opengl.sh set xorg
+}
+
+# vim:set ts=2 sw=2 et:
