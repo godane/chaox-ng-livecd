@@ -1,8 +1,8 @@
 # Contributor: Jens Pranaitis <jens@chaox.net>
 source "${startdir}"/../kernel.env
 pkgname=compat-wireless
-pkgver=2.6.30_rc6
-pkgrel=4
+pkgver=2.6.30
+pkgrel=1
 pkgdesc="Backport of current wireless drivers"
 arch=(i686 x86_64)
 url="http://wireless.kernel.org/en/users/Download/stable"
@@ -18,7 +18,7 @@ source=("http://www.orbit-lab.org/kernel/${pkgname}-2.6-stable/v2.6.30/${pkgname
         "4012_openwrt-b43-disable_qos_when_openfw.patch"
         "rtl8187_injection_speed_2.6.30-rc6.patch" # based on the aircrack-ng patch for -rc3
         )
-md5sums=('4c9ee820ad4607fb31edb822b8e7e1a5'
+md5sums=('d1e4d0f2b30ffe2931c6fad8d6607e17'
          'ca85d39144f07b0500c663779dda9259'
          'a713e50e8f2cf82ae9cf7e10a9f82412'
          '9c474a07e0f6f7b7549fa562e8cee080'
