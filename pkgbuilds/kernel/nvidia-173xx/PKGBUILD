@@ -13,7 +13,7 @@ source=("ftp://download.nvidia.com/XFree86/Linux-$ARCH/${pkgver}/NVIDIA-Linux-$A
         "nvidia-173xx-symlinks.sh"
         "nvidia_supported_chakra")
 md5sums=('480c10f3d861fd2c3cc2a46bccc961a4'
-         '71a9b5b93da57ca429c3b5312ca645e8'
+         '27b4285e57aa16e874e9dee49f2cccc9'
          'd0f28ba00ca1f3011f5fccacb80b8378')
 build()
 {
