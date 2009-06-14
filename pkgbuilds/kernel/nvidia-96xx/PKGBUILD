@@ -4,22 +4,26 @@ source "${startdir}"/../kernel.env
 pkgbase=nvidia-96xx
 pkgname=("nvidia-96xx-module" "nvidia-96xx-drivers" "nvidia-96xx-utils")
 pkgver=96.43.11
-pkgrel=7
+pkgrel=8
 arch=(i686)
 license=('nvidia')
 [ "$CARCH" = "i686"   ] && ARCH=x86
 url="http://www.nvidia.com/"
 source=("ftp://download.nvidia.com/XFree86/Linux-$ARCH/${pkgver}/NVIDIA-Linux-$ARCH-${pkgver}-pkg0.run"
         "nvidia-96xx-symlinks.sh"
-        "nvidia_supported_chakra")
+        "nvidia_supported_chakra"
+        "remove-old-proc-interface-code.patch")
 md5sums=('bf2661f00759f78cbad9f72eeecdc676'
          '5ddc004ca84728fb91472145a641cad7'
-         'd0f28ba00ca1f3011f5fccacb80b8378')
+         'd0f28ba00ca1f3011f5fccacb80b8378'
+         '24e6929e737deaab52662e1ffed54989')
 build()
 {
   # Extract
   cd "${srcdir}"/
   sh NVIDIA-Linux-$ARCH-${pkgver}-pkg0.run --extract-only
+  cd NVIDIA-Linux-$ARCH-${pkgver}-pkg0
+  patch -Np1 -i "${srcdir}"/remove-old-proc-interface-code.patch
 }
 package_nvidia-96xx-module() {
 pkgdesc="NVIDIA driver module from the 96xx branch"
