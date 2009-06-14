@@ -1,0 +1,11 @@
+--- wlan_compat.h.orig	2009-06-14 17:29:08.000000000 +0200
++++ wlan_compat.h	2009-06-14 17:29:32.000000000 +0200
+@@ -221,7 +221,7 @@
+ #ifndef IRQ_NONE
+ #define IRQ_NONE
+ #define IRQ_HANDLED
+-typedef void irqreturn_t;
++typedef enum irqreturn_t;
+ #endif
+ 
+ #ifndef ARPHRD_IEEE80211_PRISM
