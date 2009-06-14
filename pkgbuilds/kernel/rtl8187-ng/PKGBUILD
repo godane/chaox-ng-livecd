@@ -3,7 +3,7 @@
 source "${startdir}"/../kernel.env
 pkgname=rtl8187-ng
 pkgver=1010
-pkgrel=3
+pkgrel=4
 pkgdesc="Drivers for Realtek RTL8187l Wifi card - Aircrack-ng patched (Monitor/Injection)"
 arch=('i686' 'x86_64')
 url="http://rtl-wifi.sourceforge.net/"
