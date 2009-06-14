@@ -4,22 +4,25 @@ source "${startdir}"/../kernel.env
 pkgbase=nvidia-173xx
 pkgname=("nvidia-173xx-module" "nvidia-173xx-drivers" "nvidia-173xx-utils")
 pkgver=173.14.18
-pkgrel=8
+pkgrel=9
 arch=('i686')
 [ "$CARCH" = "i686"   ] && ARCH=x86
 url="http://www.nvidia.com/"
 license=('nvidia')
 source=("ftp://download.nvidia.com/XFree86/Linux-$ARCH/${pkgver}/NVIDIA-Linux-$ARCH-${pkgver}-pkg0.run"
         "nvidia-173xx-symlinks.sh"
-        "nvidia_supported_chakra")
+        "nvidia_supported_chakra"
+        "remove-old-proc-interface-code.patch")
 md5sums=('480c10f3d861fd2c3cc2a46bccc961a4'
          '27b4285e57aa16e874e9dee49f2cccc9'
-         'd0f28ba00ca1f3011f5fccacb80b8378')
+         'd0f28ba00ca1f3011f5fccacb80b8378'
+         '24e6929e737deaab52662e1ffed54989')
 build()
 {
   # Extract
   cd "${srcdir}"/
   sh NVIDIA-Linux-$ARCH-${pkgver}-pkg0.run --extract-only
+  patch -Np0 -i "${srcdir}"/remove-old-proc-interface-code.patch
 }
 package_nvidia-173xx-module() {
 pkgdesc="NVIDIA driver kernel module from the 173xx branch for kernel26-chaox"
