@@ -1,0 +1,27 @@
+# $Id: PKGBUILD,v 1.7 2009/06/01 08:58:41 sergej Exp $
+# Maintainer: Sergej Pupykin <pupykin.s+arch@gmail.com>
+# Contributor: Jens Pranaitis <jens@jenux.homelinux.org>
+
+pkgname=busybox
+pkgver=1.14.1
+pkgrel=2
+pkgdesc="Utilities for rescue and embedded systems"
+arch=("i686" "x86_64")
+url="http://busybox.net"
+license=('GPL')
+makedepends=("make" "gcc" "sed" "ncurses")
+options=()
+source=($url/downloads/$pkgname-$pkgver.tar.bz2 \
+	config)
+md5sums=('d5186821d4f4cf6017452c7c8730cf19'
+         'd44fe34f2fd88fc508716cdbd2b23b9c')
+
+build() {
+  cd "$srcdir/$pkgname-$pkgver"
+  cp $srcdir/config .config
+  # if you want to run menuconfig uncomment the following line:
+  make menuconfig
+  make || return 1
+  mkdir $pkgdir/bin
+  install -m755 busybox $pkgdir/bin/
+}
