@@ -34,7 +34,7 @@ done
 if [ -h /lib/modules/$(uname -r)/kernel/drivers/video/nvidia.ko ]
 then
   ln -sf /usr/lib/nvidia-96xx/modules/$(uname -r)/nvidia.ko /lib/modules/$(uname -r)/kernel/drivers/video/nvidia.ko
-  depmod /lib/moduleS/$(uname -r)/kernel/drivers/video/nvidia.ko
+  depmod /lib/modules/$(uname -r)/kernel/drivers/video/nvidia.ko
 elif [ ! -e /lib/modules/$(uname -r)/kernel/drivers/video/nvidia.ko ]
 then
   ln -sf /usr/lib/nvidia-96xx/modules/$(uname -r)/nvidia.ko /lib/modules/$(uname -r)/kernel/drivers/video/nvidia.ko
