@@ -4,7 +4,7 @@ pkgbase=kernel
 pkgname=("kernel26-chaox" "kernel26-chaox-sources")
 _basekernel=2.6.30
 pkgver=2.6.30
-pkgrel=1
+pkgrel=6
 pkgdesc="Linux kernel based on slax config. Used in chaox-ng"
 arch=("i686")
 license=('GPL2')
@@ -15,33 +15,35 @@ source=(ftp://ftp.kernel.org/pub/linux/kernel/v2.6/linux-$_basekernel.tar.bz2
 	http://kernel.org/pub/linux/kernel/v2.6/patch-$pkgver.bz2
   config
 	openlog.patch
-  squashfs-lzma-from-openwrt.patch
   kernel26-chaox.preset
+  # wifi patches from pentoo and aircrack-ng, kudos to them!
   4000_mac80211_2.6.28-rc4-wl_frag+ack_v3.patch
   4002_mac80211-2.6.29-fix-tx-ctl-no-ack-retry-count.patch
   4004_zd1211rw-2.6.28.patch
   4007_ath5k-pass-failed-crc.patch
   4012_openwrt-b43-disable_qos_when_openfw.patch
   rtl8187_injection_speed_2.6.30-rc6.patch
+  # reiser4 patch from zen-sources git
+  reiser4-from-zen.patch
 )
 md5sums=('7a80058a6382e5108cdb5554d1609615'
          '02aaa07fdf89c1e689a77d74f1f8fcf9'
-         'a646f876880b52b52662541e6993a2aa'
+         '29f29d25b9cf2596f13d46b86b248729'
          'a49390dd08e4f7702b8f4b550f1ad84e'
-         '482924542ec58db417ee9de11c3d5ff5'
          '27b73ecc9083efcf62ff276ee19326a4'
          'ca85d39144f07b0500c663779dda9259'
          'a713e50e8f2cf82ae9cf7e10a9f82412'
          '9c474a07e0f6f7b7549fa562e8cee080'
          '3826efcfe08f1cbf978c02bd2f3c37b1'
          '94cb11a39099d69662b6b5fa3cb0a11e'
-         'ff33e6f2120119707bc5de62b26947dd')
+         'ff33e6f2120119707bc5de62b26947dd'
+         'e094628914565aa92b181db33c558551')
 build() {
   KARCH=x86
   cd "${srcdir}"
   git clone http://git.c3sl.ufpr.br/pub/scm/aufs/aufs2-standalone.git
   cd aufs2-standalone
-  git checkout origin/aufs2
+  git checkout origin/aufs2-30
   cd ../linux-$_basekernel
   if [ "$_basekernel" != "$pkgver" ]; then
   # add latest kernel stable patch
@@ -51,10 +53,10 @@ build() {
   patch -Np1 -i "${srcdir}"/aufs2-standalone/aufs2-standalone.patch || return 1
   patch -Np1 -i "${srcdir}"/aufs2-standalone/aufs2-kbuild.patch || return 1
   cp -R "${srcdir}"/aufs2-standalone/{Documentation,include,fs,config.mk} .
-  echo "add sqlzma"
-  patch -Np1 -i "${srcdir}"/squashfs-lzma-from-openwrt.patch || return 1
   # add openlog patch
   patch -Np0 -i "${srcdir}"/openlog.patch || return 1
+  # add reiser4
+  patch -Np1 -i "${srcdir}"/reiser4-from-zen.patch || return 1
   # wifi patches
   patch -Np1 -i "${srcdir}"/4000_mac80211_2.6.28-rc4-wl_frag+ack_v3.patch || return 1
   patch -Np1 -i "${srcdir}"/4002_mac80211-2.6.29-fix-tx-ctl-no-ack-retry-count.patch || return 1
@@ -78,7 +80,7 @@ package_kernel26-chaox() {
   replaces=('kernel24' 'kernel24-scsi' 'kernel26-scsi'
           'alsa-driver' 'ieee80211' 'hostap-driver26'
           'pwc' 'nforce' 'squashfs' 'ivtv' 'aufs' 'sqlzma'
-          'zd1211' 'kvm-modules' 'iwlwifi' 'rt2x00-cvs' 'kernel26' 'kernel26slax' "compat-wireless<=2.6.30")
+          'zd1211' 'kvm-modules' 'iwlwifi' 'rt2x00-cvs' 'kernel26' 'kernel26slax' 'compat-wireless')
   provides=('kernel26')
   install=$pkgname.install
   cd "${srcdir}"/linux-$_basekernel
