@@ -1,5 +1,6 @@
 # Contributor: Jens Pranaitis <jens@jenux.homelinux.org>
 # Contributor: niQo
+
 pkgname=libgpod-svn
 pkgver=2307
 pkgrel=1
@@ -20,10 +21,11 @@ build() {
    cd "${srcdir}"
    svn co $_svntrunk/ $_svnmod --config-dir ./ -r $pkgver
    cp -r $_svnmod $_svnmod-build
-  cd $_svnmod-build
-  ./autogen.sh 
-  ./configure --prefix=/usr
-  make || return 1
-  make DESTDIR="${pkgdir}" install || return 1
-  rm -rf "${srcdir}"/$_svnmod-build
+   cd $_svnmod-build
+   AUTOMAKE="/usr/bin/automake"
+   ./autogen.sh 
+   ./configure --prefix=/usr
+   make || return 1
+   make DESTDIR="${pkgdir}" install || return 1
+   rm -rf "${srcdir}"/$_svnmod-build
 }
