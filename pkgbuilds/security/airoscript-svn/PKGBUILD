@@ -1,0 +1,42 @@
+# Contributor: Jens Pranaitis <jens@chaox.net>
+pkgname=airoscript-svn
+pkgver=1557
+pkgrel=1
+pkgdesc="script to simplify the use of aircrack-ng tools"
+arch=("i686")
+url="http://trac.aircrack-ng.org/browser/branch/airoscript" # FIXME
+license=('GPL')
+depends=("bash" "gettext" "perl" "aircrack-ng-svn" "screen")
+makedepends=('subversion')
+source=("airoscript-conf.patch" "why-the-fuck-do-you-ignore-my-config.patch")
+md5sums=('518fd5b4cc2808b48b851664e19400e7'
+         'd2b4edcf9b536ccd731f83c6e7a37e2e')
+_svntrunk=http://trac.aircrack-ng.org/svn/branch/airoscript/
+_svnmod=airoscript
+build() {
+  cd "$srcdir"
+
+  if [ -d $_svnmod/.svn ]; then
+    (cd $_svnmod && svn up -r $pkgver)
+  else
+    svn co $_svntrunk --config-dir ./ -r $pkgver $_svnmod
+  fi
+  msg "SVN checkout done or server timeout"
+  msg "Starting make..."
+  rm -rf "$srcdir/$_svnmod-build"
+  cp -r "$srcdir/$_svnmod" "$srcdir/$_svnmod-build"
+  cd "$srcdir/$_svnmod-build"
+  cd src/conffiles
+  patch -Np0 -i "$srcdir"/airoscript-conf.patch || return 1
+  cd ../functions
+  patch -Np0 -i "$srcdir"/why-the-fuck-do-you-ignore-my-config.patch || return 1
+  cd ../..
+  sed -i "s|/usr/local|$pkgdir/usr|" Makefile || return 1
+  sed -i 's|$(prefix)/etc|$(prefix)/../etc|' Makefile-Linux || return 1
+  make DESTDIR="$pkgdir/" install || return 1
+  # renaming screenrc or we will be in conflict hell
+  cd "$pkgdir"/etc
+  mv screenrc screenrc-airoscript
+  # why the fuck?
+  rm "$pkgdir"/usr/share/locale/es_ES
+}

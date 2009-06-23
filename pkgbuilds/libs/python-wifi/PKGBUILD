@@ -1,0 +1,18 @@
+# Contributor: Jens Pranaitis <jens@chaox.net>
+pkgname=python-wifi
+pkgver=0.3.1
+pkgrel=1
+pkgdesc="access to wifi cards capabilites"
+arch=('i686')
+url="http://pythonwifi.wikispot.org/"
+license=('BSD')
+depends=('python')
+source=("http://download.berlios.de/pythonwifi/python-wifi-0.3.1.tar.gz")
+md5sums=('0458e32f82900e03c9fd155442242638')
+
+build() {
+    cd "$srcdir"/$pkgname-$pkgver
+    python setup.py build || return 1
+    python setup.py install --root="$pkgdir/" || return 1
+    install -D LICENSE "${pkgdir}"/usr/share/licenses/$pkgname/LICENSE
+}

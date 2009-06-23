@@ -6,7 +6,7 @@ source "${startdir}"/../kernel.env
 
 pkgname=vhba-module
 pkgver=1.2.1
-pkgrel=3
+pkgrel=4
 pkgdesc="Kernel module that emulates SCSI devices"
 arch=('i686' 'x86_64')
 url="http://cdemu.sourceforge.net/"
