@@ -6,7 +6,7 @@ pkgver=4.5
 pkgrel=1
 pkgdesc="Wireless WPA/WPA2 PSK handshake cracking utility"
 arch=('i686' 'x86_64')
-url="http://www.churchofwifi.org/Project_Display.asp?PID=95"
+url="http://www.willhackforsushi.com/?page_id=50"
 license=('GPL')
 depends=('openssl' 'libpcap')
 source=("http://www.willhackforsushi.com/code/$pkgname/$pkgver/$pkgname-$pkgver.tgz" "cow.patch")
