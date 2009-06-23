@@ -10,6 +10,7 @@ makesqfs() {
 	pacman -Q > package.lst
   freshclam
 	yes |hwd -u
+  update-usbids.sh
 	localepurge
 CHROOTED
 	umount-chroot

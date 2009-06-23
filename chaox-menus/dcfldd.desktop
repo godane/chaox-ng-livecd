@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Type=Application
+Name=dcfldd
+Comment=enhanced dd
+Categories=Application;Forensics-Chaox;
+Exec=bash -c "dcfldd --help;bash -i"
+Icon=Terminal
+Terminal=true
+StartupNotify=false
