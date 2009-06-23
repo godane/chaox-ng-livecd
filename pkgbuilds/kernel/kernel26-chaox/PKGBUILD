@@ -82,7 +82,7 @@ package_kernel26-chaox() {
   conflicts=('aufs')
   replaces=('kernel24' 'kernel24-scsi' 'kernel26-scsi'
           'alsa-driver' 'ieee80211' 'hostap-driver26'
-          'pwc' 'nforce' 'squashfs' 'ivtv' 'aufs' 'sqlzma'
+          'pwc' 'nforce' 'squashfs' 'ivtv' 'aufs'
           'zd1211' 'kvm-modules' 'iwlwifi' 'rt2x00-cvs' 'kernel26' 'kernel26slax' 'compat-wireless')
   provides=('kernel26')
   install=$pkgname.install
