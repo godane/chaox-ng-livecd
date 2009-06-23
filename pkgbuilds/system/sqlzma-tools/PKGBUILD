@@ -6,7 +6,7 @@ pkgname=sqlzma-tools
 _realname=squashfs
 pkgver=3.4
 lzmaver=457
-kver=2.6.27.7-SLAX
+kver=2.6.29-ARCH
 kdir="${pkgdir}"/lib/modules/${kver}/kernel/fs/${_realname}
 pkgrel=1
 url="http://www.squashfs-lzma.org"
@@ -21,7 +21,7 @@ source=(http://frugalware.org/~janny/source_pkgs/lzma${lzmaver}.tar.bz2 \
 	http://frugalware.org/~janny/source_pkgs/sqlzma${pkgver}-${lzmaver}.tar.bz2)
 md5sums=('fc7a12a396ade1772e959604d6eb31e1'
          '2a4d2995ad5aa6840c95a95ffa6b1da6'
-         '471b400d0a46412012b9093f525fba61')
+         '0e7201a040fa9372e9b33f3abdbe19c9')
 build()
 {
 	cd "${srcdir}"
@@ -40,9 +40,10 @@ build()
 	cd "${srcdir}" || return 1
 	
 	echo "sed Makefile"
-	sed -i "s|KDir =.*|KDir = "${startdir}"/../kernel26slax/src/linux-2.6.27|" Makefile || return 1
-	sed -i "s|SqFs =.*|SqFs = "${startdir}"/../kernel26slax/src/linux-2.6.27/fs/squashfs|" Makefile || return 1
+	sed -i "s|KDir =.*|KDir = /usr/src/linux-2.6.29-ARCH|" Makefile || return 1
+	sed -i "s|SqFs =.*|SqFs = /usr/src/linux-2.6.29-ARCH/fs/squashfs|" Makefile || return 1
 	sed -i "s/LzmaVer =.*/LzmaVer = ./" Makefile || return 1
+  sed -i 's|BuildSquashfs|#BuildSquashfs|g' Makefile || return 1
 	#sed -i "s/C=1/C=0/" Makefile || return 1
 	
 	echo "Compiling"
