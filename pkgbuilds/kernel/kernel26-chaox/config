@@ -1,7 +1,7 @@
 #
 # Automatically generated make config: don't edit
 # Linux kernel version: 2.6.30
-# Mon Jun 22 16:07:33 2009
+# Tue Jun 23 14:19:23 2009
 #
 # CONFIG_64BIT is not set
 CONFIG_X86_32=y
@@ -3769,9 +3769,7 @@ CONFIG_BEFS_FS=m
 CONFIG_BFS_FS=m
 CONFIG_EFS_FS=m
 CONFIG_CRAMFS=m
-CONFIG_SQUASHFS=m
-# CONFIG_SQUASHFS_EMBEDDED is not set
-CONFIG_SQUASHFS_FRAGMENT_CACHE_SIZE=3
+# CONFIG_SQUASHFS is not set
 CONFIG_VXFS_FS=m
 CONFIG_MINIX_FS=m
 CONFIG_OMFS_FS=m
