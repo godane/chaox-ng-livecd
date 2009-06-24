@@ -1,10 +1,10 @@
 # Contributor: Jens Pranaitis <jens@chaox.net>
 # Based on the work of godane <slaxemulator@gmail.com>
 pkgbase=kernel
-pkgname=("kernel26-chaox" "kernel26-chaox-sources")
+pkgname=("kernel26-chaox" "kernel26-chaox-sources" "kernel26-chaox-firmware")
 _basekernel=2.6.30
 pkgver=2.6.30
-pkgrel=8
+pkgrel=10
 pkgdesc="Linux kernel based on slax config. Used in chaox-ng"
 arch=("i686")
 license=('GPL2')
@@ -24,8 +24,7 @@ source=(ftp://ftp.kernel.org/pub/linux/kernel/v2.6/linux-$_basekernel.tar.bz2
   4012_openwrt-b43-disable_qos_when_openfw.patch
   rtl8187_injection_speed_2.6.30-rc6.patch
   add-ap-mode-ath5k.patch
-  # reiser4 patch from zen-sources git
-  reiser4-from-zen.patch
+  http://www.kernel.org/pub/linux/kernel/people/edward/reiser4/reiser4-for-2.6/reiser4-for-2.6.30.patch.bz2
 )
 md5sums=('7a80058a6382e5108cdb5554d1609615'
          '02aaa07fdf89c1e689a77d74f1f8fcf9'
@@ -39,7 +38,7 @@ md5sums=('7a80058a6382e5108cdb5554d1609615'
          '94cb11a39099d69662b6b5fa3cb0a11e'
          'ff33e6f2120119707bc5de62b26947dd'
          '09787bb326f05f65602d294a12170bbb'
-         'e094628914565aa92b181db33c558551')
+         '49d5c097872663d5e540026c7eeb6ac8')
 build() {
   KARCH=x86
   cd "${srcdir}"
@@ -58,7 +57,7 @@ build() {
   # add openlog patch
   patch -Np0 -i "${srcdir}"/openlog.patch || return 1
   # add reiser4
-  patch -Np1 -i "${srcdir}"/reiser4-from-zen.patch || return 1
+  patch -Np1 -i "${srcdir}"/reiser4-for-2.6.30.patch || return 1
   # wifi patches
   patch -Np1 -i "${srcdir}"/4000_mac80211_2.6.28-rc4-wl_frag+ack_v3.patch || return 1
   patch -Np1 -i "${srcdir}"/4002_mac80211-2.6.29-fix-tx-ctl-no-ack-retry-count.patch || return 1
@@ -78,7 +77,7 @@ build() {
 }
 
 package_kernel26-chaox() {
-  depends=('coreutils' 'module-init-tools' 'mkinitcpio>=0.5.18')
+depends=('coreutils' 'module-init-tools' 'mkinitcpio>=0.5.18' 'kernel26-chaox-firmware')
   conflicts=('aufs')
   replaces=('kernel24' 'kernel24-scsi' 'kernel26-scsi'
           'alsa-driver' 'ieee80211' 'hostap-driver26'
@@ -92,6 +91,7 @@ package_kernel26-chaox() {
   _kernver="$pkgver"${CONFIG_LOCALVERSION}""
   mkdir -p "${pkgdir}"/{lib/modules,boot}
   make INSTALL_MOD_PATH="${pkgdir}" modules_install || return 1
+  rm -rf "${pkgdir}"/lib/firmware
   cp System.map "${pkgdir}"/boot/System.map26 || return 1
   cp arch/x86/boot/bzImage "${pkgdir}"/boot/vmlinuz26 || return 1
   cd ${pkgdir}/lib/modules/${_kernver} || return 1
@@ -192,3 +192,18 @@ package_kernel26-chaox-sources() {
   # remove unneeded architectures
   rm -rf ${pkgdir}/usr/src/linux-${_kernver}/arch/{alpha,arm,arm26,avr32,blackfin,cris,frv,h8300,ia64,m32r,m68k,m68knommu,mips,mn10300,parisc,powerpc,ppc,s390,sh,sh64,sparc,sparc64,um,v850,xtensa}
 } 
+package_kernel26-chaox-firmware() {
+pkgdesc="firmware for chaox kernel"
+license=("custom")
+replaces=("iwlwifi-3945-ucode" "iwlwifi-4965-ucode" "iwlwifi-5000-ucode" "iwlwifi-5150-ucode"
+          "rt2x00-rt61-fw")
+  cd "${srcdir}"/linux-$_basekernel
+  make INSTALL_MOD_PATH="${pkgdir}" firmware_install
+  cd ..
+  git clone git://git.kernel.org/pub/scm/linux/kernel/git/dwmw2/linux-firmware.git
+  cp -r linux-firmware/* "${pkgdir}"/lib/firmware/
+  mkdir -p "${pkgdir}"/usr/share/licenses/kernel26-chaox-firmware/
+  mv "${pkgdir}"/lib/firmware/LICENCE* "${pkgdir}"/usr/share/licenses/kernel26-chaox-firmware/
+  cp "${srcdir}"/linux-$_basekernel/COPYING "${pkgdir}"/usr/share/licenses/kernel26-chaox-firmware/
+}
+  
