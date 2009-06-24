@@ -1,8 +1,9 @@
 # Contributor: Jens Pranaitis <jens@jenux.homelinux.org>
 # Contributor: niQo
+# Contributor: Thomas Schneider <maxmusterm@gmail.com>
 
 pkgname=libgpod-svn
-pkgver=2307
+pkgver=2371
 pkgrel=1
 pkgdesc="libgpod is a shared library to access the contents of an iPod"
 arch=(i686 x86_64)
@@ -20,9 +21,10 @@ _svnmod=libgpod
 build() {
    cd "${srcdir}"
    svn co $_svntrunk/ $_svnmod --config-dir ./ -r $pkgver
+
    cp -r $_svnmod $_svnmod-build
    cd $_svnmod-build
-   AUTOMAKE="/usr/bin/automake"
+   export AUTOMAKE="/usr/bin/automake"
    ./autogen.sh 
    ./configure --prefix=/usr
    make || return 1
