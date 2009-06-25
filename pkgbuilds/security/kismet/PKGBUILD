@@ -2,7 +2,7 @@
 # Contributer: Jason Chu <jason@archlinux.org>
 # Contributor: Juergen Hoetzel <jason@archlinux.org>
 pkgname=kismet
-pkgver=2009_05_RC2
+pkgver=2009_06_R1
 pkgrel=1
 pkgdesc="802.11abg sniffing software"
 arch=(i686 x86_64)
@@ -13,7 +13,7 @@ replaces=("kismet-newcore-svn")
 url="http://www.kismetwireless.net/"
 backup=('etc/ap_manuf' 'etc/client_manuf' 'etc/kismet.conf' 'etc/kismet_drone.conf' 'etc/kismet_ui.conf')
 source=(http://www.kismetwireless.net/code/$pkgname-${pkgver//_/-}.tar.gz)
-md5sums=('a1898ed387a0484b0ee84fb412c3ba82')
+md5sums=('8d77138020ace39f175a906dc0d3b267')
 build() {
    cd "${srcdir}"/kismet-${pkgver//_/-}
    ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var
