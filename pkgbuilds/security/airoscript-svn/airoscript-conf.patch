@@ -1,6 +1,6 @@
---- airoscript.conf.orig 	009-06-02 23:43:51.000000000 +0200
-+++ airoscript.conf		2009-06-02 23:49:58.000000000 +0200
-@@ -39,7 +39,7 @@
+--- airoscript.conf.orig	2009-06-24 23:22:36.000000000 +0200
++++ airoscript.conf	2009-06-24 23:24:04.000000000 +0200
+@@ -41,7 +41,7 @@
  	#export resonset="1" # this is also necesary
  
  #Your dhcp client utility
@@ -9,7 +9,7 @@
  
  # Debug:
  	# Uncomment next line to make airoscript not launch terminals, just print the command to be executed.
-@@ -59,7 +59,7 @@
+@@ -61,7 +61,7 @@
  	# For example, in systems where you have compiled aircrack-ng 
  	# or in slax it'll be /usr/local/bin or BINDIR and SBINDIR
  	# And, on some systems, mdk3 will be installed on /usr/local/bin/
@@ -18,16 +18,16 @@
  
  	BINDIR="$PREFIX/bin/"
  	SBINDIR="$PREFIX/sbin/"                     
-@@ -74,7 +74,7 @@
- 	TKIPTUN=$SBINDIR"tkiptun-ng"
+@@ -77,7 +77,7 @@
  	MACCHANGER=$BINDIR"macchanger"
  
--	SCREENRC="$PREFIX/share/airoscript/screenrc"
-+	SCREENRC="/etc/airoscript-screenrc"
+ 	# Fix to be able to use screenrc defined screenrc's
+-	[[ "$SCREENRC" == "" ]] && SCREENRC="$PREFIX/share/airoscript/screenrc"
++	[[ "$SCREENRC" == "" ]] && SCREENRC="/etc/airoscript-screenrc"
  	
  	FUNCTIONS="$PREFIX/share/airoscript/airoscfunc.sh"
  	SCREEN_FUNCTIONS="$PREFIX/share/airoscript/airoscfunc_screen.sh"
-@@ -87,7 +87,7 @@
+@@ -90,7 +90,7 @@
  	iwconfig="iwconfig"
  
  # Path to optional binaries
