@@ -2,12 +2,12 @@
 # Contributor: Jens Pranaitis <jens@jenux.homelinux.org>
 pkgname=kismet-dect-svn
 pkgver=89
-pkgrel=1
+pkgrel=2
 pkgdesc="DECT Plugin for Kismet"
 arch=('i686' 'x86_64')
 url="https://dedected.org/"
 license=('GPL2')
-depends=('gcc-libs' '>=kismet-2009_05_RC2')
+depends=('gcc-libs' 'kismet')
 makedepends=('subversion')
 provides=(kismet-dect)
 conflicts=(kismet-dect)
