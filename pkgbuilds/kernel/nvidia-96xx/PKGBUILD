@@ -4,7 +4,7 @@ source "${startdir}"/../kernel.env
 pkgbase=nvidia-96xx
 pkgname=("nvidia-96xx-module" "nvidia-96xx-drivers" "nvidia-96xx-utils")
 pkgver=96.43.12
-pkgrel=1
+pkgrel=2
 arch=(i686)
 license=('nvidia')
 [ "$CARCH" = "i686"   ] && ARCH=x86
@@ -25,6 +25,7 @@ build()
 package_nvidia-96xx-module() {
 pkgdesc="NVIDIA driver module from the 96xx branch"
 depends=("kernel26-chaox=$kernpkgver" "nvidia-96xx-drivers=$pkgver")
+groups=("nvidia-96xx" "chaox-modules")
 replaces=("nvidia-96xx")
   cd "${srcdir}"/NVIDIA-Linux-$ARCH-${pkgver}-pkg0
   # Any extra patches are applied in here...
@@ -42,6 +43,7 @@ replaces=("nvidia-96xx")
 package_nvidia-96xx-drivers() {
 pkgdesc="NVIDIA driver libraries from the 96xx branch"
 depends=("xorg-server" "libxext")
+groups=("nvidia-96xx")
 provides=("libgl")
 install=nvidia-96xx-drivers.install
   cd "${srcdir}"/NVIDIA-Linux-${ARCH}-${pkgver}-pkg0/usr
@@ -66,6 +68,7 @@ package_nvidia-96xx-utils() {
 pkgdesc="NVIDIA driver utils from the 96xx branch"
 conflicts=("nvidia-utils" "nvidia-173xx-utils")
 depends=("gtk2")
+groups=("nvidia-96xx")
   cd "${srcdir}"/NVIDIA-Linux-${ARCH}-${pkgver}-pkg0/usr
   mkdir -p "${pkgdir}"/usr/{bin,share/applications,share/man/man1,share/pixmaps/}
   install -m755 bin/nvidia-{settings,xconfig,bug-report.sh} $pkgdir/usr/bin/ || return 1

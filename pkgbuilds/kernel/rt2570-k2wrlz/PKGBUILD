@@ -3,11 +3,12 @@ source "${startdir}"/../kernel.env
 pkgname=rt2570-k2wrlz
 pkgver=1.6.4
 pkgdesc="RaLink RT73 USB Enhanced Driver"
-pkgrel=1
+pkgrel=2
 arch=('i686')
 license=("GPL2")
 url="http://homepages.tu-darmstadt.de/~p_larbig/wlan/"
 depends=("kernel26-chaox=$kernpkgver")
+groups=("chaox-modules")
 install=$pkgname.install
 source=(http://homepages.tu-darmstadt.de/~p_larbig/wlan/$pkgname-$pkgver.tar.bz2)
 md5sums=('21f6e873ad7ee34843dbcd1204f9eda3')

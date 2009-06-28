@@ -4,7 +4,7 @@ source "${startdir}"/../kernel.env
 pkgbase=nvidia-173xx
 pkgname=("nvidia-173xx-module" "nvidia-173xx-drivers" "nvidia-173xx-utils")
 pkgver=173.14.19
-pkgrel=1
+pkgrel=2
 arch=('i686')
 [ "$CARCH" = "i686"   ] && ARCH=x86
 url="http://www.nvidia.com/"
@@ -24,6 +24,7 @@ build()
 package_nvidia-173xx-module() {
 pkgdesc="NVIDIA driver kernel module from the 173xx branch for kernel26-chaox"
 depends=("kernel26-chaox=$kernpkgver" "nvidia-173xx-drivers=$pkgver")
+groups=("chaox-modules" "nvidia-173xx")
 replaces=("nvidia-173xx")
   cd "${srcdir}"/NVIDIA-Linux-$ARCH-${pkgver}-pkg0
   # Any extra patches are applied in here...
@@ -41,6 +42,7 @@ replaces=("nvidia-173xx")
 package_nvidia-173xx-drivers() {
 pkgdesc="NVIDIA driver libraries from the 173xx  branch"
 depends=("gcc-libs" "zlib" "libxext" "xorg-server" "chaox-opengl-tools")
+groups=("nvidia-173xx")
 provides=("libgl")
 install="nvidia-173xx-drivers.install"
   cd "${srcdir}"/NVIDIA-Linux-${ARCH}-${pkgver}-pkg0/usr
@@ -68,6 +70,7 @@ package_nvidia-173xx-utils() {
 pkgdesc="NVIDIA driver utils from the 173xx branch"
 conflicts=("nvidia-utils" "nvidia-96xx-utils")
 depends=("gtk2")
+groups=("nvidia-173xx")
   cd "${srcdir}"/NVIDIA-Linux-${ARCH}-${pkgver}-pkg0/usr
   mkdir -p "${pkgdir}"/usr/{bin,share/applications,share/man/man1,share/pixmaps/}
   install -m755 bin/nvidia-{settings,xconfig,bug-report.sh} $pkgdir/usr/bin/ || return 1

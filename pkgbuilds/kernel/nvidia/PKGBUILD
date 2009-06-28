@@ -4,7 +4,7 @@ source "${startdir}"/../kernel.env
 pkgbase=nvidia
 pkgname=("nvidia-module" "nvidia-drivers" "nvidia-utils")
 pkgver=185.18.14
-pkgrel=1
+pkgrel=2
 arch=('i686')
 [ "$CARCH" = "i686"   ] && ARCH=x86
 url="http://www.nvidia.com/"
@@ -24,6 +24,7 @@ build()
 package_nvidia-module() {
 pkgdesc="NVIDIA driver kernel module for kernel26-chaox"
 depends=("kernel26-chaox=$kernpkgver" "nvidia-drivers=$pkgver")
+groups=("nvidia" "chaox-modules")
 replaces=("nvidia")
   # Any extra patches are applied in here...
   cd "${srcdir}"/NVIDIA-Linux-$ARCH-${pkgver}-pkg0
@@ -40,6 +41,7 @@ replaces=("nvidia")
 package_nvidia-drivers() {
 pkgdesc="NVIDIA driver libraries"
 depends=("xorg-server" "gcc-libs" "zlib" "libxext" "chaox-opengl-tools")
+groups=("nvidia")
 provides=("libgl")
 install="nvidia-drivers.install"
   cd "${srcdir}"/NVIDIA-Linux-${ARCH}-${pkgver}-pkg0/usr
@@ -73,6 +75,7 @@ package_nvidia-utils() {
 pkgdesc="NVIDIA driver utils"
 conflicts=("nvidia-173xx-utils" "nvidia-96xx-utils")
 depends=("gtk2")
+groups=("nvidia")
   cd "${srcdir}"/NVIDIA-Linux-${ARCH}-${pkgver}-pkg0/usr
   mkdir -p "${pkgdir}"/usr/{bin,share/applications,share/man/man1,share/pixmaps/}
   install -m755 bin/nvidia-{settings,xconfig,bug-report.sh} $pkgdir/usr/bin/ || return 1
