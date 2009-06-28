@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Type=Application
+Name=ms-sys
+Comment=tool for writing windows mbr
+Categories=Application;Forensics-Chaox;
+Exec=bash -c "ms-sys --help;bash -i"
+Icon=Terminal
+Terminal=true
+StartupNotify=false
