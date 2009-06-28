@@ -11,7 +11,7 @@ case "$1" in
         case ${x} in
                 xfce) /usr/bin/detect-opengl.sh && /etc/init.d/gdm start
                 ;;
-                xkeymap=*) export ${x} && cp /usr/share/hal/fdi/policy/10osvendor/10-keymap.fdi /etc/hal/fdi/policy/ && sed -i "s|>us<|>$keymap<|" /etc/hal/fdi/policy/10-keymap.fdi
+                xkeymap=*) export ${x} && cp /usr/share/hal/fdi/policy/10osvendor/10-keymap.fdi /etc/hal/fdi/policy/ && sed -i "s|>us<|>$keymap<|" /etc/hal/fdi/policy/10-keymap.fdi && /etc/rc.d/hal start
                 ;;
                 keymap=*) export ${x} && loadkeys $keymap
                 ;;
