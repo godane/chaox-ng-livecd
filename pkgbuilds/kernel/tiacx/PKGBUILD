@@ -9,6 +9,7 @@ arch=(i686 x86_64)
 url="http://acx100.sourceforge.net/"
 license=('MPL')
 depends=('wireless_tools' 'tiacx-firmware' "kernel26-chaox=$kernpkgver")
+groups=("chaox-modules")
 install=acx.install
 source=(http://downloads.sourceforge.net/sourceforge/acx100/acx-$pkgver.tar.bz2
         http://patches.aircrack-ng.org/acx-20070101.patch

@@ -9,6 +9,7 @@ arch=('i686' 'x86_64')
 url="http://rtl-wifi.sourceforge.net/"
 license=('GPL')
 depends=("kernel26-chaox=$kernpkgver")
+groups=("chaox-modules")
 install=rtl8187-ng.install
 source=("http://dl.aircrack-ng.org/drivers/rtl8187_linux_26.$pkgver.zip"\
         "http://patches.aircrack-ng.org/rtl8187_2.6.27.patch")
