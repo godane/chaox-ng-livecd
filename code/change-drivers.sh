@@ -43,6 +43,7 @@ rt73_k2wrlz() {
     if [ $? = 0 ]
     then
       down_iface_for_module rt73usb
+      sudo rmmod rt2500usb 2>/dev/null
       sudo rmmod rt73usb 2>/dev/null
       sudo rmmod rt2x00usb 2>/dev/null
       sudo rmmod rt2x00lib 2>/dev/null
