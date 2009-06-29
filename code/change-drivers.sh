@@ -21,7 +21,7 @@ driver_select_menu() {
     rt2570-rt2x00) rt2570_rt2x00;;
     r8187) r8187;;
     rtl8187) rtl8187;;
-    madwifi-newhal) madwifi-newhal;;
+    madwifi-newhal) madwifi_newhal;;
     ath5k) ath5k;;
   esac
 }
@@ -154,7 +154,25 @@ rtl8187() {
     dialog --msgbox "Something went wrong, make sure you have a device supported by the driver and contact support" 0 0
   fi
 }
-
+madwifi_newhal() {
+  if $(lsmod |grep -q ath5k)
+  then
+    dialog --yesno "ath5k driver is loaded, it has to be unloaded before we can load madwifi-newhal driver - shall I do this for you?" 0 0    
+    if [ $? = 0 ]
+    then
+      down_iface_for_module ath5k
+      rmmod ath5k
+    else
+      exit
+    fi
+  fi
+  if $(sleep 3 && sudo modprobe ath_pci)
+  then
+    dialog --msgbox "Successfully loaded madwifi-newhal driver" 0 0
+  else
+    dialog --msgbox "Something went wrong, make sure you have a device supported by the driver and contact support" 0 0
+  fi
+}	    
 while true
 do
   driver_select_menu
