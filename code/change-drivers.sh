@@ -29,7 +29,7 @@ down_iface_for_module() {
   module="$1"
   for iface in $(iwconfig 2>&1|grep IEEE|awk '{print $1}')
   do 
-    if $(ls /sys/class/net/$iface/device/driver/module/drivers/|grep "$module")
+    if $(ls /sys/class/net/$iface/device/driver/module/drivers/ |grep -q "$module")
     then 
       sudo ifconfig $iface down
       sleep 3
@@ -43,9 +43,9 @@ rt73_k2wrlz() {
     if [ $? = 0 ]
     then
       down_iface_for_module rt73usb
-      rmmod rt73usb 2>/dev/null
-      rmmod rt2x00usb 2>/dev/null
-      rmmod rt2x00lib 2>/dev/null
+      sudo rmmod rt73usb 2>/dev/null
+      sudo rmmod rt2x00usb 2>/dev/null
+      sudo rmmod rt2x00lib 2>/dev/null
     else
       exit
     fi
@@ -64,7 +64,7 @@ rt73_rt2x00() {
     if [ $? = 0 ]
     then
       down_iface_for_module rt73
-      rmmod rt73
+      sudo rmmod rt73
     else
       exit
     fi
@@ -83,9 +83,9 @@ rt2570_k2wrlz() {
     if [ $? = 0 ]
     then
       down_iface_for_module rt2500usb
-      rmmod rt2500usb 
-      rmmod rt2x00usb 2>/dev/null
-      rmmod rt2x00lib 2>/dev/null
+      sudo rmmod rt2500usb 
+      sudo rmmod rt2x00usb 2>/dev/null
+      sudo rmmod rt2x00lib 2>/dev/null
     else
       exit
     fi
@@ -104,7 +104,7 @@ rt2570_rt2x00() {
     if [ $? = 0 ]
     then
       down_iface_for_module rt73
-      rmmod rt73
+      sudo rmmod rt73
     else
       exit
     fi
@@ -123,7 +123,7 @@ r8187() {
     if [ $? = 0 ]
     then
       down_iface_for_module rtl8187
-      rmmod rtl8187
+      sudo rmmod rtl8187
     else
       exit
     fi
@@ -142,7 +142,7 @@ rtl8187() {
     if [ $? = 0 ]
     then
       down_iface_for_module r8187
-      rmmod r8187
+      sudo rmmod r8187
     else
       exit
     fi
@@ -161,7 +161,7 @@ madwifi_newhal() {
     if [ $? = 0 ]
     then
       down_iface_for_module ath5k
-      rmmod ath5k
+      sudo rmmod ath5k
     else
       exit
     fi
@@ -173,6 +173,26 @@ madwifi_newhal() {
     dialog --msgbox "Something went wrong, make sure you have a device supported by the driver and contact support" 0 0
   fi
 }	    
+ath5k() {
+  if $(lsmod |grep -q ath_pci)
+  then
+    dialog --yesno "madwifi driver is loaded, it has to be unloaded before we can load ath5k driver - shall I do this for you?" 0 0
+    if [ $? = 0 ]
+    then
+      down_iface_for_module ath_pci
+      sudo madwifi-unload >/dev/null 2>&1
+    else
+      exit
+    fi
+  fi
+  if $(sudo modprobe ath5k)
+  then
+    dialog --msgbox "Successfully loaded ath5k driver" 0 0
+  else
+    dialog --msgbox "Something went wrong, make sure you have a device supported by the driver and contact support" 0 0
+  fi
+}
+
 while true
 do
   driver_select_menu
