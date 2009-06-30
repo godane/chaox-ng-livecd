@@ -29,7 +29,7 @@ down_iface_for_module() {
   module="$1"
   for iface in $(iwconfig 2>&1|grep IEEE|awk '{print $1}')
   do 
-    if $(ls /sys/class/net/$iface/device/driver/module/drivers/ |grep -q "$module")
+    if ls /sys/class/net/$iface/device/driver/module/drivers/ |grep -q "$module"
     then 
       sudo ifconfig $iface down
       sleep 3
@@ -37,7 +37,7 @@ down_iface_for_module() {
   done
 }
 rt73_k2wrlz() {
-  if $(lsmod |grep -q rt2x00lib)
+  if lsmod |grep -q rt2x00lib
   then
     dialog --yesno "rt2x00 drivers are loaded, these have to be unloaded before we can load rt73-k2wrlz drivers - shall I do this for you?" 0 0
     if [ $? = 0 ]
@@ -59,7 +59,7 @@ rt73_k2wrlz() {
   fi
 }
 rt73_rt2x00() {
-  if $(lsmod |grep -q "rt73 ")
+  if lsmod |grep -q "rt73 "
   then
     dialog --yesno "rt73-k2wrlz drivers are loaded, these have to be unloaded before we can load rt73-rt2x00 drivers - shall I do this for you?" 0 0    
     if [ $? = 0 ]
@@ -70,7 +70,7 @@ rt73_rt2x00() {
       exit
     fi
   fi
-  if $(sudo modprobe rt73usb)
+  if sudo modprobe rt73usb
   then
     dialog --msgbox "Successfully loaded rt73-rt2x00 driver" 0 0
   else
@@ -78,7 +78,7 @@ rt73_rt2x00() {
   fi
 }
 rt2570_k2wrlz() {
-  if $(lsmod |grep -q "rt2x00lib")
+  if lsmod |grep -q "rt2x00lib"
   then
     dialog --yesno "rt2x00 drivers are loaded, these have to be unloaded before we can load rt2570-k2wrlz drivers - shall I do this for you?" 0 0
     if [ $? = 0 ]
@@ -91,7 +91,7 @@ rt2570_k2wrlz() {
       exit
     fi
   fi
-  if $(sudo modprobe rt2570)
+  if sudo modprobe rt2570
   then
     dialog --msgbox "Successfully loaded rt2570-k2wrlz driver" 0 0
   else
@@ -99,7 +99,7 @@ rt2570_k2wrlz() {
   fi
 }
 rt2570_rt2x00() {
-  if $(lsmod |grep -q "rt2570 ")
+  if lsmod |grep -q "rt2570 "
   then
     dialog --yesno "rt2570-k2wrlz drivers are loaded, these have to be unloaded before we can load rt2570-rt2x00 drivers - shall I do this for you?" 0 0    
     if [ $? = 0 ]
@@ -110,7 +110,7 @@ rt2570_rt2x00() {
       exit
     fi
   fi
-  if $(sudo modprobe rt73usb)
+  if sudo modprobe rt73usb
   then
     dialog --msgbox "Successfully loaded rt73-rt2x00 driver" 0 0
   else
@@ -118,7 +118,7 @@ rt2570_rt2x00() {
   fi
 }
 r8187() {
-  if $(lsmod |grep -q rtl8187)
+  if lsmod |grep -q rtl8187
   then
     dialog --yesno "rtl8187 driver is loaded, it has to be unloaded before we can load r8187 driver - shall I do this for you?" 0 0    
     if [ $? = 0 ]
@@ -129,7 +129,7 @@ r8187() {
       exit
     fi
   fi
-  if $(sudo modprobe r8187)
+  if sudo modprobe r8187
   then
     dialog --msgbox "Successfully loaded r8187 driver" 0 0
   else
@@ -137,7 +137,7 @@ r8187() {
   fi
 }
 rtl8187() {
-  if $(lsmod |grep -q r8187)
+  if lsmod |grep -q r8187
   then
     dialog --yesno "r8187 driver is loaded, it has to be unloaded before we can load rtl8187 driver - shall I do this for you?" 0 0    
     if [ $? = 0 ]
@@ -148,7 +148,7 @@ rtl8187() {
       exit
     fi
   fi
-  if $(sudo modprobe rtl8187)
+  if sudo modprobe rtl8187
   then
     dialog --msgbox "Successfully loaded rtl8187 driver" 0 0
   else
@@ -156,7 +156,7 @@ rtl8187() {
   fi
 }
 madwifi_newhal() {
-  if $(lsmod |grep -q ath5k)
+  if lsmod |grep -q ath5k
   then
     dialog --yesno "ath5k driver is loaded, it has to be unloaded before we can load madwifi-newhal driver - shall I do this for you?" 0 0    
     if [ $? = 0 ]
@@ -167,7 +167,8 @@ madwifi_newhal() {
       exit
     fi
   fi
-  if $(sleep 3 && sudo modprobe ath_pci)
+  #FIXME very ugly workaround
+  if sleep 3 && sudo modprobe ath_pci && sudo madwifi-unload >/dev/null && sudo modprobe ath_pci
   then
     dialog --msgbox "Successfully loaded madwifi-newhal driver" 0 0
   else
@@ -175,7 +176,7 @@ madwifi_newhal() {
   fi
 }	    
 ath5k() {
-  if $(lsmod |grep -q ath_pci)
+  if lsmod |grep -q ath_pci
   then
     dialog --yesno "madwifi driver is loaded, it has to be unloaded before we can load ath5k driver - shall I do this for you?" 0 0
     if [ $? = 0 ]
@@ -186,7 +187,7 @@ ath5k() {
       exit
     fi
   fi
-  if $(sudo modprobe ath5k)
+  if sudo modprobe ath5k
   then
     dialog --msgbox "Successfully loaded ath5k driver" 0 0
   else
