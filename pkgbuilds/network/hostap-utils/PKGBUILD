@@ -1,0 +1,26 @@
+# Contributor: Thomas Schneider <maxmusterm@gmail.com>
+
+pkgname=hostap-utils
+pkgver=0.4.7
+pkgrel=1
+arch=('i686')
+url="http://hostap.epitest.fi/"
+pkgdesc="Hostap utils for prism cards"
+license=('GPL2')
+makedepends=('make')
+depends=()
+source=(http://hostap.epitest.fi/releases/${pkgname}-${pkgver}.tar.gz)
+md5sums=('afe041581b8f01666e353bec20917c85')
+
+build() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+  make || return 1
+  mkdir -p ${pkgdir}/usr/sbin/
+  for i in *_*;do
+  if $(echo $i|grep "\." -q -v);then
+  echo install $i
+  install -Dm0700 $i ${pkgdir}/usr/sbin/ || return 1
+  fi
+  done
+}
+
