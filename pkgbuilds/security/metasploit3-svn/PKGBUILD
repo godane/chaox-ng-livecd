@@ -2,10 +2,10 @@
 # Contributor: Torin <jakub.laszczynski@gmail.com>
 pkgname=metasploit3-svn
 pkgver=6734
-pkgrel=3
+pkgrel=4
 pkgdesc="The Metasploit Framework is an advanced open-source platform for developing, testing, and using exploit code"
 makedepends=("subversion")
-depends=('ruby' 'ruby-gtk2' 'ruby-libglade' 'perl')
+depends=('ruby' 'ruby-gtk2' 'ruby-libglade' 'perl' 'rubygems')
 source=(metasploit3.sh LICENSE metasploit.desktop)
 url="http://www.metasploit.com/"
 license=('custom:"Metasploit Framework License v1.2"')
