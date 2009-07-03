@@ -1,0 +1,15 @@
+# Contributor: Jens Pranaitis <jens@chaox.net>
+pkgname=change-drivers
+pkgver=0.1
+pkgrel=1
+pkgdesc="a little script for switching between wifi drivers"
+arch=("i686")
+url="http://blag.chaox.net"
+license=('GPL')
+depends=("bash" "dialog")
+source=(http://chaox.net/~jens/chaox/${pkgname}.sh-$pkgver.bz2)
+md5sums=('d0543d2d9af832eed457e8fcd3253415')
+build() {
+  install -D -m 755 "${srcdir}"/${pkgname}.sh-$pkgver "${pkgdir}"/usr/bin/change-drivers || return 1
+}
+# vim:set ts=2 sw=2 et:
