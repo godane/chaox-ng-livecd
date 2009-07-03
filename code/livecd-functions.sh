@@ -35,7 +35,7 @@ CHROOTED
 	umount-chroot
 	rm -rf "${TARGET}"/boot/*
 	cp -R "${SOURCE}"/boot/{initramfs,memtest,System.map26,vmlinuz26,isolinux} "${TARGET}"/boot/
-	time mkisofs -b boot/isolinux/isolinux.bin -V "chaox-$_VERSION" -no-emul-boot -boot-load-size 4 -boot-info-table -iso-level 4 -c boot/isolinux/boot.cat -o "${LIVECD}"/chaox-$_VERSION.iso -x files "${TARGET}"/
+	time mkisofs -b boot/isolinux/isolinux.bin -V "chaox-$_VERSION" -P "http://blag.chaox.net" -no-emul-boot -boot-load-size 4 -boot-info-table -iso-level 4 -c boot/isolinux/boot.cat -o "${LIVECD}"/chaox-$_VERSION.iso -x files "${TARGET}"/
 	cd "${LIVECD}"
 	isohybrid chaox-$_VERSION.iso
 	shasum chaox-$_VERSION.iso > chaox-$_VERSION.iso.digest
