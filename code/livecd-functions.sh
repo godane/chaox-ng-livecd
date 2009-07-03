@@ -22,6 +22,12 @@ CHROOTED
 }
 makechaox() {
 	_DATE="$(date +%F-%H-%M)"
+  if [ ! -z "$1" ]
+  then
+    _VERSION="$1"
+  else
+    _VERSION=$_DATE
+  fi
 	mount-chroot
 	chroot source /bin/bash --login <<CHROOTED
 	mkinitcpio -k $(ls "${SOURCE}"/lib/modules/) -v -g /boot/initramfs -c /etc/mkinitcpio-image.conf
@@ -29,10 +35,10 @@ CHROOTED
 	umount-chroot
 	rm -rf "${TARGET}"/boot/*
 	cp -R "${SOURCE}"/boot/{initramfs,memtest,System.map26,vmlinuz26,isolinux} "${TARGET}"/boot/
-	time mkisofs -b boot/isolinux/isolinux.bin -V "chaox-$_DATE" -no-emul-boot -boot-load-size 4 -boot-info-table -iso-level 4 -c boot/isolinux/boot.cat -o "${LIVECD}"/chaox-$_DATE.iso -x files "${TARGET}"/
+	time mkisofs -b boot/isolinux/isolinux.bin -V "chaox-$_VERSION" -no-emul-boot -boot-load-size 4 -boot-info-table -iso-level 4 -c boot/isolinux/boot.cat -o "${LIVECD}"/chaox-$_VERSION.iso -x files "${TARGET}"/
 	cd "${LIVECD}"
-	isohybrid chaox-$_DATE.iso
-	shasum chaox-$_DATE.iso > chaox-$_DATE.iso.digest
+	isohybrid chaox-$_VERSION.iso
+	shasum chaox-$_VERSION.iso > chaox-$_VERSION.iso.digest
 }
 mount-chroot() {
 	cd /pub/livecd
