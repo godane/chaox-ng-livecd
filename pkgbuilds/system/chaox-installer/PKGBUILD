@@ -1,10 +1,9 @@
-# Contributor: Jens Pranaitis <jens@jenux.homelinux.org>
+# Contributor: Jens Pranaitis <jens@chaox.net>
 # Contributor: Aaron Griffin <aaron@archlinux.org>
 # Contributor: Shino <shino@jenux.homelinux.org>
-
 pkgname=chaox-installer
 pkgver=2009.02
-pkgrel=11
+pkgrel=13
 pkgdesc="The chaox install script"
 arch=('i686' 'x86_64')
 url="http://projects.archlinux.org/?p=installer.git"
@@ -12,7 +11,7 @@ license=('GPL')
 depends=('bash')
 source=("ftp://ftp.archlinux.org/other/archlinux-installer/archlinux-installer-$pkgver-2.tar.gz" "chaox-setup.diff")
 md5sums=('93bc355046775819baa9402ff0744bd3'
-         'e3402fa164455195f3a02f28fbd6793d')
+         '1b07dcd01d693d913276c5f0285e4c76')
 
 build() {
   cd "$srcdir/archlinux-installer-$pkgver-2"
