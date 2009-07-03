@@ -194,7 +194,7 @@ ath5k() {
     dialog --msgbox "Something went wrong, make sure you have a device supported by the driver and contact support" 0 0
   fi
 }
-
+dialog --msgbox "This script is regarded fairly experimental - it propably won't break anything, but don't be suprised if it fails. If it doesn't work please report the error, thanks." 0 0
 while true
 do
   driver_select_menu
