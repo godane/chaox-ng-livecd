@@ -1,26 +1,27 @@
 # Contributor: Jens Pranaitis <jens@chaox.net>
 # Contributor: Angelo Theodorou <encelo@users.sourceforge.net>
 pkgname=cuda
-pkgver=2.1
+pkgver=2.2
 pkgrel=1
 pkgdesc="NVIDIA Compute Unified Device Architecture"
 arch=('i686')
 url="http://www.nvidia.com/object/cuda_home.html"
 license=('custom')
-depends=('gcc-libs' 'nvidia-drivers>=180.22' 'zlib')
-source=(http://developer.download.nvidia.com/compute/cuda/2_1/toolkit/cudatoolkit_2.1_linux32_suse11.0.run)
-md5sums=('d2dcee0ea53c7820af92ec6ab7261139')
+depends=('gcc-libs' 'zlib' 'nvidia-drivers>=185.18.14')
+source=(http://developer.download.nvidia.com/compute/cuda/2_2/toolkit/cudatoolkit_2.2_linux_32_suse11.1.run)
+md5sums=('d23cdec72cf18602cdb558b55578da1a')
 build()
 {
   cd "$srcdir"
-  sh cudatoolkit_2.1_linux32_suse11.0.run --noexec --keep
+  sh cudatoolkit_2.2_linux_32_suse11.1.run --noexec --keep || return 1
   cd pkg
-  mkdir -p "$pkgdir"/usr
-  ./install-linux.pl --prefix="$pkgdir"/usr
-  install -m 755 "$pkgdir"/usr/open64/bin/* "$pkgdir"/usr/bin
-  install -m 755 "$pkgdir"/usr/open64/lib/* "$pkgdir"/usr/lib
-  install -D -m644 "$pkgdir"/usr/doc/EULA.txt "$pkgdir"/usr/share/licenses/cuda/EULA.txt
-  mv "$pkgdir"/usr/man "$pkgdir"/usr/share
+  mkdir -p "$pkgdir"/{usr,opt}
+  ./install-linux.pl --prefix="$pkgdir"/usr || return 1
+  install -m 755 "$pkgdir"/usr/open64/bin/* "$pkgdir"/usr/bin || return 1
+  install -m 755 "$pkgdir"/usr/open64/lib/* "$pkgdir"/usr/lib || return 1
+  install -D -m644 "$pkgdir"/usr/doc/EULA.txt "$pkgdir"/usr/share/licenses/cuda/EULA.txt || return 1
+  mv "$pkgdir"/usr/man "$pkgdir"/usr/share || return 1
+  rm -rf "$pkgdir"/usr/cudaprof
   rm -rf "$pkgdir"/usr/src
   rm -rf "$pkgdir"/usr/open64
   rm -rf "$pkgdir"/usr/doc
