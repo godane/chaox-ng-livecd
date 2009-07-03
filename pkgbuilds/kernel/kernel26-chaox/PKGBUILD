@@ -3,8 +3,8 @@
 pkgbase=kernel
 pkgname=("kernel26-chaox" "kernel26-chaox-sources" "kernel26-chaox-firmware")
 _basekernel=2.6.30
-pkgver=2.6.30
-pkgrel=12
+pkgver=2.6.30.1
+pkgrel=1
 pkgdesc="Linux kernel based on slax config. Used in chaox-ng"
 arch=("i686")
 license=('GPL2')
@@ -27,7 +27,7 @@ source=(ftp://ftp.kernel.org/pub/linux/kernel/v2.6/linux-$_basekernel.tar.bz2
   http://www.kernel.org/pub/linux/kernel/people/bart/rt3090.patch.bz2
 )
 md5sums=('7a80058a6382e5108cdb5554d1609615'
-         '02aaa07fdf89c1e689a77d74f1f8fcf9'
+         'ff5bdcc9624b2653d49efa0b305b1e57'
          'd7a178c9edc8a0160437996a4c7cb030'
          'a49390dd08e4f7702b8f4b550f1ad84e'
          '27b73ecc9083efcf62ff276ee19326a4'
