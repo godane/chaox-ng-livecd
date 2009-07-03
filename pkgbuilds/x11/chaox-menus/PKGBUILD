@@ -1,6 +1,6 @@
 # Contributor: Jens Pranaitis <jens@chaox.net>
 pkgname=chaox-menus
-pkgver=0.1.9
+pkgver=0.1.10
 pkgrel=1
 pkgdesc="chaox menu for xfce4"
 arch=("i686")
@@ -8,16 +8,16 @@ url="http://chaox.wordpress.com"
 license=('GPL')
 depends=("xfdesktop")
 source=(http://www.chaox.net/~jens/chaox/$pkgname-$pkgver.tar.bz2)
-md5sums=('d445411520f27b915e5c4912cd6ae280')
+md5sums=('23e6d1aec8f206ad63736d605930db6b')
 build() {
   cd "${srcdir}"/chaox-menus
   for x in *.directory
   do
-    install -m 644 -D $x "${pkgdir}"/usr/share/desktop-directories/$x
+    install -m 644 -D "$x" "${pkgdir}"/usr/share/desktop-directories/"$x"
   done
   for x in *.desktop
   do
-    install -m 644 -D $x "${pkgdir}"/usr/share/applications/$x
+    install -m 644 -D "$x" "${pkgdir}"/usr/share/applications/"$x"
   done
 }
 # vim:set ts=2 sw=2 et:
