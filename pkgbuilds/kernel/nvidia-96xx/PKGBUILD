@@ -4,7 +4,7 @@ source "${startdir}"/../kernel.env
 pkgbase=nvidia-96xx
 pkgname=("nvidia-96xx-module" "nvidia-96xx-drivers" "nvidia-96xx-utils")
 pkgver=96.43.12
-pkgrel=2
+pkgrel=3
 arch=(i686)
 license=('nvidia')
 [ "$CARCH" = "i686"   ] && ARCH=x86

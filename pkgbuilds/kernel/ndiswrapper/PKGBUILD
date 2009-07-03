@@ -2,8 +2,8 @@
 # Contributor: Tobias Powalowski <tpowa@archlinux.org>
 source "$startdir"/../kernel.env
 pkgname=ndiswrapper
-pkgver=1.54
-pkgrel=15
+pkgver=1.55
+pkgrel=1
 pkgdesc="Module for NDIS (Windows Network Drivers) drivers supplied by vendors. For stock arch 2.6 kernel."
 license=('GPL')
 arch=(i686 x86_64)
@@ -11,13 +11,11 @@ url="http://ndiswrapper.sourceforge.net"
 install="ndiswrapper.install"
 depends=("ndiswrapper-utils=$pkgver" "kernel26-chaox=$kernpkgver")
 groups=("chaox-modules")
-source=(http://downloads.sourceforge.net/sourceforge/ndiswrapper/ndiswrapper-$pkgver.tar.gz ndiswrapper-2.6.29.patch)
-md5sums=('fc9ebd3985967727da494ec298ad4487'
-         '4f6ede736cd2aed45dd20c6957a3ab86')
+source=(http://downloads.sourceforge.net/sourceforge/ndiswrapper/ndiswrapper-$pkgver.tar.gz)
+md5sums=('aa423a46aff97bd0a830e43d546f2b0e')
 build()
 {
   cd "${srcdir}"/$pkgname-$pkgver/driver
-  patch -Np0 -i "${srcdir}"/ndiswrapper-2.6.29.patch
   make KVERS=$_kernver KBUILD=$_kernpath
   make DESTDIR="${pkgdir}" KVERS=$_kernver KBUILD=$_kerndir install || return 1
   rm "${pkgdir}"/lib/modules/$_kernver/modules.* #wtf?
