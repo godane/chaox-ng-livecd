@@ -1,5 +1,5 @@
---- setup.orig	2009-07-04 20:25:46.000000000 +0200
-+++ setup	2009-07-04 20:39:06.000000000 +0200
+--- setup.orig	2009-07-04 21:24:50.000000000 +0200
++++ setup	2009-07-04 21:26:26.000000000 +0200
 @@ -1,9 +1,9 @@
  #!/bin/bash
  
@@ -12,7 +12,7 @@
  DESTDIR="/mnt"
  EDITOR=
  
-@@ -656,35 +656,6 @@
+@@ -656,144 +656,55 @@
      S_MKFS=1
  }
  
@@ -45,30 +45,55 @@
 -    echo "Using mirror: $SYNC_URL" >$LOG
 -}
 -
- # prepare_pacman()
- # configures pacman and syncs for the first time on destination system
- #
-@@ -703,6 +674,9 @@
- CacheDir = ${DESTDIR}/var/cache/pacman/pkg
- CacheDir = /src/core/pkg
- 
-+[chaox-stable]
-+Server = http://repo.chaox.net/stable
-+
- [core]
- Server = ${serverurl//\$repo/core}
- EOF
-@@ -716,84 +690,55 @@
-     return 0
- }
- 
--# select_packages()
--# prompts the user to select packages to install
+-# prepare_pacman()
+-# configures pacman and syncs for the first time on destination system
 +# do_rsync()
 +# does the rsync
  #
  # params: none
  # returns: 1 on error
+-prepare_pacman() {
+-    if [ "$MODE" = "cd" ]; then
+-        local serverurl="${FILE_URL}"
+-    elif [ "$MODE" = "ftp" ]; then
+-        local serverurl="${SYNC_URL}"
+-    fi
+-
+-    # Setup a pacman.conf in /tmp
+-    cat << EOF > /tmp/pacman.conf
+-[options]
+-CacheDir = ${DESTDIR}/var/cache/pacman/pkg
+-CacheDir = /src/core/pkg
+-
+-[core]
+-Server = ${serverurl//\$repo/core}
++do_rsync() {
++    cat > /tmp/rsync-exclude << EOF
++/home/livecd/.gvfs
++/tmp/*
++/media/*
++/mnt/*
++/arch/
++/dev/*
++/proc/*
++/sys/*
+ EOF
++    DIALOG --infobox "Copy in progress. This may take a while - you can watch the output in the progress window." 6 45
+ 
+-    # Set up the necessary directories for pacman use
+-    [ ! -d "${DESTDIR}/var/cache/pacman/pkg" ] && mkdir -m 755 -p "${DESTDIR}/var/cache/pacman/pkg"
+-    [ ! -d "${DESTDIR}/var/lib/pacman" ] && mkdir -m 755 -p "${DESTDIR}/var/lib/pacman"
+-
+-    DIALOG --infobox "Refreshing package database..." 6 45
+-    $PACMAN -Sy >$LOG 2>&1 || return 1
+-    return 0
+-}
+-
+-# select_packages()
+-# prompts the user to select packages to install
+-#
+-# params: none
+-# returns: 1 on error
 -select_packages() {
 -    # step dependencies
 -    if [ $S_SRC -eq 0 ]; then
@@ -83,19 +108,7 @@
 -    fi
 -
 -    DIALOG --msgbox "Package selection is split into two stages.  First you will select package categories that contain packages you may be interested in.  Then you will be presented with a full list of packages for each category, allowing you to fine-tune.\n\n" 15 70
-+do_rsync() {
-+    cat > /tmp/rsync-exclude << EOF
-+/home/livecd/.gvfs
-+/tmp/*
-+/media/*
-+/mnt/*
-+/arch/
-+/dev/*
-+/proc/*
-+/sys/*
-+EOF
-+    DIALOG --infobox "Copy in progress. This may take a while - you can watch the output in the progress window." 6 45
- 
+-
 -    # set up our install location if necessary and sync up
 -    # so we can get package lists
 -    prepare_pacman
@@ -164,25 +177,26 @@
      fi
  
 -    DIALOG --msgbox "Package installation will begin now.  You can watch the output in the progress window. Please be patient." 0 0
-+    DIALOG --msgbox "Pacman will no install the necessary packages." 0 0
++    DIALOG --msgbox "Pacman will now install the necessary packages." 0 0
  
      # must mount chroot so pre/post installs don't fail out
      chroot_mount
 -
-+    
++    cp /etc/pacman.conf /tmp/
      # execute pacman in a subshell so we can follow its progress
      # pacman output goes /tmp/pacman.log
      # /tmp/setup-pacman-running acts as a lockfile
-@@ -801,7 +746,7 @@
+@@ -801,7 +712,8 @@
          echo "Installing Packages..." >/tmp/pacman.log ; \
          echo >>/tmp/pacman.log ; \
          touch /tmp/setup-pacman-running ; \
 -        $PACMAN -S $PACKAGES 2>&1 >> /tmp/pacman.log ; \
++        $PACMAN -Rd initscripts-chaox >>/tmp/pacman.log 2>&1 ; \
 +        $PACMAN -U /arch/initscripts-*.pkg.tar.gz >>/tmp/pacman.log 2>&1 ; \
          echo $? > /tmp/.pacman-retcode ; \
          if [ $(cat /tmp/.pacman-retcode) -ne 0 ]; then
              echo -e "\nPackage Installation FAILED." >>/tmp/pacman.log
-@@ -812,13 +757,12 @@
+@@ -812,13 +724,12 @@
      ) &
  
      sleep 2
@@ -197,7 +211,7 @@
      kill $(cat $ANSWER)
  
      # pacman finished, display scrollable output
-@@ -833,10 +777,8 @@
+@@ -833,10 +744,8 @@
      DIALOG --title "$_result" --exit-label "Continue" \
          --textbox "/tmp/pacman.log" 18 70 || return 1
  
@@ -208,7 +222,7 @@
      sync
  
      S_INSTALL=1
-@@ -845,8 +787,14 @@
+@@ -845,8 +754,14 @@
      # any automatic configuration should go here
      DIALOG --infobox "Writing base configuration..." 6 40
      auto_fstab
@@ -225,7 +239,7 @@
  }
  
  # auto_fstab()
-@@ -866,43 +814,6 @@
+@@ -866,43 +781,6 @@
      fi
  }
  
@@ -269,7 +283,7 @@
  # auto_locale()
  # enable glibc locales from rc.conf and build initial locale DB
  auto_locale()
-@@ -914,84 +825,6 @@
+@@ -914,84 +792,6 @@
      chroot ${DESTDIR} locale-gen >/dev/null
  }
  
@@ -354,7 +368,7 @@
  dogrub() {
      get_grub_map
      local grubmenu="$DESTDIR/boot/grub/menu.lst"
-@@ -1024,19 +857,20 @@
+@@ -1024,19 +824,20 @@
              fi
              # remove default entries by truncating file at our little tag (#-*)
              sed -i -e '/#-\*/q' $grubmenu
@@ -381,7 +395,7 @@
  
  # (2) Windows
  #title Windows
-@@ -1092,7 +926,7 @@
+@@ -1092,7 +893,7 @@
          DIALOG --msgbox "GRUB root and setup devices could not be auto-located.  You will need to manually run the GRUB shell to install a bootloader." 0 0
          return 1
      fi
@@ -390,7 +404,7 @@
      cat /tmp/grub.log >$LOG
      # unfreeze xfs filesystems
      if [ -x /usr/sbin/xfs_freeze ]; then
-@@ -1108,64 +942,6 @@
+@@ -1108,64 +909,6 @@
      S_GRUB=1
  }
  
@@ -455,7 +469,7 @@
  # set_clock()
  # prompts user to set hardware clock and timezone
  #
-@@ -1258,7 +1034,7 @@
+@@ -1258,7 +1001,7 @@
          touch /tmp/setup-mkinitcpio-running
          echo "mkinitcpio progress ..." > /tmp/mkinitcpio.log; \
          echo >> /tmp/mkinitcpio.log; \
@@ -464,7 +478,7 @@
          echo $? > /tmp/.mkinitcpio-retcode
          echo >> /tmp/mkinitcpio.log
          rm -f /tmp/setup-mkinitcpio-running
-@@ -1288,14 +1064,6 @@
+@@ -1288,14 +1031,6 @@
      ## PREPROCESSING ##
      # only done on first invocation of configure_system
      if [ $S_CONFIG -eq 0 ]; then
@@ -479,7 +493,7 @@
          # /etc/rc.conf
          # insert timezone and utc info
          sed -i -e "s/^TIMEZONE=.*/TIMEZONE=\"$(echo $TIMEZONE | sed "s/\//\\\\\//g")\"/g" \
-@@ -1378,31 +1146,28 @@
+@@ -1378,31 +1113,28 @@
      fi
      DIALOG $DEFAULT --title " MAIN MENU " \
          --menu "Use the UP and DOWN arrows to navigate menus.  Use TAB to switch between buttons and ENTER to select." 16 55 8 \
@@ -524,7 +538,7 @@
              echo ""
              echo "If the install finished successfully, you can now type 'reboot'"
              echo "to restart the system."
-@@ -1417,12 +1182,22 @@
+@@ -1417,12 +1149,22 @@
  #####################
  ## begin execution ##
  
