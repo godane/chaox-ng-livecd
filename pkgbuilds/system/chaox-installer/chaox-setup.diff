@@ -1,5 +1,5 @@
---- setup.orig	2009-07-04 21:42:38.000000000 +0200
-+++ setup	2009-07-04 21:45:53.000000000 +0200
+--- setup.orig	2009-07-04 21:52:06.000000000 +0200
++++ setup	2009-07-04 21:59:41.000000000 +0200
 @@ -1,9 +1,9 @@
  #!/bin/bash
  
@@ -283,7 +283,7 @@
  # auto_locale()
  # enable glibc locales from rc.conf and build initial locale DB
  auto_locale()
-@@ -914,86 +792,11 @@
+@@ -914,86 +792,12 @@
      chroot ${DESTDIR} locale-gen >/dev/null
  }
  
@@ -367,13 +367,14 @@
 -
  dogrub() {
      get_grub_map
++    cp /arch/vmlinuz26 "$DESTDIR"/boot/
 +    mkdir "$DESTDIR/boot/grub"
 +    cp -r "$DESTDIR"/usr/lib/grub/i386-pc/* "$DESTDIR"/boot/grub/
 +    touch "$DESTDIR"/boot/grub/menu.lst
      local grubmenu="$DESTDIR/boot/grub/menu.lst"
      if [ ! -f $grubmenu ]; then
          DIALOG --msgbox "Error: Couldn't find $grubmenu.  Is GRUB installed?" 0 0
-@@ -1024,19 +827,20 @@
+@@ -1024,19 +828,20 @@
              fi
              # remove default entries by truncating file at our little tag (#-*)
              sed -i -e '/#-\*/q' $grubmenu
@@ -400,7 +401,7 @@
  
  # (2) Windows
  #title Windows
-@@ -1092,7 +896,7 @@
+@@ -1092,7 +897,7 @@
          DIALOG --msgbox "GRUB root and setup devices could not be auto-located.  You will need to manually run the GRUB shell to install a bootloader." 0 0
          return 1
      fi
@@ -409,7 +410,7 @@
      cat /tmp/grub.log >$LOG
      # unfreeze xfs filesystems
      if [ -x /usr/sbin/xfs_freeze ]; then
-@@ -1108,64 +912,6 @@
+@@ -1108,64 +913,6 @@
      S_GRUB=1
  }
  
@@ -474,7 +475,7 @@
  # set_clock()
  # prompts user to set hardware clock and timezone
  #
-@@ -1258,7 +1004,7 @@
+@@ -1258,7 +1005,7 @@
          touch /tmp/setup-mkinitcpio-running
          echo "mkinitcpio progress ..." > /tmp/mkinitcpio.log; \
          echo >> /tmp/mkinitcpio.log; \
@@ -483,7 +484,7 @@
          echo $? > /tmp/.mkinitcpio-retcode
          echo >> /tmp/mkinitcpio.log
          rm -f /tmp/setup-mkinitcpio-running
-@@ -1288,14 +1034,6 @@
+@@ -1288,14 +1035,6 @@
      ## PREPROCESSING ##
      # only done on first invocation of configure_system
      if [ $S_CONFIG -eq 0 ]; then
@@ -498,7 +499,7 @@
          # /etc/rc.conf
          # insert timezone and utc info
          sed -i -e "s/^TIMEZONE=.*/TIMEZONE=\"$(echo $TIMEZONE | sed "s/\//\\\\\//g")\"/g" \
-@@ -1378,31 +1116,28 @@
+@@ -1378,31 +1117,28 @@
      fi
      DIALOG $DEFAULT --title " MAIN MENU " \
          --menu "Use the UP and DOWN arrows to navigate menus.  Use TAB to switch between buttons and ENTER to select." 16 55 8 \
@@ -543,7 +544,7 @@
              echo ""
              echo "If the install finished successfully, you can now type 'reboot'"
              echo "to restart the system."
-@@ -1417,12 +1152,22 @@
+@@ -1417,12 +1153,22 @@
  #####################
  ## begin execution ##
  
