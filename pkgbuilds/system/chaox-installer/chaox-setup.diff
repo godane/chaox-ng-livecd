@@ -1,5 +1,5 @@
---- setup.orig	2009-07-03 17:11:40.000000000 +0200
-+++ setup	2009-07-03 17:12:21.000000000 +0200
+--- setup.orig	2009-07-04 20:25:46.000000000 +0200
++++ setup	2009-07-04 20:39:06.000000000 +0200
 @@ -1,9 +1,9 @@
  #!/bin/bash
  
@@ -12,7 +12,43 @@
  DESTDIR="/mnt"
  EDITOR=
  
-@@ -703,6 +703,9 @@
+@@ -656,35 +656,6 @@
+     S_MKFS=1
+ }
+ 
+-# select_mirror()
+-# Prompt user for preferred mirror and set $SYNC_URL
+-#
+-# args: none
+-# returns: nothing
+-select_mirror() {
+-    DIALOG --msgbox "Keep in mind ftp.archlinux.org is throttled.\nPlease select another mirror to get full download speed." 10 65
+-    # FIXME: this regex doesn't honor commenting
+-    MIRRORS=$(egrep -o '((ftp)|(http))://[^/]*' "${MIRRORLIST}" | sed 's|$| _|g')
+-    DIALOG --menu "Select an FTP/HTTP mirror" 14 55 7 \
+-                  $MIRRORS \
+-                  "Custom" "_" 2>$ANSWER || return 1
+-    local _server=$(cat $ANSWER)
+-    if [ "${_server}" = "Custom" ]; then
+-        # sourcing /etc/makepkg.conf to get CARCH
+-        [ -z "$CARCH" ] && source /etc/makepkg.conf
+-        DIALOG --inputbox "Enter the full URL to the core repo (you may use \$repo as a placeholder for the repo name, i.e. core)." 8 65 \
+-                "ftp://ftp.archlinux.org/\$repo/os/$CARCH" 2>$ANSWER || return 1
+-        SYNC_URL=$(cat $ANSWER)
+-    else
+-        # Form the full URL for our mirror by grepping for the server name in
+-        # our mirrorlist and pulling the full URL out. Substitute 'core' in
+-        # for the repository name, and ensure that if it was listed twice we
+-        # only return one line for the mirror.
+-        SYNC_URL=$(egrep -o "${_server}.*" "${MIRRORLIST}" | head -n1)
+-    fi
+-    echo "Using mirror: $SYNC_URL" >$LOG
+-}
+-
+ # prepare_pacman()
+ # configures pacman and syncs for the first time on destination system
+ #
+@@ -703,6 +674,9 @@
  CacheDir = ${DESTDIR}/var/cache/pacman/pkg
  CacheDir = /src/core/pkg
  
@@ -22,15 +58,31 @@
  [core]
  Server = ${serverurl//\$repo/core}
  EOF
-@@ -716,6 +719,38 @@
+@@ -716,84 +690,55 @@
      return 0
  }
  
+-# select_packages()
+-# prompts the user to select packages to install
 +# do_rsync()
 +# does the rsync
-+#
-+# params: none
-+# returns: 1 on error
+ #
+ # params: none
+ # returns: 1 on error
+-select_packages() {
+-    # step dependencies
+-    if [ $S_SRC -eq 0 ]; then
+-        DIALOG --msgbox "You must select an installation source!" 0 0
+-        return 1
+-    fi
+-
+-    # if selection has been done before, warn about loss of input
+-    # and let the user exit gracefully
+-    if [ $S_SELECT -ne 0 ]; then
+-        DIALOG --yesno "WARNING: Running this stage again will result in the loss of previous package selections.\n\nDo you wish to continue?" 10 50 || return 1
+-    fi
+-
+-    DIALOG --msgbox "Package selection is split into two stages.  First you will select package categories that contain packages you may be interested in.  Then you will be presented with a full list of packages for each category, allowing you to fine-tune.\n\n" 15 70
 +do_rsync() {
 +    cat > /tmp/rsync-exclude << EOF
 +/home/livecd/.gvfs
@@ -43,102 +95,125 @@
 +/sys/*
 +EOF
 +    DIALOG --infobox "Copy in progress. This may take a while - you can watch the output in the progress window." 6 45
-+
+ 
+-    # set up our install location if necessary and sync up
+-    # so we can get package lists
+-    prepare_pacman
 +    rsync -av / ${DESTDIR} --exclude-from=/tmp/rsync-exclude 2>&1 >$LOG
-+    if [ $? -ne 0 ]; then
+     if [ $? -ne 0 ]; then
+-        DIALOG --msgbox "Pacman preparation failed! Check $LOG for errors." 6 60
 +        DIALOG --msgbox "Rsync failed (maybe you're out of disk space?). See the log output for more information"
-+        return 1
-+    fi
-+
+         return 1
+     fi
+ 
+-    # show group listing for group selection
+-    local _catlist="base ^ ON"
+-    for i in $($PACMAN -Sg | sed "s/^base$/ /g"); do
+-        _catlist="${_catlist} ${i} - OFF"
+-    done
+-
+-    DIALOG --checklist "Select Package Categories\nDO NOT deselect BASE unless you know what you're doing!" 19 55 12 $_catlist 2>$ANSWER || return 1
+-    _catlist="$(cat $ANSWER)"
+-
+-    # assemble a list of packages with groups, marking pre-selected ones
+-    # <package> <group> <selected>
+-    local _pkgtmp="$($PACMAN -Sl core | awk '{print $2}')"
+-    local _pkglist=''
+-
+-    $PACMAN -Si $_pkgtmp | \
+-        awk '/^Name/{ printf("%s ",$3) } /^Group/{ print $3 }' > $ANSWER
+-    while read pkgname pkgcat; do
+-        # check if this package is in a selected group
+-        # slightly ugly but sorting later requires newlines in the variable
+-        if [ "${_catlist/"\"$pkgcat\""/XXXX}" != "${_catlist}" ]; then
+-            _pkglist="$(echo -e "${_pkglist}\n${pkgname} ${pkgcat} ON")"
+-        else
+-            _pkglist="$(echo -e "${_pkglist}\n${pkgname} ${pkgcat} OFF")"
+-        fi
+-    done < $ANSWER
+-
+-    # sort by category
+-    _pkglist="$(echo "$_pkglist" | sort -f -k 2)"
 +    mknod -m666 ${DESTDIR}/dev/zero c 1 5
 +    mknod -m666 ${DESTDIR}/dev/null c 1 3
 +    mknod -m600 ${DESTDIR}/dev/console c 5 1
 +    mkdir -m755 ${DESTDIR}/media/{cd,dvd,fl}
-+
-+    S_SELECT=1
-+}
-+
- # select_packages()
- # prompts the user to select packages to install
- #
-@@ -778,6 +813,89 @@
+ 
+-    DIALOG --separate-output --checklist "Select Packages To Install." 19 60 12 $_pkglist 2>$ANSWER || return 1
+-    PACKAGES="$(cat $ANSWER)"
      S_SELECT=1
  }
  
+-
+-# installpkg()
 +# installpkg_chaox()
-+# performs package installation to the target system
+ # performs package installation to the target system
+-#
+-installpkg() {
+-    # check step dependencies
 +# 
 +# params: none
 +# returns 1 on error
 +
 +installpkg_chaox() {
-+    if [ $S_SELECT -eq 0 ]; then
+     if [ $S_SELECT -eq 0 ]; then
+-        DIALOG --msgbox "You must select packages first." 0 0
+-        return 1
 +        DIALOG --msgbox "You have to copy the distribution first." 0 0
 +       return 1
-+    fi
+     fi
+ 
+-    DIALOG --msgbox "Package installation will begin now.  You can watch the output in the progress window. Please be patient." 0 0
++    DIALOG --msgbox "Pacman will no install the necessary packages." 0 0
+ 
+     # must mount chroot so pre/post installs don't fail out
+     chroot_mount
+-
++    
+     # execute pacman in a subshell so we can follow its progress
+     # pacman output goes /tmp/pacman.log
+     # /tmp/setup-pacman-running acts as a lockfile
+@@ -801,7 +746,7 @@
+         echo "Installing Packages..." >/tmp/pacman.log ; \
+         echo >>/tmp/pacman.log ; \
+         touch /tmp/setup-pacman-running ; \
+-        $PACMAN -S $PACKAGES 2>&1 >> /tmp/pacman.log ; \
++        $PACMAN -U /arch/initscripts-*.pkg.tar.gz >>/tmp/pacman.log 2>&1 ; \
+         echo $? > /tmp/.pacman-retcode ; \
+         if [ $(cat /tmp/.pacman-retcode) -ne 0 ]; then
+             echo -e "\nPackage Installation FAILED." >>/tmp/pacman.log
+@@ -812,13 +757,12 @@
+     ) &
+ 
+     sleep 2
+-
+-    # display pacman output while it's running
+     DIALOG --title " Installing... Please Wait " \
+         --no-kill --tailboxbg "/tmp/pacman.log" 18 70 2>$ANSWER
+     while [ -f /tmp/setup-pacman-running ]; do
+         sleep 1
+     done
 +
-+    if [ $S_SRC -eq 0 ]; then
-+        DIALOG --msgbox "You need do configure your network first". 0 0
-+        return 1
-+    fi
-+
-+    DIALOG --msgbox "Package installation will begin now. You can wath the output in the progress window. Please be patient." 0 0
-+
-+    # must mount chroot so pre/post installs don't fail out
-+    chroot_mount
-+
-+    prepare_pacman || (DIALOG --msgbox "Something went wrong while synchronizing the package database, make sure you have a working internet connection. You can look at the error message on tty8." 0 0 && return 1)
-+
-+    # execute pacman in a subshell so we can follow its progress
-+    # pacman output goes /tmp/pacman.log
-+    # /tmp/setup-pacman-running acts as a lockfile
-+    ( \
-+        echo "Installing Packages..." >/tmp/pacman.log ; \
-+        echo >>/tmp/pacman.log ; \
-+        touch /tmp/setup-pacman-running ; \
-+        rm /mnt/etc/mkinitcpio.d/kernel26-chaox.preset; $PACMAN -Rc kernel26-chaox >>/tmp/pacman.log 2>&1 ; \
-+        $PACMAN -S kernel26-chaox initscripts grub >>/tmp/pacman.log 2>&1 ; \
-+        echo $? > /tmp/.pacman-retcode ; \
-+        if [ $(cat /tmp/.pacman-retcode) -ne 0 ]; then
-+            echo -e "\nPackage Installation FAILED." >>/tmp/pacman.log
-+        else
-+            echo -e "\nPackage Installation Complete." >>/tmp/pacman.log
-+        fi
-+        $PACMAN -S chaox-modules >>/tmp/pacman.log 2>&1
-+        rm /tmp/setup-pacman-running
-+    ) &
-+
-+    sleep 2
-+    DIALOG --title " Installing... Please Wait " \
-+        --no-kill --tailboxbg "/tmp/pacman.log" 18 70 2>$ANSWER
-+    while [ -f /tmp/setup-pacman-running ]; do
-+        sleep 1
-+    done
-+
-+    kill $(cat $ANSWER)
-+
-+    # pacman finished, display scrollable output
-+    local _result=''
-+    if [ $(cat /tmp/.pacman-retcode) -ne 0 ]; then
-+        _result="Installation Failed (see errors below)"
-+    else
-+        _result="Installation Complete"
-+    fi
-+    rm /tmp/.pacman-retcode
-+
-+    DIALOG --title "$_result" --exit-label "Continue" \
-+        --textbox "/tmp/pacman.log" 18 70 || return 1
-+
-+    chroot_umount
-+
-+    sync
-+
-+    S_INSTALL=1
-+
-+    # automagic time!
-+    # any automatic configuration should go here
-+    DIALOG --infobox "Writing base configuration..." 6 40
-+    auto_fstab
+     kill $(cat $ANSWER)
+ 
+     # pacman finished, display scrollable output
+@@ -833,10 +777,8 @@
+     DIALOG --title "$_result" --exit-label "Continue" \
+         --textbox "/tmp/pacman.log" 18 70 || return 1
+ 
+-    # don't need chroot anymore
+     chroot_umount
+ 
+-    # ensure the disk is synced
+     sync
+ 
+     S_INSTALL=1
+@@ -845,8 +787,14 @@
+     # any automatic configuration should go here
+     DIALOG --infobox "Writing base configuration..." 6 40
+     auto_fstab
+-    auto_network
+-    auto_locale
 +
 +    # depmod time
 +    source ${DESTDIR}/etc/mkinitcpio.d/kernel26-chaox.kver
@@ -147,11 +222,139 @@
 +    # initscripts backups the following files: etc/inittab etc/rc.conf etc/rc.local etc/rc.local.shutdown
 +    mv ${DESTDIR}/etc/rc.conf.pacsave ${DESTDIR}/etc/rc.conf
 +    rm ${DESTDIR}/etc/*.pacsave
-+}
+ }
  
- # installpkg()
- # performs package installation to the target system
-@@ -1024,19 +1142,20 @@
+ # auto_fstab()
+@@ -866,43 +814,6 @@
+     fi
+ }
+ 
+-# auto_network()
+-# configures network on host system according to installer
+-# settings if user wishes to do so
+-#
+-auto_network()
+-{
+-    # exit if network wasn't configured in installer
+-    if [ $S_NET -eq 0 ]; then
+-        return 1
+-    fi
+-
+-    DIALOG --yesno "Do you want to use the network settings from the installer in rc.conf and resolv.conf?\n\nIf you used Proxy settings, they will be written to /etc/profile.d/proxy.sh" 10 55 || return 1
+-
+-    if [ "$S_DHCP" == "" ]; then
+-        sed -i "s#eth0=\"eth0#$INTERFACE=\"$INTERFACE#g" ${DESTDIR}/etc/rc.conf
+-        sed -i "s#192.168.0.2# $IPADDR#g" ${DESTDIR}/etc/rc.conf
+-        sed -i "s#255.255.255.0# $SUBNET#g" ${DESTDIR}/etc/rc.conf
+-        sed -i "s#192.168.0.255\"#$BROADCAST\"#g" ${DESTDIR}/etc/rc.conf
+-        sed -i "s#eth0)#$INTERFACE)#g" ${DESTDIR}/etc/rc.conf
+-        if [ "$GW" != "" ]; then
+-            sed -i "s#gw 192.168.0.1#gw $GW#g" ${DESTDIR}/etc/rc.conf
+-            sed -i "s#!gateway#gateway#g" ${DESTDIR}/etc/rc.conf
+-        fi
+-        echo "nameserver $DNS" >> ${DESTDIR}/etc/resolv.conf
+-    else
+-        sed -i "s#eth0=\"eth0.*#$INTERFACE=\"dhcp\"#g" ${DESTDIR}/etc/rc.conf
+-    fi
+-    if [ "$PROXY_HTTP" != "" ]; then
+-        echo "export http_proxy=$PROXY_HTTP" >> ${DESTDIR}/etc/profile.d/proxy.sh;
+-        chmod a+x ${DESTDIR}/etc/profile.d/proxy.sh
+-    fi
+-    if [ "$PROXY_FTP" != "" ]; then
+-        echo "export ftp_proxy=$PROXY_FTP" >> ${DESTDIR}/etc/profile.d/proxy.sh;
+-        chmod a+x ${DESTDIR}/etc/profile.d/proxy.sh
+-    fi
+-}
+-
+ # auto_locale()
+ # enable glibc locales from rc.conf and build initial locale DB
+ auto_locale()
+@@ -914,84 +825,6 @@
+     chroot ${DESTDIR} locale-gen >/dev/null
+ }
+ 
+-# donetwork()
+-# Hand-hold through setting up networking
+-#
+-# args: none
+-# returns: 1 on failure
+-donetwork() {
+-    INTERFACE=""
+-    S_DHCP=""
+-    local ifaces
+-    ifaces=$(ifconfig -a |grep "Link encap:Ethernet"|sed 's/ \+Link encap:Ethernet \+HWaddr \+/ /g')
+-
+-    if [ "$ifaces" = "" ]; then
+-        DIALOG --msgbox "Cannot find any ethernet interfaces. This usually means udev was\nunable to load the module and you must do it yourself. Switch to\nanother VT, load the appropriate module, and run this step again." 18 70
+-        return 1
+-    fi
+-
+-    DIALOG --nocancel --ok-label "Select" --menu "Select a network interface" 14 55 7 $ifaces 2>$ANSWER
+-    case $? in
+-        0) INTERFACE=$(cat $ANSWER) ;;
+-        *) return 1 ;;
+-    esac
+-
+-    DIALOG --yesno "Do you want to use DHCP?" 0 0
+-    if [ $? -eq 0 ]; then
+-        DIALOG --infobox "Please wait.  Polling for DHCP server on $INTERFACE..." 10 65
+-        dhcpcd $INTERFACE >$LOG 2>&1
+-        if [ $? -ne 0 ]; then
+-            DIALOG --msgbox "Failed to run dhcpcd.  See $LOG for details." 0 0
+-            return 1
+-        fi
+-        if [ ! $(ifconfig $INTERFACE | grep 'inet addr:') ]; then
+-            DIALOG --msgbox "DHCP request failed." 0 0 || return 1
+-        fi
+-        S_DHCP=1
+-    else
+-        NETPARAMETERS=""
+-        while [ "$NETPARAMETERS" = "" ]; do
+-            DIALOG --inputbox "Enter your IP address" 8 65 "192.168.0.2" 2>$ANSWER || return 1
+-            IPADDR=$(cat $ANSWER)
+-            DIALOG --inputbox "Enter your netmask" 8 65 "255.255.255.0" 2>$ANSWER || return 1
+-            SUBNET=$(cat $ANSWER)
+-            DIALOG --inputbox "Enter your broadcast" 8 65 "192.168.0.255" 2>$ANSWER || return 1
+-            BROADCAST=$(cat $ANSWER)
+-            DIALOG --inputbox "Enter your gateway (optional)" 8 65 "192.168.0.1" 2>$ANSWER || return 1
+-            GW=$(cat $ANSWER)
+-            DIALOG --inputbox "Enter your DNS server IP" 8 65 "192.168.0.1" 2>$ANSWER || return 1
+-            DNS=$(cat $ANSWER)
+-            DIALOG --inputbox "Enter your HTTP proxy server, for example:\nhttp://name:port\nhttp://ip:port\nhttp://username:password@ip:port\n\n Leave the field empty if no proxy is needed to install." 16 65 "" 2>$ANSWER || return 1
+-            PROXY_HTTP=$(cat $ANSWER)
+-            DIALOG --inputbox "Enter your FTP proxy server, for example:\nhttp://name:port\nhttp://ip:port\nhttp://username:password@ip:port\n\n Leave the field empty if no proxy is needed to install." 16 65 "" 2>$ANSWER || return 1
+-            PROXY_FTP=$(cat $ANSWER)
+-            DIALOG --yesno "Are these settings correct?\n\nIP address:         $IPADDR\nNetmask:            $SUBNET\nGateway (optional): $GW\nDNS server:         $DNS\nHTTP proxy server:  $PROXY_HTTP\nFTP proxy server:   $PROXY_FTP" 0 0
+-            case $? in
+-                1) ;;
+-                0) NETPARAMETERS="1" ;;
+-            esac
+-        done
+-        echo "running: ifconfig $INTERFACE $IPADDR netmask $SUBNET broadcast $BROADCAST up" >$LOG
+-        ifconfig $INTERFACE $IPADDR netmask $SUBNET broadcast $BROADCAST up >$LOG 2>&1 || DIALOG --msgbox "Failed to setup $INTERFACE interface." 0 0 || return 1
+-        if [ "$GW" != "" ]; then
+-            route add default gw $GW >$LOG 2>&1 || DIALOG --msgbox "Failed to setup your gateway." 0 0 || return 1
+-        fi
+-        if [ "$PROXY_HTTP" = "" ]; then
+-            unset http_proxy
+-        else
+-            export http_proxy=$PROXY_HTTP
+-        fi
+-        if [ "$PROXY_FTP" = "" ]; then
+-            unset ftp_proxy
+-        else
+-            export ftp_proxy=$PROXY_FTP
+-        fi
+-        echo "nameserver $DNS" >/etc/resolv.conf
+-    fi
+-    DIALOG --msgbox "The network is configured." 8 30
+-    S_NET=1
+-}
+-
+ dogrub() {
+     get_grub_map
+     local grubmenu="$DESTDIR/boot/grub/menu.lst"
+@@ -1024,19 +857,20 @@
              fi
              # remove default entries by truncating file at our little tag (#-*)
              sed -i -e '/#-\*/q' $grubmenu
@@ -178,7 +381,7 @@
  
  # (2) Windows
  #title Windows
-@@ -1092,7 +1211,7 @@
+@@ -1092,7 +926,7 @@
          DIALOG --msgbox "GRUB root and setup devices could not be auto-located.  You will need to manually run the GRUB shell to install a bootloader." 0 0
          return 1
      fi
@@ -187,10 +390,18 @@
      cat /tmp/grub.log >$LOG
      # unfreeze xfs filesystems
      if [ -x /usr/sbin/xfs_freeze ]; then
-@@ -1116,18 +1235,7 @@
- # returns: nothing
- select_source()
- {
+@@ -1108,64 +942,6 @@
+     S_GRUB=1
+ }
+ 
+-# select_source()
+-# displays installation source selection menu
+-# and sets up relevant config files
+-#
+-# params: none
+-# returns: nothing
+-select_source()
+-{
 -    DIALOG --menu "Please select an installation source" 10 35 3 \
 -    "1" "CD-ROM or OTHER SOURCE" \
 -    "2" "FTP/HTTP" 2>$ANSWER
@@ -203,20 +414,48 @@
 -            MODE="ftp"
 -            ;;
 -    esac
-+    MODE="ftp"
- 
-     if [ "$MODE" = "cd" ]; then
-         TITLE="Arch Linux CDROM or OTHER SOURCE Installation"
-@@ -1138,7 +1246,7 @@
-         fi
-         echo "Using CDROM for package installation" >$LOG
-     else
+-
+-    if [ "$MODE" = "cd" ]; then
+-        TITLE="Arch Linux CDROM or OTHER SOURCE Installation"
+-        DIALOG --msgbox "Packages included on this disk have been mounted to /src/core/pkg. If you wish to use your own packages from another source, manually mount them there." 0 0
+-        if [ ! -d /src/core/pkg ]; then
+-            DIALOG --msgbox "Package directory /src/core/pkg is missing!" 0 0
+-            return 1
+-        fi
+-        echo "Using CDROM for package installation" >$LOG
+-    else
 -        TITLE="Arch Linux FTP/HTTP Installation"
-+        TITLE="Chaox Installation"
-         DIALOG --msgbox "If you wish to load your ethernet modules manually, please do so now in another terminal." 12 65
-         local CURRENT_SELECTION=""
-         while true; do
-@@ -1258,7 +1366,7 @@
+-        DIALOG --msgbox "If you wish to load your ethernet modules manually, please do so now in another terminal." 12 65
+-        local CURRENT_SELECTION=""
+-        while true; do
+-            if [ -n "$CURRENT_SELECTION" ]; then
+-                DEFAULT="--default-item $CURRENT_SELECTION"
+-            else
+-                DEFAULT=""
+-            fi
+-            DIALOG $DEFAULT --menu "FTP Installation" 10 35 3 \
+-            "0" "Setup Network" \
+-            "1" "Choose Mirror" \
+-            "2" "Return to Main Menu" 2>$ANSWER
+-            CURRENT_SELECTION="$(cat $ANSWER)"
+-
+-            case "$(cat $ANSWER)" in
+-                "0")
+-                    donetwork ;;
+-                "1")
+-                    select_mirror ;;
+-                *)
+-                    break ;;
+-            esac
+-        done
+-   fi
+-   S_SRC=1
+-}
+-
+ # set_clock()
+ # prompts user to set hardware clock and timezone
+ #
+@@ -1258,7 +1034,7 @@
          touch /tmp/setup-mkinitcpio-running
          echo "mkinitcpio progress ..." > /tmp/mkinitcpio.log; \
          echo >> /tmp/mkinitcpio.log; \
@@ -225,34 +464,67 @@
          echo $? > /tmp/.mkinitcpio-retcode
          echo >> /tmp/mkinitcpio.log
          rm -f /tmp/setup-mkinitcpio-running
-@@ -1378,11 +1486,11 @@
+@@ -1288,14 +1064,6 @@
+     ## PREPROCESSING ##
+     # only done on first invocation of configure_system
+     if [ $S_CONFIG -eq 0 ]; then
+-
+-        # /etc/pacman.d/mirrorlist
+-        # add installer-selected mirror to the top of the mirrorlist
+-        if [ "$MODE" = "ftp" -a "${SYNC_URL}" != "" ]; then
+-            awk "BEGIN { printf(\"# Mirror used during installation\nServer = "${SYNC_URL}"\n\n\") } 1 " "${DESTDIR}/etc/pacman.d/mirrorlist" > /tmp/inst-mirrorlist
+-	    mv /tmp/inst-mirrorlist "${DESTDIR}/etc/pacman.d/mirrorlist"
+-        fi
+-
+         # /etc/rc.conf
+         # insert timezone and utc info
+         sed -i -e "s/^TIMEZONE=.*/TIMEZONE=\"$(echo $TIMEZONE | sed "s/\//\\\\\//g")\"/g" \
+@@ -1378,31 +1146,28 @@
      fi
      DIALOG $DEFAULT --title " MAIN MENU " \
          --menu "Use the UP and DOWN arrows to navigate menus.  Use TAB to switch between buttons and ENTER to select." 16 55 8 \
 -        "0" "Select Source" \
-+        "0" "Network Configuration" \
-         "1" "Set Clock" \
-         "2" "Prepare Hard Drive" \
+-        "1" "Set Clock" \
+-        "2" "Prepare Hard Drive" \
 -        "3" "Select Packages" \
 -        "4" "Install Packages" \
-+        "3" "Copy the Distribution" \
-+        "4" "Package Installation" \
-         "5" "Configure System" \
-         "6" "Install Bootloader" \
-         "7" "Exit Install" 2>$ANSWER
-@@ -1395,9 +1503,9 @@
-         "2")
+-        "5" "Configure System" \
+-        "6" "Install Bootloader" \
+-        "7" "Exit Install" 2>$ANSWER
++        "0" "Set Clock" \
++        "1" "Prepare Hard Drive" \
++        "2" "Copy the Distribution" \
++        "3" "Package Installation" \
++        "4" "Configure System" \
++        "5" "Install Bootloader" \
++        "6" "Exit Install" 2>$ANSWER
+     CURRENT_SELECTION="$(cat $ANSWER)"
+     case $(cat $ANSWER) in
+         "0")
+-            select_source ;;
+-        "1")
+             set_clock ;;
+-        "2")
++        "1")
              prepare_harddrive ;;
++        "2")
++            do_rsync ;;
          "3")
 -            select_packages ;;
-+            do_rsync ;;
++            installpkg_chaox ;;
          "4")
 -            installpkg ;;
-+            installpkg_chaox ;;
-         "5")
+-        "5")
              configure_system ;;
-         "6")
-@@ -1417,12 +1525,22 @@
+-        "6")
++        "5")
+             install_bootloader ;;
+-        "7")
++        "6")
+             echo ""
+             echo "If the install finished successfully, you can now type 'reboot'"
+             echo "to restart the system."
+@@ -1417,12 +1182,22 @@
  #####################
  ## begin execution ##
  
