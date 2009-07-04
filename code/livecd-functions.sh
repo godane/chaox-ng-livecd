@@ -4,10 +4,13 @@ TARGET="${LIVECD}target"
 mkdir -p "${SOURCE}"
 mkdir -p "${TARGET}"
 makesqfs() {
+  cp "${SOURCE}"/boot/vmlinuz26 "${SOURCE}"/arch/
 	mount-chroot
 	chroot source /bin/bash --login <<CHROOTED
 	depmod -a $(ls "${SOURCE}"/lib/modules/)
 	pacman -Q > package.lst
+  pacman -Swd initscripts
+  cp /var/cache/pacman/pkg/initscripts-*.pkg.tar.gz /arch/
   freshclam
 	yes |hwd -u
 	localepurge
@@ -18,6 +21,7 @@ CHROOTED
 	cd source
 	find var/log -type f -exec rm '{}' \;
 	time mksquashfs . ../target/archlive.sqfs -ef ../exclude -wildcards -noappend -sort ../load.order.new
+  rm "${SOURCE}"/arch/{vmlinuz26,initscripts-*.pkg.tar.gz}
 }
 makechaox() {
 	_DATE="$(date +%F-%H-%M)"
