@@ -1,6 +1,6 @@
 # Contributor: Jens Pranaitis <jens@chaox.net>
 pkgname=chaox-opengl-tools-git
-pkgver=20090623
+pkgver=20090706
 pkgrel=1
 pkgdesc="some scripts to aid with opengl setup"
 arch=("i686")
@@ -33,6 +33,6 @@ build() {
   #
   # BUILD HERE
   #
-  mkdir -p "$pkgdir"/usr/bin/
+  mkdir -p "$pkgdir"{/usr/bin/,/etc/chaox-opengl-tools}
   install -m755 {detect,select}-opengl.sh "$pkgdir"/usr/bin/ || return 1
 } 
