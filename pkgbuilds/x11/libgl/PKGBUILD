@@ -3,7 +3,7 @@
 # Contributor: Jan de Groot <jgc@archlinux.org>
 pkgname=libgl
 pkgver=7.4.4
-pkgrel=1
+pkgrel=2
 pkgdesc="Mesa DRI OpenGL library and drivers"
 arch=(i686 x86_64)
 license=('LGPL')
@@ -19,7 +19,7 @@ source=(http://downloads.sourceforge.net/mesa3d/MesaLib-${pkgver}.tar.bz2
   xorg-symlinks.sh)
 md5sums=('b66528d314c574dccbe0ed963cac5e93'
          'f0baa948d9810f268413111ee439d24b'
-         '1cd5cd1888928ef9594a9af62445f531')
+         'cb90e5d3eaf0683ed1aa61f5d3ad3a68')
 build() {
   cd "${srcdir}"/Mesa-${pkgver}
   patch -Np1 -i "${srcdir}/mesa-7.1-link-shared.patch" || return 1
