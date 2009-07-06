@@ -1,7 +1,7 @@
 # Contributor: Jens Pranaitis <jens@chaox.net>
 pkgname=chaox-opengl-tools-git
 pkgver=20090706
-pkgrel=1
+pkgrel=5
 pkgdesc="some scripts to aid with opengl setup"
 arch=("i686")
 url="http://github.com/jensp/chaox-opengl-tools"
