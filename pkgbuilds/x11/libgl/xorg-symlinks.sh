@@ -1,5 +1,5 @@
 _symlist="/etc/chaox-opengl-tools/xorg-symlinks"
-rm $_symlist
+rm -f $_symlist
 for lib in /usr/lib/xorg/*.so*
 do
   if [ -h /usr/lib/$(basename "$lib") ]
