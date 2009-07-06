@@ -3,7 +3,7 @@
 # Contributor: Allan McRae <allan@archlinux.org>
 pkgname=glibc-chaox
 pkgver=2.10.1
-pkgrel=2
+pkgrel=3
 _glibcdate=20090511
 install=glibc.install
 backup=(etc/locale.gen
@@ -17,7 +17,8 @@ depends=('kernel-headers>=2.6.29.3' 'tzdata')
 makedepends=('gcc>=4.3')
 replaces=('glibc-xen' 'glibc')
 conflicts=("glibc")
-provides=("glibc")
+# don't ask <_<
+provides=("glibc" "glibc=2.8" "glibc=2.9" "glibc=2.10")
 source=(ftp://ftp.archlinux.org/other/glibc/glibc-${pkgver}_${_glibcdate}.tar.bz2
 	      glibc-2.10-dont-build-timezone.patch
 	      glibc-2.10-bz4781.patch
@@ -58,7 +59,6 @@ build() {
       --with-headers=/usr/include --libexecdir=/usr/lib \
       --enable-bind-now --with-tls --with-__thread \
       --libdir=/usr/lib --without-gd
-        
   make || return 1
   make install_root="${pkgdir}" install || return 1
 
