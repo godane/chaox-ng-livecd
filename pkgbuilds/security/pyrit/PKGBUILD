@@ -2,7 +2,7 @@
 # Contributor: Thomas Schneider <blacklotus@jenux.homelinux.org>
 pkgbase="pyrit"
 pkgname=("pyrit" "pyrit-cuda")
-pkgver=104
+pkgver=110
 pkgrel=1
 pkgdesc="WPA-PSK and WPA2-PSK improved brute force and dictonary attack"
 url="http://code.google.com/p/pyrit/"
@@ -10,8 +10,6 @@ arch=('i686' 'x86_64')
 license=('GPL3')
 depends=('python')
 makedepends=('gcc' 'subversion')
-source=("cuda-setup.patch")
-md5sums=("ae7c0c984e2b39d7d9405b7c457ca358")
 
 _svntrunk=http://pyrit.googlecode.com/svn/trunk/
 _svnmod=pyrit
@@ -33,9 +31,8 @@ package_pyrit() {
 }
 package_pyrit-cuda() {
 pkgdesc="cuda module for pyrit"
-depends=("cuda" "pyrit")
+depends=("cuda-toolkit" "pyrit")
   cd $srcdir/pyrit/cpyrit_cuda
-  patch -Np0 -i "${srcdir}"/cuda-setup.patch || return 1
   ./setup.py install --root="${pkgdir}" || return 1
 }
 # vim:syntax=sh
