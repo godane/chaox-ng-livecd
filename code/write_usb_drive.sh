@@ -3,7 +3,6 @@
 # 1) partition/drive is mounted
 # 2) user exit
 _tmp_file=$(mktemp)
-# most of this function from http://www.unixboard.de/vb3/showthread.php?t=43210
 add_persistable() {
   _drive=$1
   # cylinder size
@@ -35,6 +34,7 @@ add_persistable() {
     exit 2
   fi
 }
+# most of this function from http://www.unixboard.de/vb3/showthread.php?t=43210
 copy_image() {
   _in=$1
   _out=$2
@@ -105,12 +105,16 @@ then
       if copy_image $(get_chaox_live_image) $_selected_drive chaox
       then
         if zenity --question --text "Image was successfully written, do you want to create a partition for persistable changes?"
+        then
           add_persistable $_selected_drive
         fi
       else
         exit 2
+      fi
     else
       exit 2
     fi
   fi
+else
+  zenity
 fi
