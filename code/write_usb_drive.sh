@@ -12,20 +12,20 @@ add_persistable() {
   drivesize_in_cyl="$(( $(hal-get-property --udi $udi --key storage.removable.media_size) / $cylsize ))"
   pers_start_cyl="$(sfdisk -l $_drive|grep ${_drive}1|awk '{print $5}')"
   # maximum partition size in cyl
-  max_size_in_cyl="$(( $drive_size_in_cyl - $pers_start_cyl ))"
+  max_size_in_cyl="$(( $drivesize_in_cyl - $pers_start_cyl ))"
   if zenity --entry --title "Adding persistable changes"\
     --text "Enter the size of the persistable storage in MB, leave it at 0 for using the rest of the drive.If you specify a size larger than the capacity of the usb drive the storage will be as large as possible."\
-    --entry-text "0" 2>$_tmp_file
+    --entry-text "0" >$_tmp_file
   then
     storage_size="$(<$_tmp_file)"
     storage_size="$(( $storage_size * 1024 * 1024 ))"
     storage_size_in_cyl="$(( $storage_size / $cylsize ))"
     if [ $storage_size = 0 ]
     then
-      create_partition $_max_size_in_cyl
+      create_partition $max_size_in_cyl
     elif [ $storage_size_in_cyl > $max_size_in_cyl ]
     then
-      create_partition $_max_size_in_cyl
+      create_partition $max_size_in_cyl
     else
       create_partition $storage_size_in_cyl
     fi
