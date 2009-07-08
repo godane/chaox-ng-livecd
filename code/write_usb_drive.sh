@@ -8,6 +8,7 @@ add_persistable() {
   # cylinder size
   cylsize="$(sfdisk -l $_drive |awk -F"cylinders of " '{print $2}'|awk -F" bytes" '{print $1}'|sed '/^$/d')"
   # convert drivesize to number of cylinders
+  udi="$(hal-find-by-property --key block.device --string $_drive)"
   drivesize_in_cyl="$(( $(hal-get-property --udi $udi --key storage.removable.media_size) / $cylsize ))"
   pers_start_cyl="$(sfdisk -l $_drive|grep ${_drive}1|awk '{print $5}')"
   # maximum partition size in cyl
@@ -116,5 +117,25 @@ then
     fi
   fi
 else
-  zenity
+  zenity --info --text "Please select the image file you want to write to the usb drive"
+  image_file="$(zenity --file-selection --title "select image file")"
+  if [ $? = 0 ]
+  then
+    if zenity --question --text "Starting image write now. This is your last chance to bail out. Continue?"
+    then
+      if copy_image "$image_file" $_selected_drive
+      then
+        if zenity --question --text "Image was successfully written, do you want to create a partition for persistable changes?"
+        then
+          add_persistable $_selected_drive
+        fi
+      else
+        exit 2
+      fi
+    else
+      exit 2
+    fi
+  else
+    exit 2
+  fi
 fi
