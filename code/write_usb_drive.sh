@@ -88,7 +88,7 @@ get_usb_storage_details() {
     fi
   done
 }
-zenity --warning --text "This script will write the chaox image to your usb thumb drive or hard disc. You have to be *absolutly sure* to pick the correct drive. All data on the drive will be lost."
+zenity --warning --text "This script will write the chaox image to your usb thumb drive or hard disc. You have to be *absolutly sure* to pick the correct drive. All data on the drive will be lost. The thunar service will be stopped, as it might interfere with partitioning. It will be restarted after you exit the installer."
 get_usb_storage_details|zenity --list --radiolist --text "Which device do you want to write the image to?" --title "Disk choice" --column "" --column Device --column "Vendor description" > $_tmp_file
 _selected_drive=$(<$_tmp_file)
 if grep -q $_selected_drive /proc/mounts
@@ -99,6 +99,12 @@ then
 fi
 if [[ $(hostname) == chaox ]]
 then
+  THUNAR_IS_STARTED=$(su livecd -c 'dbus-send --session --type=method_call --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.NameHasOwner string:"org.xfce.Thunar"' | grep -q 'boolean true'; echo $?)
+  if [ $THUNAR_IS_STARTED -eq 0 ]
+  then
+    trap 'su livecd -c "dbus-send --session --type=method_call --dest=org.freedesktop.DBus / org.freedesktop.DBus.StartServiceByName string:org.xfce.Thunar uint32:0"' EXIT
+    su livecd -c "dbus-send --session --dest=org.xfce.Thunar --type=method_call /org/xfce/FileManager org.xfce.Thunar.Terminate"
+  fi
   if zenity --question --text "It seems like you're running from the chaox live environment, do you want me to copy the running image to ${_selected_drive}?"
   then
     if zenity --question --text "Starting image write now. This is your last chance to bail out. Continue?"
