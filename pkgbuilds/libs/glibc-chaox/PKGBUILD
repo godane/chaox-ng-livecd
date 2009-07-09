@@ -18,7 +18,7 @@ makedepends=('gcc>=4.3')
 replaces=('glibc-xen' 'glibc')
 conflicts=("glibc")
 # don't ask <_<
-provides=("glibc" "glibc=2.8" "glibc=2.9" "glibc=2.10")
+provides=("glibc" "glibc=2.8" "glibc=2.9" "glibc=2.10" "glibc=2.10.1")
 source=(ftp://ftp.archlinux.org/other/glibc/glibc-${pkgver}_${_glibcdate}.tar.bz2
 	      glibc-2.10-dont-build-timezone.patch
 	      glibc-2.10-bz4781.patch
