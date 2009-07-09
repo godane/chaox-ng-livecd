@@ -1,14 +1,14 @@
 # Contributor: Ermak <ermak@email.it>
 pkgname=openvas-libraries
-pkgver=2.0.2
+pkgver=2.0.3
 pkgrel=1
 pkgdesc="The OpenVAS libraries"
 arch=('i686' 'x86_64')
 url="http://www.openvas.org/"
 license=('GPL')
 depends=('gnutls' 'libpcap' 'gpgme' 'glib2')
-source=(http://wald.intevation.org/frs/download.php/572/$pkgname-$pkgver.tar.gz)
-md5sums=('1323cf02bf11806929042c3e7fb056b0')
+source=(http://wald.intevation.org/frs/download.php/600/openvas-libraries-2.0.3.tar.gz)
+md5sums=('9df63a63c1ea134e0218d7a8f2ffd288')
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
