@@ -1,9 +1,9 @@
 # Contributor: Jens Pranaitis <jens@jenux.homelinux.org>
 # Contributor: Douglas Soares de Andrade <douglas@archlinux.org>
 
-pkgname=avahi
+pkgname=avahi-chaox
 pkgver=0.6.25
-pkgrel=1
+pkgrel=2
 pkgdesc="A multicast/unicast DNS-SD framework"
 arch=('i686' 'x86_64')
 url="http://www.avahi.org/"
@@ -11,20 +11,18 @@ license=('LGPL')
 depends=('libglade' 'libcap' 'libdaemon>=0.11' 'python' 'dbus-core')
 optdepends=('libglade:Avahi-discover-standalone'
             'nss-mdns:NSS support for mDNS')
-makedepends=('mono' 'pygtk' 'gtk-sharp-2' 'dbus-python' 'libglade' 'intltool')
+makedepends=('pygtk' 'dbus-python' 'libglade' 'intltool')
 backup=(etc/avahi/avahi-daemon.conf)
 install=avahi.install
+replaces=("avahi")
 conflicts=('howl' 'mdnsresponder')
-provides=('howl' 'mdnsresponder')
+provides=('howl' 'mdnsresponder' "avahi" "avahi=0.6" "avahi=0.6.25")
 replaces=('howl' 'mdnsresponder')
 options=('!libtool')
 source=(http://www.avahi.org/download/avahi-${pkgver}.tar.gz gnome-nettool.png)
 
 build() {
-  export MONO_SHARED_DIR="${srcdir}"/.wabi
-  mkdir -p ${MONO_SHARED_DIR}
-
-  cd "${srcdir}"/${pkgname}-${pkgver}
+  cd "${srcdir}"/avahi-${pkgver}
   ./configure --prefix=/usr \
     --sysconfdir=/etc \
     --localstatedir=/var \
@@ -40,8 +38,8 @@ build() {
     --enable-autoipd \
     --with-autoipd-user=avahi \
     --with-autoipd-group=avahi \
-    --disable-gdbm
-
+    --disable-gdbm \
+    --disable-mono
   make || return 1
   make DESTDIR="${pkgdir}" install
 
