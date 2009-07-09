@@ -1,7 +1,7 @@
 # Contributor: Jens Pranaitis <jens@jenux.homelinux.org>
 # Contributor: Hugo Doria <hugo@archlinux.org>
 pkgname=nmap-beta
-pkgver=4.85BETA10
+pkgver=4.90RC1
 pkgrel=1
 pkgdesc="A network exploration tool and security/port scanner"
 arch=('i686' 'x86_64')
@@ -15,7 +15,7 @@ options=('!makeflags')
 replaces=('nmap')
 provides=("nmap")
 source=(http://download.insecure.org/nmap/dist/nmap-${pkgver}.tar.bz2)
-md5sums=('c1f9b8e773b8a78dd68b3a53a6ed07a8')
+md5sums=('4355574dfdc3f86bfa85be0a6d9b5bf4')
 
 build() {
   cd ${srcdir}/nmap-${pkgver}
