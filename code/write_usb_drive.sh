@@ -2,6 +2,9 @@
 # error codes:
 # 1) partition/drive is mounted
 # 2) user exit
+# 3) failed to mount chaox
+# log file:
+LOG=/var/log/write_usb.log
 _tmp_file=$(mktemp)
 add_persistable() {
   _drive=$1
@@ -22,12 +25,21 @@ add_persistable() {
     storage_size_in_cyl="$(( $storage_size / $cylsize ))"
     if [ $storage_size = 0 ]
     then
-      create_partition $max_size_in_cyl
+      if  ! create_partition $max_size_in_cyl
+      then
+        zenity --error --text "Failed to create partition, please report this error and include $LOG in your report"
+      fi
     elif [ $storage_size_in_cyl > $max_size_in_cyl ]
     then
-      create_partition $max_size_in_cyl
+      if ! create_partition $max_size_in_cyl
+      then
+        zenity --error --text "Failed to create partition, please report this error and include $LOG in your report"
+      fi
     else
-      create_partition $storage_size_in_cyl
+      if ! create_partition $storage_size_in_cyl
+      then
+        zenity -error --text "Failed to create partition, please report this error and include $LOG in your report"
+      fi
     fi
     zenity --info --title "Success!" --text "Successfully created persistable storage, you are ready to go now"
     exit
@@ -46,10 +58,15 @@ copy_image() {
   if [ $3 = chaox ]
   then
     tmp_mnt_point=$(mktemp -d)
-    mount $_in $(mktemp -d) >/dev/null 2>&1
-    image_size=$(($(df |grep $_in|awk '{print $2}') * 1024))
-    umount $_in
-    rm -r $tmp_mnt_point
+     if mount $_in $(mktemp -d) >>$LOG 2>&1
+     then
+      image_size=$(($(df |grep $_in|awk '{print $2}') * 1024))
+      umount $_in
+      rm -r $tmp_mnt_point
+    else
+      zenity --error --text "Failed to calculate size of chaox image. Please report the error and include  $LOG in your report."
+      exit 3
+    fi
   else
     image_size=$(du -b $_in)
   fi
@@ -66,10 +83,10 @@ copy_image() {
 }
 create_partition() {
   _partsize="$1"
-  sfdisk -f -N 2 $_drive >/dev/null 2>&1 <<EOF
+  sfdisk -f -N 2 $_drive >>$LOG 2>&1 <<EOF
 ${pers_start_cyl},${_partsize},L  
 EOF
-  mke2fs ${_drive}2 >/dev/null 2>&1
+  mke2fs ${_drive}2 >>$LOG 2>&1
 }
 get_chaox_live_image() {
   grep "/bootmnt" /proc/mounts |awk '{print $1}'
