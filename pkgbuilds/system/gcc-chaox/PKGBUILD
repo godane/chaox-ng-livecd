@@ -3,7 +3,7 @@
 # Contributor: Allan McRae <allan@archlinux.org>
 pkgname=gcc-chaox
 pkgver=4.4.0
-pkgrel=5
+pkgrel=6
 _snapshot=4.4-20090630
 _libstdcppmanver=4.4.0
 pkgdesc="The GNU Compiler Collection"
