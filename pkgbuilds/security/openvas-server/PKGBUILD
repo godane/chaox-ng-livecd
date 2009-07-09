@@ -2,7 +2,7 @@
 # Contributor: Ermak <ermak@email.it>
 pkgname=openvas-server
 pkgver=2.0.2
-pkgrel=1
+pkgrel=2
 pkgdesc="The OpenVAS server"
 arch=('i686' 'x86_64')
 url="http://www.openvas.org/"

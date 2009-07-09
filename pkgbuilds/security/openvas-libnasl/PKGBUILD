@@ -1,12 +1,12 @@
 # Contributor: Ermak <ermak@email.it>
 pkgname=openvas-libnasl
 pkgver=2.0.1
-pkgrel=1
+pkgrel=2
 pkgdesc="The OpenVAS NASL scripting language"
 arch=('i686' 'x86_64')
 url="http://www.openvas.org/"
 license=('GPL')
-depends=('bison' 'gpgme' 'openvas-libraries>=2.0.1')
+depends=('bison' 'gpgme' 'openvas-libraries>=2.0.3')
 source=(http://wald.intevation.org/frs/download.php/561/$pkgname-$pkgver.tar.gz)
 md5sums=('658c730b902a04f2e2d057a303c2e6f3')
 
