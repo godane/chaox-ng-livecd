@@ -1,7 +1,7 @@
 # Contributor: Ermak <ermak@email.it>
 pkgname=openvas-plugins
 pkgver=1.0.7
-pkgrel=1
+pkgrel=2
 pkgdesc="The OpenVAS plugins"
 arch=('i686' 'x86_64')
 url="http://www.openvas.org/"
