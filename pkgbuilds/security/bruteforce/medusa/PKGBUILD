@@ -1,0 +1,23 @@
+# Contributor: Francesco Piccinno <stack.box@gmail.com>
+
+pkgname=medusa
+pkgver=1.5
+pkgrel=1
+pkgdesc="Medusa is a speedy, massively parallel, modular, login brute-forcer for network "
+depends=('postgresql-libs' 'subversion' 'ncpfs-chaox' 'libssh2' 'afpfs-ng')
+source=("http://www.foofus.net/jmk/tools/$pkgname-$pkgver.tar.gz")
+url="http://www.foofus.net/jmk/medusa/medusa.html"
+md5sums=('82f884666161af80f8cee7a7d5c7554d')
+license=("GPL")
+arch=('i686' 'x86_64')
+
+build() {
+  cd "${srcdir}"/$pkgname-$pkgver
+  sed -i "s|apr-config|apr-1-config|g" configure.in || return 1
+  sed -i "s|apr-0/apr_tables.h|apr-1/apr_tables.h|g" configure.in || return 1
+  autoconf
+  ./configure --with-default-mod-path="/usr/lib/medusa/modules" --prefix="/usr" --enable-module-afp=yes
+  make || return 1
+  DESTDIR="$pkgdir"/ make install || return 1
+}
+
