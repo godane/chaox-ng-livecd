@@ -2,7 +2,7 @@
 # Contributor: dsa <dsa@unilestemg.br>
 pkgname=ncpfs-chaox
 pkgver=2.2.6
-pkgrel=2
+pkgrel=3
 pkgdesc="ncpfs allows you to mount volumes of NetWare servers under Linux."
 arch=(i686 x86_64)
 license=('GPL')
@@ -29,5 +29,7 @@ build() {
   make DESTDIR="${pkgdir}" install
   mkdir -p "${pkgdir}"/usr/include
   cp -r include/ncp "${pkgdir}"/usr/include/
+  cd "$pkgdir"/usr/lib
+  ln -s libncp.so.2.3.0 libncp.so
 }
 
