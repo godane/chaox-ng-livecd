@@ -1,0 +1,34 @@
+# Contributor: Francesco Piccinno <stack.box@gmail.com>
+
+pkgname=carwhisperer
+pkgver=0.2
+pkgrel=1
+pkgdesc="The carwhisperer project intends to sensibilise manufacturers of carkits and other Bluetooth appliances without display and keyboard for the possible security threat evolving from the use of standard passkeys."
+url="http://trifinite.org/trifinite_stuff_carwhisperer.html"
+license=('GPL')
+depends=('bluez')
+arch=(i686 x86_64)
+source=(http://trifinite.org/Downloads/${pkgname}-${pkgver}.tar.gz)
+md5sums=('ef3b658c7b8a5b255276b71a2151d356')
+
+build() {
+  cd "$srcdir/$pkgname-$pkgver"
+  sed -i "s|CFLAGS =|CFLAGS = $CFLAGS|" Makefile || return 1
+  make || return 1
+
+  install -D -m755 $pkgname "$pkgdir"/usr/bin/$pkgname || return 1
+
+  for file in README hcid.conf; do
+    install -D -m644 $file "$pkgdir"/usr/share/doc/$pkgname/$file || return 1
+  done
+
+  for file in *.raw; do
+    install -D -m644 $file "$pkgdir"/usr/share/doc/$pkgname/samples/$file || return 1
+  done
+
+  for file in cw_pin.pl cw_scanner; do
+    install -D -m755 $file "$pkgdir"/usr/share/doc/$pkgname/scripts/$file || return 1
+  done
+}
+
+# vim:set ts=2 sw=2 et:
