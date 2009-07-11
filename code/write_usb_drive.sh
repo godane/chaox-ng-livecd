@@ -58,7 +58,7 @@ copy_image() {
   if [ $3 = chaox ]
   then
     tmp_mnt_point=$(mktemp -d)
-     if mount $_in $(mktemp -d) >>$LOG 2>&1
+     if mount $_in $(mktemp -d) -o ro >>$LOG 2>&1
      then
       image_size=$(($(df |grep $_in|awk '{print $2}') * 1024))
       umount $_in
