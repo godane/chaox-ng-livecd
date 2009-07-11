@@ -1,16 +1,16 @@
 # Contributor: Jens Pranaitis <jens@jenux.homelinux.org>
-pkgname=perl-net-ssh
-pkgver=0.09
+pkgname=perl-net-ssh-perl
+pkgver=1.34
 pkgrel=1
-pkgdesc="Perl/CPAN Module Net-SSH"
+pkgdesc="Perl/CPAN Module Net-SSH-Perl"
 arch=("i686" "x86_64")
-url="http://search.cpan.org/~ivan/Net-SSH/"
+url="http://search.cpan.org/~turnstep/Net-SSH-Perl/"
 depends=("perl")
 license=("PerlArtistic")
-source=("http://search.cpan.org/CPAN/authors/id/I/IV/IVAN/Net-SSH-0.09.tar.gz")
-md5sums=('96837a66d0329e49cf5febd8b1ff4315')
+source=("http://search.cpan.org/CPAN/authors/id/T/TU/TURNSTEP/Net-SSH-Perl-1.34.tar.gz")
+md5sums=('5b6d60e459707058e856c45c30e96e53')
 build() {
-  cd "${srcdir}"/Net-SSH-$pkgver
+  cd "${srcdir}"/Net-SSH-Perl-$pkgver
   PERL_MM_USE_DEFAULT=1 perl Makefile.PL INSTALLDIRS=vendor || return 1 
   make || return 1
   make install DESTDIR="${pkgdir}" || return 1
