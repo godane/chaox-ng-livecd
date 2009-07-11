@@ -1,10 +1,10 @@
 # Contributor: Jens Pranaitis <jens@chaox.net>
 pkgname=airoscript-svn
 pkgver=1565
-pkgrel=1
+pkgrel=2
 pkgdesc="script to simplify the use of aircrack-ng tools"
 arch=("i686")
-url="http://trac.aircrack-ng.org/browser/branch/airoscript" # FIXME
+url="http://www.lugs.ch/~venty/ventybunny-schreiben/"
 license=('GPL')
 depends=("bash" "gettext" "perl" "aircrack-ng-svn" "screen")
 makedepends=('subversion')
