@@ -1,0 +1,20 @@
+# Contributor: Jens Pranaitis <jens@chaox.net>
+pkgname=bt_audit
+pkgver=0.1.1
+pkgrel=1
+pkgdesc="Tool for auditing bluetooth devices"
+arch=("i686")
+url="http://trifinite.org/trifinite_stuff_btaudit.html"
+license=('GPL')
+depends=("bluez")
+source=(http://www.betaversion.net/btdsd/download/$pkgname-$pkgver.tar.gz)
+md5sums=('4762a48e93f2f590cbcd343d520ee503')
+build() {
+  cd "$srcdir/$pkgname/src"
+  sed -i "s|gcc|gcc $CFLAGS|g" Makefile
+  make || return 1
+  install -Dm755 psm_scan "$pkgdir"/usr/bin/psm_scan || return 1
+  install -Dm755 rfcomm_scan "$pkgdir"/usr/bin/rfcomm_scan || return 1
+}
+
+# vim:set ts=2 sw=2 et:
