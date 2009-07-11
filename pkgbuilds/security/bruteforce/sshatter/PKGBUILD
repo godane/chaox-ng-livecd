@@ -1,12 +1,12 @@
 # Contributor: Francesco Piccinno <stack.box@gmail.com>
 pkgname=sshatter
 pkgver=0.6
-pkgrel=1
+pkgrel=2
 pkgdesc="Password bruteforcer for SSH"
 url="http://www.nth-dimension.org.uk/downloads.php?id=34"
 license=('GPL')
 arch=("i686")
-depends=('perl' 'perl-parallel-fork' 'perl-net-ssh')
+depends=('perl' 'perl-parallel-fork' 'perl-net-ssh-perl')
 source=("http://www.nth-dimension.org.uk/pub/SSHatter-0.6.tar.gz")
 md5sums=('6df66e2b1e4cdcd719be6dc3a3683887')
 
