@@ -1,0 +1,26 @@
+--- a/net/wireless/nl80211.c	2009-07-11 21:25:41.000000000 +0200
++++ b/net/wireless/nl80211.c	2009-07-11 21:30:53.000000000 +0200
+@@ -4026,13 +4026,18 @@
+ 
+ int nl80211_init(void)
+ {
+-	int err;
++	int err, i;
++  
++  err = genl_register_family(&nl80211_fam);
+ 
+-	err = genl_register_family_with_ops(&nl80211_fam,
+-		nl80211_ops, ARRAY_SIZE(nl80211_ops));
+-	if (err)
++  if (err)
+ 		return err;
+-
++  
++  for (i = 0; i < ARRAY_SIZE(nl80211_ops); i++) {
++      err = genl_register_ops(&nl80211_fam, &nl80211_ops[i]);
++      if (err)
++          goto err_out;
++  }
+ 	err = genl_register_mc_group(&nl80211_fam, &nl80211_config_mcgrp);
+ 	if (err)
+ 		goto err_out;
