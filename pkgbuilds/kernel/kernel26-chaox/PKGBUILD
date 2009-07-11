@@ -4,7 +4,7 @@ pkgbase=kernel
 pkgname=("kernel26-chaox" "kernel26-chaox-wireless" "kernel26-chaox-sources" "kernel26-chaox-firmware")
 _basekernel=2.6.30
 pkgver=2.6.30.1
-pkgrel=3
+pkgrel=4
 pkgdesc="Linux kernel based on slax config. Used in chaox-ng"
 arch=("i686")
 license=('GPL2')
@@ -83,7 +83,7 @@ depends=('coreutils' 'module-init-tools' 'mkinitcpio>=0.5.18' 'kernel26-chaox-fi
   replaces=('kernel24' 'kernel24-scsi' 'kernel26-scsi'
           'alsa-driver' 'ieee80211' 'hostap-driver26'
           'pwc' 'nforce' 'squashfs' 'ivtv' 'aufs'
-          'zd1211' 'kvm-modules' 'iwlwifi' 'rt2x00-cvs' 'kernel26' 'kernel26slax' 'compat-wireless')
+          'zd1211' 'kvm-modules' 'iwlwifi' 'rt2x00-cvs' 'kernel26' 'kernel26slax')
   provides=('kernel26')
   install=$pkgname.install
   cd "${srcdir}"/linux-$_basekernel
