@@ -1,7 +1,7 @@
 # Contributor: Jens Pranaitis <jens@chaox.net>
 pkgname=portbunny-ui-svn
 pkgver=218
-pkgrel=1
+pkgrel=2
 pkgdesc="portbunny portscanner ui"
 arch=("i686")
 url="http://portbunny.recurity.com/"
@@ -25,6 +25,7 @@ build() {
   #
   # BUILD
   #
+  sed -i "s|../share/portbunny/|/usr/share/portbunny/|g" UI/bin/*.py UI/share/portbunny/*.py || return 1
   mkdir -p "$pkgdir"/usr/
   cp -r UI/* "$pkgdir"/usr/ || return 1
   install -Dm644 README "$pkgdir"/usr/share/doc/$pkgname/README || return 1
