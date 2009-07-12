@@ -1,0 +1,24 @@
+# Contributor: Francesco Piccinno <stack.box@gmail.com>
+pkgname=irpas
+pkgver=0.10
+pkgrel=1
+pkgdesc="Internetwork Routing Protocol Attack Suite."
+url="http://phenoelit-us.org/irpas"
+arch=(i686 x86_64)
+license=('custom')
+depends=('libpcap')
+source=(http://phenoelit-us.org/irpas/${pkgname}_${pkgver}.tar.gz LICENSE)
+md5sums=('314670e9d239694cdd4e1f529b63959b'
+         'd4455eb2ca62c9abd189778a40e0381c')
+build() {
+  cd "$srcdir"
+  sed -i "s|-g|$CFLAGS|g" Makefile
+  make || return 1
+  for binary in dhcpx itrace tctrace ass file2cable dfkaa cdp hsrp icmp_redirect \
+                igrp irdp irdpresponder netenum netmask protos timestamp; do
+    install -Dm755 $binary "$pkgdir"/usr/bin/$binary || return 1
+	done
+  install -Dm644 LICENSE "$pkgdir"/usr/share/licenses/$pkgname/COPYING
+}
+
+# vim:set ts=2 sw=2 et:
