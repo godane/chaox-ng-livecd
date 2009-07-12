@@ -1,0 +1,34 @@
+# Contributor: Jens Pranaitis <jens@chaox.net>
+source "$startdir"/../kernel.env
+pkgname=portbunny-svn
+pkgver=218
+pkgrel=1
+pkgdesc="kernel module for portbunny portscanner"
+arch=("i686")
+url="http://portbunny.recurity.com/"
+license=('GPL')
+depends=("kernel26-chaox=$kernpkgver")
+makedepends=('subversion')
+install="$pkgname.install"
+_svntrunk=http://portbunny.recurity.com/svn/PortBunny/trunk/PortBunny 
+_svnmod=$pkgname
+build() {
+  cd "$srcdir"
+  if [ -d $_svnmod/.svn ]; then
+    (cd $_svnmod && svn up -r $pkgver)
+  else
+    svn co $_svntrunk --config-dir ./ -r $pkgver $_svnmod
+  fi
+  msg "SVN checkout done or server timeout"
+  msg "Starting make..."
+  rm -rf "$srcdir/$_svnmod-build"
+  cp -r "$srcdir/$_svnmod" "$srcdir/$_svnmod-build"
+  cd "$srcdir/$_svnmod-build"
+  #
+  # BUILD
+  #
+  sed -i "s|/usr/src/linux-source-2.6.27|$_kerndir|g" Makefile
+  make || return 1
+  install -Dm644 portbunny.ko "$pkgdir"/lib/modules/$_kernver/kernel/portbunny.ko || return 1
+  sed -i -e "s/_kernver='.*'/_kernver='${_kernver}'/" $startdir/*.install
+}
