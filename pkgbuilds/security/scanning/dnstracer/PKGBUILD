@@ -1,0 +1,17 @@
+# Contributor: Francesco Piccinno <stack.box@gmail.com>
+pkgname=dnstracer
+pkgver=1.9
+pkgrel=1
+pkgdesc="dnstracer - trace a chain of DNS servers to the source"
+url="http://www.mavetju.org/unix/dnstracer.php"
+license=("BSD")
+arch=(i686 x86_64)
+source=(http://www.mavetju.org/download/$pkgname-$pkgver.tar.gz)
+md5sums=('7db73ce3070119c98049a617fe52ea84')
+build() {
+  cd "${srcdir}"/$pkgname-$pkgver
+  ./configure --prefix=/usr --mandir=/usr/share/man
+  make || return 1
+  make DESTDIR="${pkgdir}" install || return 1
+  install -Dm644 LICENSE "$pkgdir"/usr/share/licenses/$pkgname/COPYING || return 1
+}
