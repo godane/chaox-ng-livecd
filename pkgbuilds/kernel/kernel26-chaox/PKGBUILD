@@ -4,7 +4,7 @@ pkgbase=kernel
 pkgname=("kernel26-chaox" "kernel26-chaox-wireless" "kernel26-chaox-sources" "kernel26-chaox-firmware")
 _basekernel=2.6.30
 pkgver=2.6.30.1
-pkgrel=4
+pkgrel=5
 pkgdesc="Linux kernel based on slax config. Used in chaox-ng"
 arch=("i686")
 license=('GPL2')
@@ -133,7 +133,7 @@ package_kernel26-chaox-sources() {
     ${pkgdir}/usr/src/linux-${_kernver}/.config
   mkdir -p ${pkgdir}/usr/src/linux-${_kernver}/include
 
-  for i in acpi asm-{generic,x86} config linux math-emu media net pcmcia scsi sound video; do
+  for i in acpi asm-{generic,x86} config linux math-emu media net pcmcia scsi sound trace video; do
     cp -a include/$i ${pkgdir}/usr/src/linux-${_kernver}/include/
   done
 
