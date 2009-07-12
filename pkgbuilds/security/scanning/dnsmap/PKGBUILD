@@ -1,0 +1,20 @@
+# Contributor: Jens Pranaitis <jens@chaox.net>
+pkgname=dnsmap
+pkgver=0.22.2
+pkgrel=1
+pkgdesc="dns subdomainn bruteforcer"
+arch=("i686")
+url="http://lab.gnucitizen.org/projects/dnsmap"
+license=('GPL')
+source=('http://www.gnucitizen.org/static/blog/2009/03/dnsmap-0222tar.gz')
+md5sums=('c01df8f2f16fda6281141872d1ad224c')
+build() {
+  cd "$srcdir/$pkgname-$pkgver"
+  gcc $CFLAGS dnsmap.c -o dnsmap || return 1
+  install -Dm755 dnsmap "$pkgdir"/usr/bin/dnsmap || return 1
+  for doc in dnsmap-bulk.sh README THANKS TODO use_cases
+  do
+    install -Dm644 $doc "$pkgdir"/usr/share/dnsmap/$doc || return 1
+  done
+}
+# vim:set ts=2 sw=2 et:
