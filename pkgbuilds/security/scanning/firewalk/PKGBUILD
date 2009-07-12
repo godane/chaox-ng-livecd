@@ -1,0 +1,23 @@
+# Contributor: James Fryman <jfryman@gmail.com>
+pkgname=firewalk
+pkgver=5.0
+pkgrel=1
+pkgdesc="An active reconnaissance network security tool"
+arch=(i686 x86_64)
+depends=('libpcap')
+source=(http://examples.oreilly.de/english_examples/9780596510305/tools/firewalk.tar.gz
+        http://mirrors.evolva.ro/gentoo-portage/net-analyzer/firewalk/files/firewalk-5.0-gcc3.4.diff
+        LICENSE)
+url="http://www.packetfactory.net/projects/firewalk/" # dead
+md5sums=('02412f13218ea052427bbf038a88a026'
+         'c3e22ea80840de86d03304169830ef9b'
+         'be71cf871bf2454cb0a3c328810a1029')
+license=("BSD")
+build() {
+  cd "${srcdir}"/Firewalk
+  patch -Np1 -i "$srcdir"/firewalk-5.0-gcc3.4.diff
+  ./configure --prefix=/usr --mandir=/usr/share/man/
+  make || return 1
+  make install DESTDIR="$pkgdir/" || return 1
+  install -Dm644 "$srcdir"/LICENSE "$pkgdir"/usr/share/licenses/$pkgname/COPYING || return 1
+}
