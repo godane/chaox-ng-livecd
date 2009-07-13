@@ -3,7 +3,7 @@
 # Contributor: Lawrence Lee <valheru AT facticius DOT net>
 pkgname=cuda-toolkit
 pkgver=2.2
-pkgrel=3.1
+pkgrel=4
 pkgdesc="NVIDIA's CUDA architecture can be programmed in the only C language environment that unlocks the processing power of GPUs to solve the most complex compute-intensive challenges."
 arch=('i686' 'x86_64')
 [ "$CARCH" = "i686"   ] && ARCH=x86
@@ -41,6 +41,11 @@ build() {
   rm -rf "${pkgdir}"/opt/cuda/open64
   rm -rf "${pkgdir}"/opt/cuda/src
   rm -rf "${pkgdir}"/opt/cuda/doc
+  mkdir -p "${pkgdir}"/etc/profile.d/
+  cat >> "$pkgdir"/etc/profile.d/${pkgname}.sh << EOF
+export LD_LIBRARY_PATH="\$LD_LIBRARY_PATH:/opt/cuda/lib"
+EOF
+  chmod 755 "$pkgdir"/etc/profile.d/${pkgname}.sh
 }
 
 #TODO: will not install if cuda-toolkit is already installed
