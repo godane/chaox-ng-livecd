@@ -3,7 +3,7 @@
 # Contributor: Lawrence Lee <valheru AT facticius DOT net>
 pkgname=cuda-toolkit
 pkgver=2.2
-pkgrel=3.1
+pkgrel=3.2
 pkgdesc="NVIDIA's CUDA architecture can be programmed in the only C language environment that unlocks the processing power of GPUs to solve the most complex compute-intensive challenges."
 arch=('i686' 'x86_64')
 [ "$CARCH" = "i686"   ] && ARCH=x86
@@ -13,6 +13,7 @@ license=('custom')
 depends=('gcc-libs' 'nvidia-drivers>=185.18.08-1' 'zlib')
 replaces=("cuda")
 conflicts=("cuda")
+provides=("cuda")
 [ "$CARCH" = "i686" ] && source=(http://developer.download.nvidia.com/compute/cuda/2_2/toolkit/cudatoolkit_2.2_linux_32_suse11.1.run)
 [ "$CARCH" = "x86_64" ] && source=(http://developer.download.nvidia.com/compute/cuda/2_2/toolkit/cudatoolkit_2.2_linux_64_suse11.1.run)
 [ "$CARCH" = "i686" ] && md5sums=('d23cdec72cf18602cdb558b55578da1a')
