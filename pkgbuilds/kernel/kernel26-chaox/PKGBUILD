@@ -28,7 +28,7 @@ source=(ftp://ftp.kernel.org/pub/linux/kernel/v2.6/linux-$_basekernel.tar.bz2
 )
 md5sums=('7a80058a6382e5108cdb5554d1609615'
          'ff5bdcc9624b2653d49efa0b305b1e57'
-         '1d909d4ef8c37a8e868abf7cf2bfedfa'
+         '9c7438b69ae9385298bb7db32f76deae'
          'a49390dd08e4f7702b8f4b550f1ad84e'
          '27b73ecc9083efcf62ff276ee19326a4'
          'ca85d39144f07b0500c663779dda9259'
