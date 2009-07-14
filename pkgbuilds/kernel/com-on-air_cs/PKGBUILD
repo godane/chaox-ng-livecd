@@ -4,7 +4,7 @@
 source "${startdir}"/../kernel.env
 pkgname=com-on-air_cs
 pkgver=87
-pkgrel=8
+pkgrel=9
 pkgdesc="Com on air linux driver, for dect pcmcia cards."
 url="https://dedected.org/cgi-bin/trac.cgi/wiki/COM-ON-AIR-Linux"
 arch=('i686' 'x86_64')
