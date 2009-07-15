@@ -1,10 +1,10 @@
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=bluediving
-Comment=bluetooth pentesting
+Name=blueprint
+Comment=perl tool to identify Bluetooth devices
 Categories=Application;Bluetooth-Chaox;
-Exec=Terminal -x bash -c "/usr/bin/bluedivingNG.pl --help;bash -i"
+Exec=Terminal -x bash -c "/usr/bin/blueprint;bash -i"
 Icon=Terminal
 Terminal=false
 StartupNotify=false
