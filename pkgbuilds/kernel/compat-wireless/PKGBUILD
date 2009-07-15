@@ -2,7 +2,7 @@
 source "${startdir}"/../kernel.env
 pkgname=compat-wireless
 pkgver=2.6.31_rc1
-pkgrel=1
+pkgrel=2
 pkgdesc="Backport of current wireless drivers"
 arch=(i686 x86_64)
 url="http://wireless.kernel.org/en/users/Download/stable"
@@ -28,9 +28,9 @@ build()
 {
   cd "${srcdir}"/${pkgname}-${pkgver/_/-}
   patch -Np1 -i "$srcdir"/4000_mac80211_2.6.28-rc4-wl_frag+ack_v3.patch || return 1
-  patch -Np1 -i "$srcdir"/4002_mac80211-2.6.29-fix-tx-ctl-no-ack-retry-count.patch || return 1
+  #patch -Np1 -i "$srcdir"/4002_mac80211-2.6.29-fix-tx-ctl-no-ack-retry-count.patch || return 1
   patch -Np1 -i "$srcdir"/4004_zd1211rw-2.6.28.patch || return 1
-  patch -Np1 -i "$srcdir"/rtl8187_injection_speed_2.6.30-rc6.patch || return 1
+  #patch -Np1 -i "$srcdir"/rtl8187_injection_speed_2.6.30-rc6.patch || return 1
   patch -Np1 -i "$srcdir"/compat-build-fixes.patch || return 1
   KLIB="/lib/modules/$_kernver" KLIB_BUILD="$_kerndir" make || return 1
   # Workaround for fscked up Makefile, idea stolen from pentoo as usual ;)
