@@ -1,0 +1,32 @@
+# Contributor: Jens Pranaitis <jens@chaox.net>
+# Contributor: Thomas Baechler <thomas@archlinux.org>
+pkgname=iw-git
+pkgver=20090716
+pkgrel=1
+pkgdesc="nl80211 based CLI configuration utility for wireless devices"
+arch=("i686" "x86_64")
+url="http://wireless.kernel.org/en/users/Documentation/iw"
+license=("GPL")
+depends=("libnl")
+makedepends=("kernel-headers" "git")
+provides=("iw" "iw=0.9.14")
+_gitroot="http://git.sipsolutions.net/iw.git"
+_gitname="iw"
+build() {
+  cd "$srcdir"
+  msg "Connecting to GIT server...."
+  if [ -d $_gitname ] ; then
+    cd $_gitname && git pull origin
+    msg "The local files are updated."
+  else
+    git clone $_gitroot
+  fi
+  msg "GIT checkout done or server timeout"
+  msg "Starting make..."
+  rm -rf "$srcdir/$_gitname-build"
+  git clone "$srcdir/$_gitname" "$srcdir/$_gitname-build"
+  cd "$srcdir/$_gitname-build"
+  sed -i "s|-g|$CFLAGS|g" Makefile
+  make || return 1
+  make DESTDIR=$pkgdir install
+}
