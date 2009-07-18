@@ -1,6 +1,6 @@
 # Contributor: Jens Pranaitis <jens@chaox.net>
 pkgname=haraldscan
-pkgver=0.22
+pkgver=0.23
 pkgrel=1
 pkgdesc="A Bluetooth discovery scanner."
 arch=("i686")
@@ -8,7 +8,7 @@ url="http://code.google.com/p/haraldscan/"
 license=('GPL3')
 depends=("python-pybluez" "python-pysqlite")
 source=(http://haraldscan.googlecode.com/files/haraldscan-$pkgver.tar.gz)
-md5sums=('1322c56e0050415bc388733fffa87b5e')
+md5sums=('7537d2e5d362454c33093b662334efef')
 build() {
   cd "$srcdir/$pkgname-$pkgver"
   mkdir -p "$pkgdir"/usr/{share/$pkgname,share/doc/$pkgname,bin}
