@@ -2,7 +2,7 @@
 source "$startdir"/../kernel.env
 pkgname=portbunny-svn
 pkgver=218
-pkgrel=2
+pkgrel=3
 pkgdesc="kernel module for portbunny portscanner"
 arch=("i686")
 url="http://portbunny.recurity.com/"
