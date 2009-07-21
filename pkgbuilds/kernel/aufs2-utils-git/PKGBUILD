@@ -1,6 +1,6 @@
 # Contributor: Jens Pranaitis <jens@jenux.homelinux.org>
 pkgname=aufs2-utils-git
-pkgver=20090720
+pkgver=20090721
 pkgrel=1
 pkgdesc="aufs2 utils"
 arch=("i686")
@@ -10,6 +10,7 @@ depends=("bash")
 conflicts=("aufs-utils")
 _gitroot="http://git.c3sl.ufpr.br/pub/scm/aufs/aufs2-util.git"
 _gitname="aufs2-util"
+options=("force")
 build() {
   source "${startdir}"/../kernel.env
   cd "$srcdir"
