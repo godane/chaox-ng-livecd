@@ -3,23 +3,23 @@
 source "${startdir}"/../kernel.env
 pkgbase=nvidia
 pkgname=("nvidia-module" "nvidia-drivers" "nvidia-utils")
-pkgver=185.18.14
-pkgrel=8
+pkgver=185.18.29
+pkgrel=1
 arch=('i686')
 [ "$CARCH" = "i686"   ] && ARCH=x86
 url="http://www.nvidia.com/"
 license=('nvidia')
-source=("ftp://download.nvidia.com/XFree86/Linux-$ARCH/${pkgver}/NVIDIA-Linux-$ARCH-${pkgver}-pkg0.run"
+source=("http://us.download.nvidia.com/XFree86/Linux-x86/"$pkgver"/NVIDIA-Linux-x86-"$pkgver"-pkg1.run"
         'nvidia-symlinks.sh'
         'nvidia_supported_chakra')
-md5sums=('a91d31a9dec5deb2f9e4ca9a09e0019f'
+md5sums=('ecafd5b6a8e4b9f8795618b2c4a7205f'
          '95464ce1b31eae0197fa68794d941eab'
          'd0f28ba00ca1f3011f5fccacb80b8378')
 build()
 {
   # Extract
   cd "${srcdir}"/
-  sh NVIDIA-Linux-$ARCH-${pkgver}-pkg0.run --extract-only
+  sh NVIDIA-Linux-$ARCH-${pkgver}-pkg1.run --extract-only
 }
 package_nvidia-module() {
 pkgdesc="NVIDIA driver kernel module for kernel26-chaox"
@@ -27,7 +27,7 @@ depends=("kernel26-chaox=$kernpkgver" "nvidia-drivers=$pkgver")
 groups=("nvidia" "chaox-modules")
 replaces=("nvidia")
   # Any extra patches are applied in here...
-  cd "${srcdir}"/NVIDIA-Linux-$ARCH-${pkgver}-pkg0
+  cd "${srcdir}"/NVIDIA-Linux-$ARCH-${pkgver}-pkg1
   cd usr/src/nv/
   ln -s Makefile.kbuild Makefile
   make SYSSRC="${_kerndir}" module || return 1
@@ -44,7 +44,7 @@ depends=("xorg-server" "gcc-libs" "zlib" "libxext" "chaox-opengl-tools")
 groups=("nvidia")
 provides=("libgl")
 install="nvidia-drivers.install"
-  cd "${srcdir}"/NVIDIA-Linux-${ARCH}-${pkgver}-pkg0/usr
+  cd "${srcdir}"/NVIDIA-Linux-${ARCH}-${pkgver}-pkg1/usr
   mkdir -p ${pkgdir}/usr/lib/nvidia/modules/{extensions,drivers}
   mkdir -p ${pkgdir}/usr/share/licenses/nvidia/
   mkdir -p $pkgdir/usr/include/{cuda,vdpau}
@@ -66,7 +66,7 @@ install="nvidia-drivers.install"
   ln -s libXvMCNVIDIA.so.$pkgver libXvMCNVIDIA_dynamic.so.1 || return 1
   cd ${pkgdir}/usr/lib/nvidia/modules/extensions
   ln -s libglx.so.$pkgver libglx.so || return 1
-  install -m644 ${srcdir}/NVIDIA-Linux-${ARCH}-${pkgver}-pkg0/LICENSE ${pkgdir}/usr/share/licenses/nvidia/ || return 1
+  install -m644 ${srcdir}/NVIDIA-Linux-${ARCH}-${pkgver}-pkg1/LICENSE ${pkgdir}/usr/share/licenses/nvidia/ || return 1
   find ${pkgdir}/usr -type d -exec chmod 755 {} \;
   install -D -m644 "${srcdir}"/nvidia-symlinks.sh "${pkgdir}"/usr/share/select-opengl/functions/nvidia-symlinks.sh
   # phew :)
@@ -76,7 +76,7 @@ pkgdesc="NVIDIA driver utils"
 conflicts=("nvidia-173xx-utils" "nvidia-96xx-utils")
 depends=("gtk2")
 groups=("nvidia")
-  cd "${srcdir}"/NVIDIA-Linux-${ARCH}-${pkgver}-pkg0/usr
+  cd "${srcdir}"/NVIDIA-Linux-${ARCH}-${pkgver}-pkg1/usr
   mkdir -p "${pkgdir}"/usr/{bin,share/applications,share/man/man1,share/pixmaps/}
   install -m755 bin/nvidia-{settings,xconfig,bug-report.sh} $pkgdir/usr/bin/ || return 1
   install -m644 share/applications/nvidia-settings.desktop $pkgdir/usr/share/applications/ || return 1
