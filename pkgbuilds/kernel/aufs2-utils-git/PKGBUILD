@@ -1,6 +1,6 @@
 # Contributor: Jens Pranaitis <jens@jenux.homelinux.org>
 pkgname=aufs2-utils-git
-pkgver=20090721
+pkgver=20090730
 pkgrel=1
 pkgdesc="aufs2 utils"
 arch=("i686")
@@ -30,4 +30,6 @@ build() {
   KDIR=$_kerndir/ make || return 1
   mkdir -p "${pkgdir}"{/usr/bin,/sbin,/etc/default}
   make KDIR=$_kerndir DESTDIR="$pkgdir/" install
+  cd "$pkgdir"/etc
+  mv default aufs
 } 
