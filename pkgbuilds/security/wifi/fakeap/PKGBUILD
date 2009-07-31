@@ -1,7 +1,7 @@
 # Contributor: Francesco Piccinno <stack.box@gmail.com>
 pkgname=fakeap
 pkgver=0.3.2
-pkgrel=1
+pkgrel=2
 pkgdesc="Black Alchemy's Fake AP generates thousands of counterfeit 802.11b access points. Hide in plain sight amongst Fake AP's cacophony of beacon frames."
 url="http://www.blackalchemy.to/project/fakeap/"
 license=('GPL')
@@ -12,6 +12,8 @@ source=(http://www.sourcefiles.org/Networking/Tools/Wireless/${pkgname}-${pkgver
 md5sums=('b5077cf7a164dc293ffbab6da79284ab')
 build() {
   cd "$srcdir/$pkgname-$pkgver"
+  # fix iwconfig path
+  sed -i 's|/sbin/iwconfig|/usr/sbin/iwconfig|g' fakeap.pl || return 1
   install -d "$pkgdir"/usr/bin
   install -d "$pkgdir"/usr/share/$pkgname
   cp -r lists "$pkgdir"/usr/share/$pkgname/ || return 1
