@@ -3,7 +3,7 @@
 pkgbase=kernel
 pkgname=("kernel26-chaox" "kernel26-chaox-wireless" "kernel26-chaox-sources" "kernel26-chaox-firmware")
 _basekernel=2.6.30
-pkgver=2.6.30.2
+pkgver=2.6.30.4
 pkgrel=1
 pkgdesc="Linux kernel based on slax config. Used in chaox-ng"
 arch=("i686")
@@ -27,7 +27,7 @@ source=(ftp://ftp.kernel.org/pub/linux/kernel/v2.6/linux-$_basekernel.tar.bz2
   http://www.kernel.org/pub/linux/kernel/people/bart/rt3090.patch.bz2
 )
 md5sums=('7a80058a6382e5108cdb5554d1609615'
-         '3b566e7d970941846bcbe35cecf04e21'
+         'd0fc44b54ba5953140b3f2aa9a1f2580'
          '9c7438b69ae9385298bb7db32f76deae'
          'a49390dd08e4f7702b8f4b550f1ad84e'
          '27b73ecc9083efcf62ff276ee19326a4'
