@@ -1,8 +1,8 @@
 # Contributor: Jens Pranaitis <jens@jenux.homelinux.org>
 pkgname=apache-tools
-pkgver=2.2.11
+pkgver=2.2.12
 pkgdesc="Useful Apache tools - htdigest, htpasswd, ab, htdbm"
-pkgrel=2
+pkgrel=1
 arch=("i686" "x86_64")
 url="http://httpd.apache.org/"
 license=('APACHE')
@@ -20,6 +20,6 @@ build() {
 	make || return 1
 	make DESTDIR="${pkgdir}" install || return 1
 }
-md5sums=('3e98bcb14a7122c274d62419566431bb'
+md5sums=('7d30c7195883c26a6eaf59a85b42c6ef'
          'fd7d6a7656da0c7de7f3f591a272d887')
 
