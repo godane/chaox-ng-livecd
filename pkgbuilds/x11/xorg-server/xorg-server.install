@@ -11,4 +11,5 @@ post_upgrade() {
   if [ "`vercmp $2 1.4.99.906`" -lt 0 ]; then
     post_install
   fi
+  echo "Make sure you call select-opengl.sh set yourimplementation, if you want working OpenGL"
 }
