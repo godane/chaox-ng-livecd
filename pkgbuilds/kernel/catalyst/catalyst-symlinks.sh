@@ -39,7 +39,7 @@ then
   depmod -A
 elif [ ! -e /lib/modules/$(uname -r)/kernel/drivers/video/fglrx.ko ]
 then
-  _ln /usr/lib/fglrx/modules/$(uname -r)/video/fglrx.ko /lib/modules/$(uname -r)/kernel/drivers/video/fglrx.ko
+  _ln /usr/lib/catalyst/modules/$(uname -r)/video/fglrx.ko /lib/modules/$(uname -r)/kernel/drivers/video/fglrx.ko
   depmod -A
 else
   echo "there is already a module of the same name available, bailing out" && exit 2

@@ -3,7 +3,7 @@ source "$startdir"/../kernel.env
 pkgbase=catalyst
 pkgname=("catalyst-module" "catalyst-driver")
 pkgver=9.7
-pkgrel=3
+pkgrel=5
 arch=('i686' 'x86_64')
 url="http://www.ati.amd.com"
 license=('custom')
@@ -17,7 +17,8 @@ fglrx-smp-problem.patch
 catalyst.sh
 amdcccle.desktop
 atieventsd.sh
-catalyst-symlinks.sh)
+catalyst-symlinks.sh
+catalyst_supported_chakra)
 md5sums=('33ab7b3152de35e49b4db95a19821c47'
          '36522e2dbbd75225f1241752443ab62c'
          '84241d492acbfaf6b8cbd55dcfa99c68'
@@ -28,7 +29,8 @@ md5sums=('33ab7b3152de35e49b4db95a19821c47'
          'bdafe749e046bfddee2d1c5e90eabd83'
          '4efa8414a8fe9eeb50da38b5522ef81d'
          'f729bf913613f49b0b9759c246058a87'
-         '9137825d02cdfa9215ffaa19eaf7bad1')
+         '2528581717916398250e674ff9fbac20'
+         '187570a6b9c7b7521bff79870d076210')
 build() {
   /bin/sh ./ati-driver-installer-${pkgver/./-}-x86.x86_64.run --extract archive_files
   # Add support for 2.6.30 kernel
@@ -97,7 +99,7 @@ options=('!strip')
   install -m755 -d "${pkgdir}/usr/share/licenses/${pkgname}"
   install -m755 -d "${pkgdir}/usr/share/man/man8"
   install -m755 -d "${pkgdir}/usr/share/pixmaps"
-
+  install -m755 -d "$pkgdir"/usr/share/detect-opengl
   # X driver installation
   if [ "${CARCH}" = "i686" ]; then
     cd "${srcdir}/archive_files/x740/usr/X11R6/lib/modules" || return 1
@@ -157,5 +159,8 @@ options=('!strip')
   # thanks to cerebral, we dont need that damned symlink
   install -m755 "${srcdir}/catalyst.sh" "${pkgdir}/etc/profile.d/" || return 1
 
-    install -D -m644 "${srcdir}"/catalyst-symlinks.sh "${pkgdir}"/usr/share/select-opengl/functions/catalyst-symlinks.sh
+  install -D -m644 "${srcdir}"/catalyst-symlinks.sh "${pkgdir}"/usr/share/select-opengl/functions/catalyst-symlinks.sh
+  
+  # get pciids
+  "${srcdir}"/catalyst_supported_chakra "${pkgdir}"/usr/lib/catalyst/modules/drivers/fglrx_drv.so > "${pkgdir}"/usr/share/detect-opengl/ati.db || return 1
 }
