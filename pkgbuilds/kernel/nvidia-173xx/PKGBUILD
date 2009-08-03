@@ -4,7 +4,7 @@ source "${startdir}"/../kernel.env
 pkgbase=nvidia-173xx
 pkgname=("nvidia-173xx-module" "nvidia-173xx-drivers" "nvidia-173xx-utils")
 pkgver=173.14.19
-pkgrel=9
+pkgrel=10
 arch=('i686')
 [ "$CARCH" = "i686"   ] && ARCH=x86
 url="http://www.nvidia.com/"
@@ -13,7 +13,7 @@ source=("ftp://download.nvidia.com/XFree86/Linux-$ARCH/${pkgver}/NVIDIA-Linux-$A
         "nvidia-173xx-symlinks.sh"
         "nvidia_supported_chakra")
 md5sums=('dc2b993aa8dae8a982916b81b2c53f6e'
-         'd4d33f99f34b00ae0bc8032b99cebfa3'
+         '718c4a2e87469fcc864cf6c07dc6c1c0'
          'd0f28ba00ca1f3011f5fccacb80b8378')
 build()
 {

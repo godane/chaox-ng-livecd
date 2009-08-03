@@ -4,7 +4,7 @@ source "${startdir}"/../kernel.env
 pkgbase=nvidia
 pkgname=("nvidia-module" "nvidia-drivers" "nvidia-utils")
 pkgver=185.18.29
-pkgrel=2
+pkgrel=3
 arch=('i686')
 [ "$CARCH" = "i686"   ] && ARCH=x86
 url="http://www.nvidia.com/"
@@ -13,7 +13,7 @@ source=("http://us.download.nvidia.com/XFree86/Linux-x86/"$pkgver"/NVIDIA-Linux-
         'nvidia-symlinks.sh'
         'nvidia_supported_chakra')
 md5sums=('ecafd5b6a8e4b9f8795618b2c4a7205f'
-         '95464ce1b31eae0197fa68794d941eab'
+         'e9e3d5220aad509ee2e178e1e0fdf2f1'
          'd0f28ba00ca1f3011f5fccacb80b8378')
 build()
 {
