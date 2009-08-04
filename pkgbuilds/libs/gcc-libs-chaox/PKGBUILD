@@ -4,7 +4,7 @@
 
 pkgname=gcc-libs-chaox
 pkgver=4.4.1
-pkgrel=1
+pkgrel=2
 #_snapshot=4.4-20090630
 pkgdesc="Runtime libraries shipped by GCC for C and C++ languages"
 arch=('i686' 'x86_64')
@@ -14,7 +14,7 @@ url="http://gcc.gnu.org"
 depends=('glibc>=2.10')
 makedepends=('binutils>=2.19.1' 'gcc>=4.4' 'mpfr>=2.4.1' 'texinfo' 'flex' 'cloog-ppl>=0.15.3')
 conflicts=('gcc-libs')
-provides=("gcc-libs" "gcc-libs=4.4.0")
+provides=("gcc-libs" "gcc-libs=4.4.1")
 options=('!libtool' '!emptydirs' '!docs')
 source=(ftp://gcc.gnu.org/pub/gcc/releases/gcc-${pkgver}/gcc-{core,g++,fortran}-${pkgver}.tar.bz2
 	#ftp://gcc.gnu.org/pub/gcc/snapshots/${_snapshot}/gcc-{core,g++,fortran}-${_snapshot}.tar.bz2
