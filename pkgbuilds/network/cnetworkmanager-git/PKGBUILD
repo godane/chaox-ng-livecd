@@ -1,7 +1,7 @@
 # Contributor: Jens Pranaitis <jens@jenux.homelinux.org>
 # Contributor: Dario Andres Rodriguez <andresbajotierra@gmail.com>
 pkgname=cnetworkmanager-git
-pkgver=20090728
+pkgver=20090809
 pkgrel=1
 pkgdesc="Command Line Interface for NetworkManager"
 url="http://vidner.net/martin/software/cnetworkmanager/"
