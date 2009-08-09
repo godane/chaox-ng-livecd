@@ -12,6 +12,7 @@ _rename() {
   local newuser="$2"
   sed -i "s/$olduser/$newuser/g" /home/$olduser/.config/xfce4/panel/xfce4-menu-12322101260.rc
   usermod -m -d /home/$newuser -l $newuser $olduser || exit 1
+  sed -i "s|AutomaticLogin=livecd|AutomaticLogin=$newuser|g" /etc/gdm/custom.conf
 }
 
 if [ $(id -u) -ne 0 ]
