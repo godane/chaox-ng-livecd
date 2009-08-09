@@ -1,25 +1,30 @@
-# Contributor: Jens Pranaitis <jens@jenux.homelinux.org>
+# Contributor: Jens Pranaitis <jens@chaox.net>
 # Contributor: Dale Blount <dale@archlinux.org>
 # Original Contributor: Tom Newsom <Jeepster@gmx.co.uk>
 # Portions from AUR john-devel PKGBUILD used with permission from Michal Krenek <mikos@sg1.cz>
 
 pkgname=john
 pkgver=1.7.3.1
-pkgrel=4
+pkgrel=5
 pkgdesc="John the Ripper is a fast password cracker. Additional patches (NTLM, MySQL, Kerberos V5, etc.) included."
 arch=(i686 x86_64)
 url="http://www.openwall.com/$pkgname/"
+makedepends=("hd2u")
 depends=('openssl')
 license=("GPL")
 source=(http://www.openwall.com/$pkgname/g/$pkgname-$pkgver.tar.bz2 \
 	ftp://ftp.openwall.com/pub/projects/john/contrib/john-1.7.3.1-all-5.diff.gz
+  ftp://ftp.openwall.com/pub/projects/john/contrib/john-1.7.3.1-all-5-phpass-3.diff.gz
 	)
 md5sums=('4a8de450ff332bd0c7cbc573eb5032d9'
-         '198b96030a679057faadcd318113a787')
+         '198b96030a679057faadcd318113a787'
+         '18de92283c012da313c52041ea53c0d3')
 build() {
 	# jumbo patch
 	cd "${srcdir}"/$pkgname-$pkgver
-	patch -p1 < "${srcdir}"/$pkgname-1.7.3.1-all-5.diff || return 1
+  dos2unix "$srcdir"/$pkgname-1.7.3.1-all-5-phpass-3.diff
+	patch -Np1 -i "${srcdir}"/$pkgname-1.7.3.1-all-5.diff || return 1
+  patch -Np1 -l -F 5 -i "$srcdir"/$pkgname-1.7.3.1-all-5-phpass-3.diff || return 1
 	cd "${srcdir}"/john-$pkgver/src/
 
 	sed -i 's|CFLAGS = -c -Wall -O2|CFLAGS = -c -Wall -O2 -march=i686 -fomit-frame-pointer -pipe -mtune=generic -DJOHN_SYSTEMWIDE=1|' Makefile || return 1
