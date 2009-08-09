@@ -9,7 +9,8 @@ makesqfs() {
 	depmod -a $(ls "${SOURCE}"/lib/modules/)
 	pacman -Q > package.lst
   freshclam
-	yes |hwd -u
+  update-pciids
+  update-usbids.sh
 	localepurge
 CHROOTED
 	umount-chroot
