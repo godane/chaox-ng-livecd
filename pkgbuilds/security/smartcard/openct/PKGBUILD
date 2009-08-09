@@ -2,7 +2,7 @@
 # Contributor: William Rea <sillywilly@gmail.com>
 # Contributor: Lorenzo Nizzi Grifi Gargiolli <lorenzo.nizzi.grifi@gmail.com>
 pkgname=openct
-pkgver=0.6.16
+pkgver=0.6.17
 pkgrel=1
 pkgdesc="Implements drivers for several smart card readers"
 arch=('i686' 'x86_64')
@@ -13,7 +13,7 @@ backup=(etc/openct.conf)
 depends=('pcsclite' 'libusb' 'libtool')
 source=(http://www.opensc-project.org/files/openct/openct-$pkgver.tar.gz \
 	openct )
-md5sums=('d8d8c63269985303a303a218c4b953d7'
+md5sums=('10992fd48da028b599f610987b7f3258'
          'a1878066a177db21366d50c9a37b2dd9')
 build() {
 	cd "${srcdir}"/$pkgname-$pkgver
