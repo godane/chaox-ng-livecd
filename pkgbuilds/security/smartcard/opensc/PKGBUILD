@@ -4,7 +4,7 @@
 # Contributor: Lorenzo Nizzi Grifi Gargiolli <lorenzo.nizzi.grifi@gmail.com>
 
 pkgname=opensc
-pkgver=0.11.8
+pkgver=0.11.9
 pkgrel=1
 pkgdesc="Access smart cards that support cryptographic operations"
 arch=('i686')
@@ -14,7 +14,7 @@ options=('!libtool')
 backup=(etc/opensc.conf)
 depends=('zlib' 'openssl' 'openct' 'pcsclite')
 source=(http://www.opensc-project.org/files/$pkgname/$pkgname-$pkgver.tar.gz)
-md5sums=('a269b478b18dddb648b9bd930206b5a8')
+md5sums=('ff9b5ee4f00693873d54d83398e20847')
 
 build() {
   cd "${srcdir}"/$pkgname-$pkgver
