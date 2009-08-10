@@ -18,13 +18,13 @@ CHROOTED
 	bzip2 -f -9 target/package.lst
 	cd source
 	find var/log -type f -exec rm '{}' \;
-	time mksquashfs . ../target/archlive.sqfs -ef ../exclude -wildcards -noappend -sort ../load.order.new
+	time mksquashfs . ../target/archlive.sqfs -ef ../exclude -wildcards -noappend -sort ../load.order.new -b 262144
 }
 makechaox() {
 	_DATE="$(date +%F-%H-%M)"
 	mount-chroot
 	chroot source /bin/bash --login <<CHROOTED
-	mkinitcpio -k $(ls "${SOURCE}"/lib/modules/) -v -g /boot/initramfs -c /etc/mkinitcpio-image.conf
+	mkinitcpio -k $(ls "${SOURCE}"/lib/modules/) -g /boot/initramfs -c /etc/mkinitcpio-image.conf
 CHROOTED
 	umount-chroot
 	rm -rf "${TARGET}"/boot/*
