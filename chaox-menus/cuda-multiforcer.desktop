@@ -2,10 +2,10 @@
 Version=1.0
 Encoding=UTF-8
 Type=Application
-Name=passcracking
-Comment=let a hash be cracked
+Name=cuda-multiforcer
+Comment=cuda accelerated bruteforce
 Categories=Application;Bruteforce-Chaox;
-Exec=Terminal -x bash -c "passcracking;bash -i"
+Exec=Terminal -x bash -c "cuda-multiforcer --help;bash -i"
 Icon=Terminal
 Terminal=false
 StartupNotify=false

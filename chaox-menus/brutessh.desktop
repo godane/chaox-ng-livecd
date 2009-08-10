@@ -2,10 +2,10 @@
 Version=1.0
 Encoding=UTF-8
 Type=Application
-Name=passcracking
-Comment=let a hash be cracked
+Name=brutessh
+Comment=bruteforce sshd
 Categories=Application;Bruteforce-Chaox;
-Exec=Terminal -x bash -c "passcracking;bash -i"
+Exec=Terminal -x bash -c "sudo brutessh;bash -i"
 Icon=Terminal
 Terminal=false
 StartupNotify=false
