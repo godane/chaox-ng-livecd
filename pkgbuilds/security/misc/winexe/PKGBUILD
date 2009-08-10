@@ -1,0 +1,26 @@
+# Contributor: Jens Pranaitis <jens@chaox.net>
+pkgname=winexe
+pkgver=081123
+pkgrel=1
+pkgdesc="remotly execute commands on windows nt/2000/xp/2003"
+arch=("i686")
+url="http://eol.ovh.org/winexe/"
+license=('GPL')
+depends=()
+source=(http://eol.ovh.org/winexe/winexe-source-081123.tar.bz2
+        http://www.foofus.net/jmk/tools/samba4-17234-passhash.patch
+        autoconf.patch)
+md5sums=('24cf53a5b957f1ed58dd4312c562419b'
+         'e31dbd4324e628ceddae8aa942abef09'
+         '81201e24ae1bc770754151088ab89369')
+build() {
+  cd "$srcdir/$pkgname-source-$pkgver"
+  patch -Np1 -i "$srcdir"/autoconf.patch || return 1
+  patch -Np2 -l -F 10 -i "$srcdir"/samba4-17234-passhash.patch || return 1
+  sed -i "s|main.mk|$(pwd)/main.mk|" build/smb_build/{main.pl,dot.pl}
+  ./autogen.sh
+  ./configure --prefix=/usr
+  make proto bin/winexe|| return 1
+  install -Dm755 wmi/Samba/source/bin/winexe "$pkgdir"/usr/bin/winexe
+}
+# vim:set ts=2 sw=2 et:
