@@ -2,13 +2,14 @@
 # Contributer: Dawid Wrobel <cromo@klej.net>
 pkgname=bluediving
 pkgver=0.9
-pkgrel=5
+pkgrel=6
 pkgdesc="A Bluetooth penetration testing suite"
 url="http://bluediving.sourceforge.net/"
 license=('GPL')
 arch=('i686')
 depends=(bluez sox obexftp openobex libxml2 perl perl-xml-simple mpg123 carwhisperer)
 source=(http://downloads.sourceforge.net/sourceforge/$pkgname/$pkgname-$pkgver.tgz)
+md5sums=('53365a068e7e65a2b047b96998ad3f9d')
 build() {
   cd "${srcdir}"/$pkgname-$pkgver
   # change the bluedivingNG.conf path to /etc
@@ -37,5 +38,6 @@ build() {
 		   "${pkgdir}"/usr/share/bluediving/AAA.vcf || return 1
   install -D -m644 "${srcdir}"/$pkgname-$pkgver/sounds/explosion.wav "${pkgdir}"/usr/share/bluediving/explosion.wav || return 1
   install -D -m644 "${srcdir}"/$pkgname-$pkgver/tools/carwhisperer-0.2/out.raw "${pkgdir}"/usr/share/bluediving/out.raw || return 1
+  install -D -m644 "$srcdir"/$pkgname-$pkgver/db/oui.txt "$pkgdir"/usr/share/bluediving/db/oui.txt || return 1
+  sed -i "s|db/oui.txt|/usr/share/$pkgname/db/oui.txt|g" "$pkgdir"/usr/bin/bluedivingNG.pl || return 1
 }
-md5sums=('53365a068e7e65a2b047b96998ad3f9d')
