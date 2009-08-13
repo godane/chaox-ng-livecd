@@ -4,7 +4,7 @@ pkgbase=kernel
 pkgname=("kernel26-chaox" "kernel26-chaox-wireless" "kernel26-chaox-sources" "kernel26-chaox-firmware")
 _basekernel=2.6.30
 pkgver=2.6.30.4
-pkgrel=2
+pkgrel=3
 pkgdesc="Linux kernel based on slax config. Used in chaox-ng"
 arch=("i686")
 license=('GPL2')
@@ -26,6 +26,7 @@ source=(ftp://ftp.kernel.org/pub/linux/kernel/v2.6/linux-$_basekernel.tar.bz2
   http://www.kernel.org/pub/linux/kernel/people/edward/reiser4/reiser4-for-2.6/reiser4-for-2.6.30.patch.bz2
   http://www.kernel.org/pub/linux/kernel/people/bart/rt3090.patch.bz2
   http://saber-personal-project.googlecode.com/files/tlb.patch
+  fix-local-root-exploit.patch
 )
 md5sums=('7a80058a6382e5108cdb5554d1609615'
          'd0fc44b54ba5953140b3f2aa9a1f2580'
@@ -40,7 +41,8 @@ md5sums=('7a80058a6382e5108cdb5554d1609615'
          '09787bb326f05f65602d294a12170bbb'
          '49d5c097872663d5e540026c7eeb6ac8'
          '3ac21c65f48d09fe7bd8f89e88cff96a'
-         '4238facbbbb1277a4e6368e41be12ca2')
+         '4238facbbbb1277a4e6368e41be12ca2'
+         'ce125def153a80387093d95e2938d337')
 build() {
   KARCH=x86
   cd "${srcdir}"
@@ -71,6 +73,8 @@ build() {
   patch -Np1 -i "${srcdir}"/add-ap-mode-ath5k.patch || return 1
   # support proprietary ati drivers
   patch -Np0 -i "${srcdir}"/tlb.patch || return 1
+  # security fix
+  patch -Np0 -i "$srcdir"/fix-local-root-exploit.patch || return 1
   cp ../config ./.config
   # build the full kernel version to use in pathnames
   . ./.config
