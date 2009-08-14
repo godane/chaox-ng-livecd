@@ -1,0 +1,25 @@
+# Contributor: Clauz
+pkgname=usb_modeswitch
+pkgver=1.0.2
+pkgrel=1
+pkgdesc="Activating switchable USB devices on Linux."
+arch=('i686' 'x86_64')
+url="http://www.draisberghof.de/usb_modeswitch/"
+license=('GPL')
+depends=('libusb')
+backup=('/etc/$pkgname.conf')
+source=(http://www.draisberghof.de/usb_modeswitch/usb_modeswitch-$pkgver.tar.bz2 
+        http://www.draisberghof.de/usb_modeswitch/usb_modeswitch.conf)
+md5sums=('4f896ed631f9be0338df9c5a2145ef82'
+         'afe56e4eba51417d7cfc1142c822a9ee')
+build() {
+    cd "$srcdir"/$pkgname-$pkgver/
+    sed -i "s|-l usb|-l usb $CFLAGS|g" Makefile || return 1
+    # deleting the precompiled binary
+    make clean || return 1
+    # recompiling
+    make || return 1
+
+    install -D -m0755 usb_modeswitch "$pkgdir"/usr/bin/usb_modeswitch || return 1
+    install -D -m0644 "$srcdir"/usb_modeswitch.conf "$pkgdir"/etc/usb_modeswitch.conf || return 1
+}
