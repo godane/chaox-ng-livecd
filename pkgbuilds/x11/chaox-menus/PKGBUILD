@@ -1,16 +1,29 @@
 # Contributor: Jens Pranaitis <jens@chaox.net>
 pkgname=chaox-menus
-pkgver=0.1.11
+pkgver=20090815
 pkgrel=1
 pkgdesc="chaox menu for xfce4"
 arch=("i686")
-url="http://chaox.wordpress.com"
+url="http://blag.chaox.net"
 license=('GPL')
+makedepends=("git")
 depends=("xfdesktop")
-source=(http://www.chaox.net/~jens/chaox/$pkgname-$pkgver.tar.bz2)
-md5sums=('15d97aeab095bf92a672a0f512e68f1a')
+_gitroot="git://github.com/jensp/$pkgname.git"
+_gitname="$pkgname"
 build() {
-  cd "${srcdir}"/chaox-menus
+  cd "$srcdir"
+  msg "Connecting to GIT server...."
+  if [ -d $_gitname ] ; then
+    cd $_gitname && git pull origin
+    msg "The local files are updated."
+  else
+    git clone $_gitroot $_gitname
+  fi
+  msg "GIT checkout done or server timeout"
+  msg "Starting make..."
+  rm -rf "$srcdir/$_gitname-build"
+  cp -r "$srcdir/$_gitname" "$srcdir/$_gitname-build"
+  cd "$srcdir/$_gitname-build"
   for x in *.directory
   do
     install -m 644 -D "$x" "${pkgdir}"/usr/share/desktop-directories/"$x"
