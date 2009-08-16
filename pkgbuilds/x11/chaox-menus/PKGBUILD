@@ -1,6 +1,6 @@
 # Contributor: Jens Pranaitis <jens@chaox.net>
 pkgname=chaox-menus
-pkgver=20090815
+pkgver=20090816
 pkgrel=1
 pkgdesc="chaox menu for xfce4"
 arch=("i686")
