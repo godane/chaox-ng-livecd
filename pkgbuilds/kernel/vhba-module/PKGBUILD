@@ -6,11 +6,11 @@ source "${startdir}"/../kernel.env
 
 pkgname=vhba-module
 pkgver=1.2.1
-pkgrel=9
+pkgrel=10
 pkgdesc="Kernel module that emulates SCSI devices"
 arch=('i686' 'x86_64')
 url="http://cdemu.sourceforge.net/"
-license=('GPL2')
+license=('GPL')
 depends=('kernel26-chaox='$kernpkgver)
 groups=("chaox-modules")
 install=vhba-module.install
