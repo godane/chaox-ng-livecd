@@ -4,7 +4,7 @@
 source "${startdir}"/../kernel.env
 pkgname=kqemu
 pkgver=1.4.0pre1
-pkgrel=7
+pkgrel=8
 pkgdesc="QEMU Accelerator Module, which adds virtualization capabilities to qemu. For kernel26."
 arch=(i686 x86_64)
 license=('GPL2' 'BSD')
