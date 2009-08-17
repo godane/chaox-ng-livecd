@@ -2,30 +2,18 @@
 source "$startdir"/../kernel.env
 pkgbase=catalyst
 pkgname=("catalyst-module" "catalyst-driver")
-pkgver=9.7
-pkgrel=6
+pkgver=9.8
+pkgrel=1
 arch=('i686' 'x86_64')
 url="http://www.ati.amd.com"
 license=('custom')
 source=(http://www2.ati.com/drivers/linux/ati-driver-installer-${pkgver/./-}-x86.x86_64.run
-2.6.29.patch
-fglrx-2.6.30-irqreturn_t.patch
-fglrx-rt-compat.patch
-fglrx-missing-pci_enable_msi.patch
-config_x86_32.patch
-fglrx-smp-problem.patch
-catalyst.sh
-amdcccle.desktop
-atieventsd.sh
-catalyst-symlinks.sh
-catalyst_supported_chakra)
-md5sums=('33ab7b3152de35e49b4db95a19821c47'
-         '36522e2dbbd75225f1241752443ab62c'
-         '84241d492acbfaf6b8cbd55dcfa99c68'
-         '4517addc6576a1b46a30e2c1043de5a2'
-         '498e5b935f02970321f76271961e0335'
-         'ea52a55f5e143d46c6106344f6ee682d'
-         'bf29a2f8d524a88c5cddbeb99ea16401'
+        catalyst.sh
+        amdcccle.desktop
+        atieventsd.sh
+        catalyst-symlinks.sh
+        catalyst_supported_chakra)
+md5sums=('fc08593edd2d4eff51f893a9292b58f9'
          'bdafe749e046bfddee2d1c5e90eabd83'
          '4efa8414a8fe9eeb50da38b5522ef81d'
          'f729bf913613f49b0b9759c246058a87'
@@ -33,17 +21,7 @@ md5sums=('33ab7b3152de35e49b4db95a19821c47'
          '187570a6b9c7b7521bff79870d076210')
 build() {
   /bin/sh ./ati-driver-installer-${pkgver/./-}-x86.x86_64.run --extract archive_files
-  # Add support for 2.6.30 kernel
-  cd "${srcdir}"/archive_files/common
-  patch -Np0 -i "${srcdir}"/2.6.29.patch|| return 1
-  cd "${srcdir}"/archive_files
-  patch -Np1 -i "${srcdir}"/fglrx-2.6.30-irqreturn_t.patch || return 1
-  patch -Np1 -i "${srcdir}"/fglrx-missing-pci_enable_msi.patch || return 1
-  patch -Np1 -i "${srcdir}"/fglrx-rt-compat.patch || return 1
-  patch -Np0 -i "${srcdir}"/config_x86_32.patch || return 1
-  patch -Np1 -i "${srcdir}"/fglrx-smp-problem.patch || return 1
 }
-
 package_catalyst-module() {
 pkgdesc="AMD/ATI kernel modules for Radeon brand cards."
 depends=("catalyst-driver=$pkgver" "kernel26-chaox=$kernpkgver")
