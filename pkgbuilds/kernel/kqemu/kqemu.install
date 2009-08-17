@@ -1,4 +1,4 @@
-KERNEL_VERSION='2.6.30.4-chaox'
+KERNEL_VERSION='2.6.30.5-chaox'
 
 post_install() {
   depmod -v $KERNEL_VERSION >/dev/null 2>&1
