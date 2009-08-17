@@ -2,7 +2,7 @@
 source "${startdir}"/../kernel.env
 pkgname=compat-wireless-unstable
 pkgver=2009_08_15
-pkgrel=1
+pkgrel=2
 pkgdesc="Backport of current wireless drivers"
 arch=(i686 x86_64)
 url="http://wireless.kernel.org/en/users/Download/stable"
