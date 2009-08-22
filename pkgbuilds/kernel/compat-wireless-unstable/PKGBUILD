@@ -1,8 +1,9 @@
 # Contributor: Jens Pranaitis <jens@chaox.net>
 source "${startdir}"/../kernel.env
 pkgname=compat-wireless-unstable
-pkgver=2009_08_15
-pkgrel=2
+pkgver=2009_08_21
+_realver=$(echo $pkgver|sed 's/_/-/g')
+pkgrel=1
 pkgdesc="Backport of current wireless drivers"
 arch=(i686 x86_64)
 url="http://wireless.kernel.org/en/users/Download/stable"
@@ -11,15 +12,15 @@ depends=("kernel26-chaox=$kernpkgver" "bash")
 conflicts=("compat-wireless")
 provides=("kernel26-chaox-wireless")
 install=$pkgname.install
-source=("http://www.orbit-lab.org/kernel/compat-wireless-2.6/2009/08/compat-wireless-2009-08-15.tar.bz2"
+source=("http://www.orbit-lab.org/kernel/compat-wireless-2.6/2009/08/compat-wireless-$_realver.tar.bz2"
         # patches with kind permission from pentoo.ch
         "4004_zd1211rw-2.6.28.patch"
         )
-md5sums=('bc71c2b8554bb79511e9a38dd6d5b318'
+md5sums=('36193f34a14f1d681bcff7a2db5cf178'
          '9c474a07e0f6f7b7549fa562e8cee080')
 build()
 {
-  cd "${srcdir}"/${pkgname/-unstable/}-2009-08-15
+  cd "${srcdir}"/${pkgname/-unstable/}-$_realver
   patch -Np1 -i "$srcdir"/4004_zd1211rw-2.6.28.patch || return 1
   KLIB="/lib/modules/$_kernver" KLIB_BUILD="$_kerndir" make -j1 || return 1
   # Workaround for fscked up Makefile, idea stolen from pentoo as usual ;)
