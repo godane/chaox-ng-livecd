@@ -1,0 +1,21 @@
+# Contributor: Jens Pranaitis <jens@chaox.net>
+pkgname=videojak
+pkgver=1.00
+pkgrel=1
+pkgdesc="Video Jacking: Hijacking VoIP Video calls!"
+arch=("i686")
+url="http://videojak.sf.net"
+license=('GPL')
+depends=("ettercap")
+source=(http://downloads.sf.net/$pkgname/$pkgname-$pkgver.tar.gz)
+md5sums=('f707d5a8cfb872c9eac029b913f38eb1')
+build() {
+  cd "$srcdir/$pkgname-$pkgver"
+  ./configure --prefix=/usr --sysconfdir=/etc
+  make || return 1
+  make DESTDIR="$pkgdir/" install
+  rm "$pkgdir"/usr/bin/etter*
+  rm "$pkgdir"/etc/etter.conf
+  rm -r "$pkgdir"/usr/share/man*
+}
+# vim:set ts=2 sw=2 et:
