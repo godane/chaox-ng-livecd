@@ -1,0 +1,21 @@
+# Contributor: Jonathan Liu <net147@gmail.com>
+pkgname=gradm
+pkgver=2.1.14
+_timestamp=200907110111
+pkgrel=2
+pkgdesc="Administrative interface for the grsecurity Role Based Access Control system"
+arch=('i686' 'x86_64')
+url="http://www.grsecurity.net/"
+license=('GPL')
+source=("http://www.grsecurity.net/test/$pkgname-$pkgver-$_timestamp.tar.gz")
+md5sums=('84d356657f11b6c2eea0ced387cbc6c7')
+build() {
+  cd "$srcdir/${pkgname}2"
+  sed -i -e "s/^CFLAGS :=/CFLAGS +=/" "Makefile" || return 1
+  make || return 1
+  make DESTDIR="$pkgdir/" INSTALL=/bin/install install || return 1
+  rm "$pkgdir"/dev/grsec &>/dev/null || return 1
+  rmdir "$pkgdir"/dev &>/dev/null
+}
+
+# vim:set ts=2 sw=2 et:
