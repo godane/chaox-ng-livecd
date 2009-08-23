@@ -2,17 +2,17 @@
 # Contributor Thomas Schneider <maxmusterm@gmail.com>
 pkgname=fish-irssi
 pkgver=1.00_RC5
-pkgrel=9
+pkgrel=10
 pkgdesc="This is an encryption addon for irssi, it is based on blowfish and is fully compatible to original 'blowcrypt' script."
 url="http://fish.sekure.us/"
 arch=('i686' 'x86_64' 'i386')
 license=('GPL')
 depends=('irssi')
 makedepends=('glib2' 'gcc' 'unzip' 'patch')
-source=(http://kleinerfeigling.kl.ohost.de/backup/FiSH-irssi.v${pkgver/_/-}-source.zip makefile.patch ftp://ftp.computing.dcu.ie/pub/crypto/miracl.zip)
-md5sums=('9ee14941eb4db813101236b1b6ae98cc'
-         '6e104029a7b096fc26378fbeef6d3a1b'
-         '8ad8d16dcf347745473fd5cd343eb768')
+source=(http://kleinerfeigling.kl.ohost.de/backup/FiSH-irssi.v${pkgver/_/-}-source.zip
+makefile.patch 
+ftp://ftp.computing.dcu.ie/pub/crypto/miracl.zip
+fix-pax-mprotect.patch)
 build() {
   cd "${srcdir}"/FiSH-irssi.v${pkgver/_/-}-source
   mkdir MIRACL
@@ -35,8 +35,8 @@ build() {
   cp miracl.a ../
   cd ..
   echo "Compiled Miracl"
-  patch -Np0 -i ../makefile.patch
-  echo "Patch applied"
+  patch -Np0 -i "$srcdir"/makefile.patch
+  patch -Np0 -i "$srcdir"/fix-pax-mprotect.patch
   if [ "`uname -m`" == "i686" ];then
   make || make return 1  #(or 'make macosx' / 'make linux64' / 'make amd64'  / 'make sparc32/64')
   fi
@@ -49,3 +49,7 @@ build() {
   cp libfish.so "${pkgdir}"/usr/lib/irssi/modules/
   echo "Use /load fish to load the fish Module"
 }
+md5sums=('9ee14941eb4db813101236b1b6ae98cc'
+         '6e104029a7b096fc26378fbeef6d3a1b'
+         'cae0d26fed6a586f81eb3078a5b6528d'
+         '6dcec92337b059ec7234e34f50df21e8')

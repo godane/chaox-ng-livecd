@@ -1,0 +1,20 @@
+--- Makefile.orig	2009-08-23 23:13:58.000000000 +0200
++++ Makefile	2009-08-23 23:15:38.000000000 +0200
+@@ -20,7 +20,7 @@
+ 
+ 
+ CC=gcc
+-CCFLAGS=-fPIC -O2
++CCFLAGS=-fPIC -O2 -Wa,--noexecstack
+ # Eat this! gcc4/MacOSX # CCFLAGS="-fPIC -Wno-pointer-sign"
+ 
+ 
+@@ -117,7 +117,7 @@
+ 
+ FiSH:
+ 	$(CC) $(CCFLAGS) $(all_include_dirs) -static -Wall -c FiSH.c
+-	$(CC) $(CCFLAGS) -shared FiSH.o SHA-256.o base64.o blowfish.o cfgopts.o DH1080.o miracl.a -o libfish.so
++	$(CC) $(CCFLAGS) -shared -Wl,-z,noexecstack FiSH.o SHA-256.o base64.o blowfish.o cfgopts.o DH1080.o miracl.a -o libfish.so
+ 	@echo
+ 
+ 
