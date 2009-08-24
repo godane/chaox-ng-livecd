@@ -4,7 +4,7 @@ pkgbase=kernel
 pkgname=("kernel26-chaox-hardened" "kernel26-chaox-hardened-wireless" "kernel26-chaox-hardened-sources" "kernel26-chaox-hardened-firmware")
 _basekernel=2.6.30
 pkgver=2.6.30.5
-pkgrel=1
+pkgrel=4
 pkgdesc="Linux kernel based on slax config. Used in chaox-ng"
 arch=("i686")
 license=('GPL2')
@@ -26,19 +26,6 @@ source=(ftp://ftp.kernel.org/pub/linux/kernel/v2.6/linux-$_basekernel.tar.bz2
   http://www.kernel.org/pub/linux/kernel/people/bart/rt3090.patch.bz2
   http://grsecurity.net/test/grsecurity-2.1.14-2.6.30.4-200908132040.patch
 )
-md5sums=('7a80058a6382e5108cdb5554d1609615'
-         '47841c7ff5c81a7b349a79f2fa8e9138'
-         'e10dac60af382255132c45f234b91064'
-         '27b73ecc9083efcf62ff276ee19326a4'
-         'ca85d39144f07b0500c663779dda9259'
-         'a713e50e8f2cf82ae9cf7e10a9f82412'
-         '9c474a07e0f6f7b7549fa562e8cee080'
-         '94cb11a39099d69662b6b5fa3cb0a11e'
-         'ff33e6f2120119707bc5de62b26947dd'
-         '09787bb326f05f65602d294a12170bbb'
-         '49d5c097872663d5e540026c7eeb6ac8'
-         '3ac21c65f48d09fe7bd8f89e88cff96a'
-         '624831f0d2b2caeb2b4756a5b6290c7d')
 build() {
   KARCH=x86
   cd "$srcdir"/linux-$_basekernel
@@ -212,3 +199,16 @@ replaces=("iwlwifi-3945-ucode" "iwlwifi-4965-ucode" "iwlwifi-5000-ucode" "iwlwif
   mv "${pkgdir}"/lib/firmware/LICENCE* "${pkgdir}"/usr/share/licenses/kernel26-chaox-hardened-firmware/
   cp "${srcdir}"/linux-$_basekernel/COPYING "${pkgdir}"/usr/share/licenses/kernel26-chaox-hardened-firmware/
 }
+md5sums=('7a80058a6382e5108cdb5554d1609615'
+         '47841c7ff5c81a7b349a79f2fa8e9138'
+         '407a28bbd6e3c3758dbde6ad3639205c'
+         '2b1a4106c26739f34d1d438247211073'
+         'ca85d39144f07b0500c663779dda9259'
+         'a713e50e8f2cf82ae9cf7e10a9f82412'
+         '9c474a07e0f6f7b7549fa562e8cee080'
+         '94cb11a39099d69662b6b5fa3cb0a11e'
+         'ff33e6f2120119707bc5de62b26947dd'
+         '09787bb326f05f65602d294a12170bbb'
+         '49d5c097872663d5e540026c7eeb6ac8'
+         '3ac21c65f48d09fe7bd8f89e88cff96a'
+         '624831f0d2b2caeb2b4756a5b6290c7d')
