@@ -1,7 +1,7 @@
 # Contributor: Jens Pranaitis <jens@chaox.net>
 source "${startdir}"/../kernel.env
 pkgname=compat-wireless-unstable
-pkgver=2009_08_21
+pkgver=2009_08_24
 _realver=$(echo $pkgver|sed 's/_/-/g')
 pkgrel=1
 pkgdesc="Backport of current wireless drivers"
@@ -16,7 +16,7 @@ source=("http://www.orbit-lab.org/kernel/compat-wireless-2.6/2009/08/compat-wire
         # patches with kind permission from pentoo.ch
         "4004_zd1211rw-2.6.28.patch"
         )
-md5sums=('36193f34a14f1d681bcff7a2db5cf178'
+md5sums=('7e569574b40e768a79e4e84afe439749'
          '9c474a07e0f6f7b7549fa562e8cee080')
 build()
 {
