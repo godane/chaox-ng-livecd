@@ -1,8 +1,8 @@
 # Contributor: Jens Pranaitis <jens@chaox.net>
 source "${startdir}"/../kernel.env
 pkgname=compat-wireless
-pkgver=2.6.31_rc4
-pkgrel=3
+pkgver=2.6.31_rc7
+pkgrel=1
 pkgdesc="Backport of current wireless drivers"
 arch=(i686 x86_64)
 url="http://wireless.kernel.org/en/users/Download/stable"
@@ -14,7 +14,7 @@ source=("http://www.orbit-lab.org/kernel/${pkgname}-2.6-stable/v2.6.31/${pkgname
         # patches with kind permission from pentoo.ch
         "4004_zd1211rw-2.6.28.patch"
         )
-md5sums=('45fd3f3e9c0c6bc6acc201b1d6bf5c57'
+md5sums=('3b12d104a64a6bdebf8896d54d9ad7bb'
          '9c474a07e0f6f7b7549fa562e8cee080')
 build()
 {
