@@ -1,0 +1,20 @@
+# Contributor: Jens Pranaitis <jens@chaox.net>
+pkgname=perl-poe-component-server-chargen
+pkgver=1.14
+pkgrel=1
+pkgdesc="A POE component that implements an RFC 864 CHARGEN server."
+arch=('i686' 'x86_64')
+url="http://search.cpan.org/~bingos/POE-Component-Server-Chargen-1.14/"
+license=('GPL' 'PerlArtistic')
+depends=('perl-poe-component-server-echo')
+options=('!emptydirs')
+source=(http://search.cpan.org/CPAN/authors/id/B/BI/BINGOS/POE-Component-Server-Chargen-$pkgver.tar.gz)
+md5sums=('8a3e30e3bbb7b19b39b6eba9fd9e52c6')
+build() {
+  cd  "${srcdir}"/POE-Component-Server-Chargen-$pkgver
+  PERL_MM_USE_DEFAULT=1 perl Makefile.PL INSTALLDIRS=vendor || return 1 
+  make || return 1
+  make pure_install doc_install DESTDIR="${pkgdir}" || return 1
+  find "${pkgdir}" -name '.packlist' -delete
+  find "${pkgdir}" -name '*.pod' -delete
+}
