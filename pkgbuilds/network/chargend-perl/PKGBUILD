@@ -1,0 +1,31 @@
+# Contributor: Jens Pranaitis <jens@chaox.net>
+pkgname=chargend-perl-git
+pkgver=20090829
+pkgrel=1
+pkgdesc="A RFC 864 Compliant CHARGEN daemon"
+arch=("i686")
+url="http://github.com/jensp/chargend-perl"
+license=('GPL' 'PerlArtistic')
+depends=("perl-poe-component-server-chargen")
+makedepends=('git')
+_gitroot="git://github.com/jensp/chargend-perl.git"
+_gitname="chargend-perl"
+build() {
+  cd "$srcdir"
+  msg "Connecting to GIT server...."
+  if [ -d $_gitname ] ; then
+    cd $_gitname && git pull origin
+    msg "The local files are updated."
+  else
+    git clone $_gitroot
+  fi
+  msg "GIT checkout done or server timeout"
+  msg "Starting make..."
+  rm -rf "$srcdir/$_gitname-build"
+  git clone "$srcdir/$_gitname" "$srcdir/$_gitname-build"
+  cd "$srcdir/$_gitname-build"
+  #
+  # BUILD HERE
+  #
+  install -Dm755 chargend.pl "$pkgdir"/usr/bin/chargend.pl
+} 
