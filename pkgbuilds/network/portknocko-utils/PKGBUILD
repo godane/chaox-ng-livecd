@@ -1,0 +1,51 @@
+# Contributor: Jens Pranaitis <jens@chaox.net>
+pkgname=portknocko-utils-svn
+pkgver=463
+pkgrel=1
+pkgdesc="Userspace utils for portknocko"
+arch=("i686")
+url="http://portknocko.berlios.de/"
+license=('GPL')
+depends=("iptables")
+makedepends=('subversion')
+_svntrunk=svn://svn.berlios.de/portknocko/trunk 
+_svnmod=portknocko
+
+build() {
+  cd "$srcdir"
+
+  if [ -d $_svnmod/.svn ]; then
+    (cd $_svnmod && svn up -r $pkgver)
+  else
+    svn co $_svntrunk --config-dir ./ -r $pkgver $_svnmod
+  fi
+
+  msg "SVN checkout done or server timeout"
+  msg "Starting make..."
+
+  rm -rf "$srcdir/$_svnmod-build"
+  cp -r "$srcdir/$_svnmod" "$srcdir/$_svnmod-build"
+  cd "$srcdir/$_svnmod-build"
+
+  #
+  # BUILD
+  #
+  # install iptables extension
+  cd iptables
+  # Makefile is fail
+  sed -i "s|IPT_LIB_DIR=.*|IPT_LIB_DIR=$pkgdir/usr/lib/iptables/|g" Makefile
+  sed -i "s|-O2 -Wall|$CFLAGS|g" Makefile
+  make || return 1
+  mkdir -p "$pkgdir"/usr/lib/iptables
+  make DESTDIR="$pkgdir" install || return 1
+  # install more or less useful utils
+  cd ..
+  mkdir -p "$pkgdir"/usr/share/$pkgname
+  cp -r test/ "$pkgdir"/usr/share/$pkgname/ || return 1
+  cp -r util/ "$pkgdir"/usr/share/$pkgname/ || return 1
+  for doc in README TODO CHANGELOG
+  do
+    install -Dm644 $doc "$pkgdir"/usr/share/doc/$pkgname/$doc || return 1
+  done
+  cp -r doc "$pkgdir"/usr/share/doc/$pkgname/ || return 1
+}
