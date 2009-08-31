@@ -1,15 +1,15 @@
 # Contributor: Jens Pranaitis <jens@chaox.net>
 # Contributor: Ermak <ermak@email.it>
 pkgname=openvas-client
-pkgver=2.0.4
+pkgver=2.0.5
 pkgrel=1
 pkgdesc="The OpenVAS client"
 arch=('i686' 'x86_64')
 depends=("gtk2")
 url="http://www.openvas.org/"
 license=('GPL')
-source=(http://wald.intevation.org/frs/download.php/595/openvas-client-2.0.4.tar.gz)
-md5sums=('f997cb13a615b23061dfcf3a2bed2dec') 
+source=(http://wald.intevation.org/frs/download.php/617/openvas-client-2.0.5.tar.gz)
+md5sums=('1ab804e599705543fb96a8c04777b46a') 
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
