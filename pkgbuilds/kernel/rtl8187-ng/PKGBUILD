@@ -12,17 +12,19 @@ depends=("kernel26-chaox=$kernpkgver")
 groups=("chaox-modules")
 install=rtl8187-ng.install
 source=("http://dl.aircrack-ng.org/drivers/rtl8187_linux_26.$pkgver.zip"\
-        "http://patches.aircrack-ng.org/rtl8187_2.6.27.patch")
+        "http://patches.aircrack-ng.org/rtl8187_2.6.27.patch"
+        "r8187-2.6.31-fix.patch")
 md5sums=('c5b1c7e0c094fa943a52e1a78117308b'
-         'c3334f96dcf47ec23f11d66c9173cf61')
-	 
+         'c3334f96dcf47ec23f11d66c9173cf61'
+         '27e26c40f060e974c70b606b948e8cd6') 
 build() {
 	  cd "${srcdir}"/rtl8187_linux_26.1010.0622.2006
 	  tar xzf drv.tar.gz || return 1
 	  tar xzf stack.tar.gz || return 1
 	  patch -Np1 -i "${srcdir}"/rtl8187_2.6.27.patch || return 1
     sed -i "s|/lib/modules/\$(KVER)/build|$_kerndir|g" ieee80211/Makefile beta-8187/Makefile || return 1
-    sed -i 's|asm/semaphore|linux/semaphore|' beta-8187/r8187.h 
+    sed -i 's|asm/semaphore|linux/semaphore|' beta-8187/r8187.h
+    patch -Np2 -i "$srcdir"/r8187-2.6.31-fix.patch
 	  make || return 1
 	  install -d "${pkgdir}"/lib/modules/$_kernver/kernel/net/wireless/rtl8187 || return 1
 	  install -d "${pkgdir}"/lib/modules/$_kernver/kernel/net/wireless/rtl_ieee80211 || return 1
