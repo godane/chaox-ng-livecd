@@ -1,0 +1,60 @@
+diff -ur a/rtl8187_linux_26.1010.0622.2006/beta-8187/r8187_core.c b/rtl8187_linux_26.1010.0622.2006/beta-8187/r8187_core.c
+--- a/rtl8187_linux_26.1010.0622.2006/beta-8187/r8187_core.c	2009-09-12 17:41:55.000000000 +0200
++++ b/rtl8187_linux_26.1010.0622.2006/beta-8187/r8187_core.c	2009-09-12 17:50:13.000000000 +0200
+@@ -1893,7 +1893,6 @@
+ 		DMESG("Reported EEPROM chip is a 93c46 (1Kbit)");
+ 	}
+ 
+-	dev->get_stats = rtl8180_stats;
+ 
+ 	dev->dev_addr[0]=eprom_read(dev,MAC_ADR) & 0xff;
+ 	dev->dev_addr[1]=(eprom_read(dev,MAC_ADR) & 0xff00)>>8;
+@@ -2597,6 +2596,18 @@
+      ---------------------------- USB_STUFF---------------------------
+ *****************************************************************************/
+ 
++static const struct net_device_ops rtl8180_netdev_ops = {
++       .ndo_open               = rtl8180_open,
++       .ndo_stop               = rtl8180_close,
++       .ndo_get_stats          = rtl8180_stats,
++       .ndo_tx_timeout         = rtl8180_restart,
++       .ndo_do_ioctl           = rtl8180_ioctl,
++       .ndo_set_multicast_list = r8180_set_multicast,
++       .ndo_set_mac_address    = r8180_set_mac_adr,
++       .ndo_validate_addr      = eth_validate_addr,
++       .ndo_change_mtu         = eth_change_mtu,
++       .ndo_start_xmit         = ieee80211_xmit_rtl7,
++};
+ 
+ static int __devinit rtl8187_usb_probe(struct usb_interface *intf,
+ 			 const struct usb_device_id *id)
+@@ -2622,14 +2633,12 @@
+ 
+ 	priv->udev=udev;
+ 
+-	dev->open = rtl8180_open;
+-	dev->stop = rtl8180_close;
++	if (dev->netdev_ops->ndo_stop)
++		dev->netdev_ops->ndo_stop(dev);
++
+ 	//dev->hard_start_xmit = rtl8180_8023_hard_start_xmit;
+-	dev->tx_timeout = tx_timeout;
++	dev->netdev_ops = &rtl8180_netdev_ops;	
+ 	dev->wireless_handlers = &r8180_wx_handlers_def;
+-	dev->do_ioctl = rtl8180_ioctl;
+-	dev->set_multicast_list = r8180_set_multicast;
+-	dev->set_mac_address = r8180_set_mac_adr;
+ #if WIRELESS_EXT >= 12
+ #if WIRELESS_EXT < 17
+ 	dev->get_wireless_stats = r8180_get_wireless_stats;
+diff -ur a/rtl8187_linux_26.1010.0622.2006/ieee80211/ieee80211_module.c b/rtl8187_linux_26.1010.0622.2006/ieee80211/ieee80211_module.c
+--- a/rtl8187_linux_26.1010.0622.2006/ieee80211/ieee80211_module.c	2009-09-12 17:41:55.000000000 +0200
++++ b/rtl8187_linux_26.1010.0622.2006/ieee80211/ieee80211_module.c	2009-09-12 17:50:13.000000000 +0200
+@@ -118,7 +118,6 @@
+ 		goto failed;
+ 	}
+ 	ieee = netdev_priv(dev);
+-	dev->hard_start_xmit = ieee80211_xmit_rtl7;
+ 
+ 	ieee->dev = dev;
+ 
