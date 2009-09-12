@@ -2,7 +2,7 @@
 source "${startdir}"/../kernel.env
 pkgname=portknocko-module
 pkgver=463
-pkgrel=1
+pkgrel=2
 pkgdesc="Netfilter module to support portknocking"
 arch=("i686")
 url="http://portknocko.berlios.de/"

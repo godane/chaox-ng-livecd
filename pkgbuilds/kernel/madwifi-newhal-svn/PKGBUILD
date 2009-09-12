@@ -3,7 +3,7 @@
 source "${startdir}"/../kernel.env
 pkgname=madwifi-newhal-svn
 pkgver=4068
-pkgrel=5
+pkgrel=6
 pkgdesc="Madwifi drivers for Atheros wireless chipsets. HAL 0.10.5.6 branch."
 arch=(i686 x86_64)
 url="http://madwifi-project.org/"
