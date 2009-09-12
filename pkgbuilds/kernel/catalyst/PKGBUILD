@@ -2,7 +2,7 @@
 source "$startdir"/../kernel.env
 pkgbase=catalyst
 pkgname=("catalyst-module" "catalyst-driver")
-pkgver=9.8
+pkgver=9.9
 pkgrel=1
 arch=('i686' 'x86_64')
 url="http://www.ati.amd.com"
@@ -13,7 +13,7 @@ source=(http://www2.ati.com/drivers/linux/ati-driver-installer-${pkgver/./-}-x86
         atieventsd.sh
         catalyst-symlinks.sh
         catalyst_supported_chakra)
-md5sums=('fc08593edd2d4eff51f893a9292b58f9'
+md5sums=('b6df55513535a9c5096de2208127b4b8'
          'bdafe749e046bfddee2d1c5e90eabd83'
          '4efa8414a8fe9eeb50da38b5522ef81d'
          'f729bf913613f49b0b9759c246058a87'
