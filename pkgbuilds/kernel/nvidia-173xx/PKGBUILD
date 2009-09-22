@@ -4,17 +4,19 @@ source "${startdir}"/../kernel.env
 pkgbase=nvidia-173xx
 pkgname=("nvidia-173xx-module" "nvidia-173xx-drivers" "nvidia-173xx-utils")
 pkgver=173.14.19
-pkgrel=11
+pkgrel=12
 arch=('i686')
 [ "$CARCH" = "i686"   ] && ARCH=x86
 url="http://www.nvidia.com/"
 license=('nvidia')
 source=("ftp://download.nvidia.com/XFree86/Linux-$ARCH/${pkgver}/NVIDIA-Linux-$ARCH-${pkgver}-pkg0.run"
         "nvidia-173xx-symlinks.sh"
-        "nvidia_supported_chakra")
+        "nvidia_supported_chakra"
+        "http://leigh123linux.fedorapeople.org/pub/patches/nvidia-173.14.19.patch")
 md5sums=('dc2b993aa8dae8a982916b81b2c53f6e'
-         'd4d33f99f34b00ae0bc8032b99cebfa3'
-         'd0f28ba00ca1f3011f5fccacb80b8378')
+         '718c4a2e87469fcc864cf6c07dc6c1c0'
+         'd0f28ba00ca1f3011f5fccacb80b8378'
+         '9d447eb6a76ccd7c7f04c6d5798bff2a')
 build()
 {
   # Extract
@@ -28,6 +30,7 @@ groups=("chaox-modules" "nvidia-173xx")
 replaces=("nvidia-173xx")
   cd "${srcdir}"/NVIDIA-Linux-$ARCH-${pkgver}-pkg0
   # Any extra patches are applied in here...
+  patch -Np0 -i "$srcdir"/nvidia-173.14.19.patch || return 1
   cd usr/src/nv/
   ln -s Makefile.kbuild Makefile
   make SYSSRC="${_kerndir}" module || return 1
