@@ -1,7 +1,7 @@
 #
 # Automatically generated make config: don't edit
 # Linux kernel version: 2.6.31
-# Thu Sep 10 02:28:04 2009
+# Tue Sep 15 20:25:31 2009
 #
 # CONFIG_64BIT is not set
 CONFIG_X86_32=y
@@ -1631,6 +1631,7 @@ CONFIG_I2O_PROC=m
 CONFIG_MACINTOSH_DRIVERS=y
 CONFIG_MAC_EMUMOUSEBTN=y
 CONFIG_NETDEVICES=y
+CONFIG_COMPAT_NET_DEV_OPS=y
 CONFIG_IFB=m
 CONFIG_DUMMY=m
 CONFIG_BONDING=m
