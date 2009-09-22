@@ -4,7 +4,7 @@ pkgbase=kernel
 pkgname=("kernel26-chaox" "kernel26-chaox-wireless" "kernel26-chaox-sources" "kernel26-chaox-firmware")
 _basekernel=2.6.31
 pkgver=2.6.31
-pkgrel=1
+pkgrel=2
 pkgdesc="Linux kernel based on slax config. Used in chaox-ng"
 arch=("i686")
 license=('GPL2')
@@ -17,13 +17,15 @@ source=(ftp://ftp.kernel.org/pub/linux/kernel/v2.6/linux-$_basekernel.tar.bz2
 	openlog.patch
   kernel26-chaox.preset
   http://www.kernel.org/pub/linux/kernel/people/edward/reiser4/reiser4-for-2.6/reiser4-for-2.6.30.patch.bz2
+  revert-remove-COMPAT_NET_DEV_OPS.patch
 )
 md5sums=('84c077a37684e4cbfa67b18154390d8a'
          '0d8a55dc75d6206d6324c81193a42976'
-         '94cd28370f91d828ca2840ecf4192c65'
+         '8b318269ab4a371f48baacea03366674'
          'a49390dd08e4f7702b8f4b550f1ad84e'
          '27b73ecc9083efcf62ff276ee19326a4'
-         '49d5c097872663d5e540026c7eeb6ac8')
+         '49d5c097872663d5e540026c7eeb6ac8'
+         '0389215f1c70a9e8cdc185233b6f15a0')
 build() {
   KARCH=x86
   cd "${srcdir}"
@@ -44,6 +46,8 @@ build() {
   patch -Np0 -i "${srcdir}"/openlog.patch || return 1
   # add reiser4
   patch -Np1 -i "${srcdir}"/reiser4-for-2.6.30.patch || return 1
+  # readd legacy netdev stuff
+  patch -Rp1 -i "$srcdir"/revert-remove-COMPAT_NET_DEV_OPS.patch || return 1
   cp ../config ./.config
   # build the full kernel version to use in pathnames
   . ./.config
